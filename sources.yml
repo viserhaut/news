@@ -1,0 +1,106 @@
+sources:
+  - id: hatena
+    name: はてなブックマーク
+    rss_url: https://b.hatena.ne.jp/hotentry/it.rss
+    language: ja
+    category: community
+    max_items: 20
+    enabled: true
+
+  - id: aws_blog
+    name: AWS Blog
+    rss_url: https://aws.amazon.com/blogs/aws/feed/
+    language: en
+    category: cloud
+    max_items: 10
+    enabled: true
+
+  - id: security_next
+    name: SecurityNEXT
+    rss_url: https://www.security-next.com/feed
+    language: ja
+    category: security
+    max_items: 10
+    enabled: true
+
+  - id: zenn_claude
+    name: Zenn (claude)
+    rss_url: https://zenn.dev/topics/claude/feed
+    language: ja
+    category: ai_tools
+    max_items: 10
+    enabled: true
+
+  - id: anthropic_blog
+    name: Anthropic Blog
+    # 公式 RSS フィードなし。代替として Simon Willison 等でカバー。
+    rss_url: https://www.anthropic.com/rss.xml
+    language: en
+    category: ai_research
+    max_items: 10
+    enabled: false
+
+  - id: hacker_news
+    name: Hacker News
+    rss_url: https://hnrss.org/best
+    language: en
+    category: community
+    max_items: 30
+    enabled: true
+
+  - id: simon_willison
+    name: Simon Willison
+    rss_url: https://simonwillison.net/atom/everything/
+    language: en
+    category: ai_research
+    max_items: 10
+    enabled: true
+
+  - id: reddit_ml
+    name: Reddit r/MachineLearning
+    rss_url: https://www.reddit.com/r/MachineLearning/.rss
+    language: en
+    category: ai_research
+    max_items: 10
+    enabled: true
+
+  - id: reddit_localllama
+    name: Reddit r/LocalLLaMA
+    rss_url: https://www.reddit.com/r/LocalLLaMA/.rss
+    language: en
+    category: ai_tools
+    max_items: 10
+    enabled: true
+
+  - id: reddit_kubernetes
+    name: Reddit r/kubernetes
+    rss_url: https://www.reddit.com/r/kubernetes/.rss
+    language: en
+    category: cloud
+    max_items: 10
+    enabled: true
+
+  - id: cncf_blog
+    name: CNCF Blog
+    rss_url: https://www.cncf.io/feed/
+    language: en
+    category: cloud
+    max_items: 10
+    enabled: true
+
+  - id: devto_claudeai
+    name: Dev.to (tag:claudeai)
+    rss_url: https://dev.to/feed/tag/claudeai
+    language: en
+    category: ai_tools
+    max_items: 10
+    enabled: true
+
+  - id: indie_hackers
+    name: Indie Hackers
+    # RSS フィードなし（リダイレクトのみ）。後続フェーズで代替手段を検討。
+    rss_url: https://www.indiehackers.com/feed.xml
+    language: en
+    category: indie_dev
+    max_items: 10
+    enabled: false
