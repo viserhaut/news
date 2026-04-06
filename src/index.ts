@@ -5,11 +5,13 @@ import { makeQueries } from "./db/queries";
 import { loadSources } from "./config/sources";
 import { fetchSource } from "./fetch/rss";
 import { fetchBody } from "./fetch/body";
+import { fetchOgImage } from "./fetch/og";
 import { summarizeBatch } from "./llm/summarize";
 import { ClaudeAuthError } from "./llm/claude";
 import { computeTagAffinity, applyTagBoost } from "./personalize/layer1";
 import { maybeGenerateProfile } from "./personalize/layer2";
 import { buildPersonalContext } from "./personalize/inject";
+import { notifyDigest, notifyError } from "./notify/slack";
 
 const ROOT_DIR = join(import.meta.dir, "..");
 const DB_PATH = process.env.DB_PATH ?? join(ROOT_DIR, "data", "digest.db");
@@ -70,8 +72,12 @@ async function main() {
     const batch = noBody.slice(i, i + BODY_CONCURRENCY);
     await Promise.all(
       batch.map(async (row) => {
-        const body = await fetchBody(row.url);
+        const [body, ogImage] = await Promise.all([
+          fetchBody(row.url),
+          fetchOgImage(row.url),
+        ]);
         q.updateBodyRaw.run({ $id: row.id, $body_raw: body });
+        q.updateOgImage.run({ $id: row.id, $og_image: ogImage });
       })
     );
   }
@@ -100,7 +106,7 @@ async function main() {
     } catch (err) {
       if (err instanceof ClaudeAuthError) {
         console.error(`\n[fatal] ${err.message}`);
-        // 認証エラーは Slack アラート送信（Phase 5 で実装）
+        await notifyError("Claude認証エラー: 再認証が必要です", "AUTH_ERROR");
         process.exit(1);
       }
       throw err;
@@ -130,6 +136,17 @@ async function main() {
     totalReads,
     (profile, basedOn) => q.insertSemanticProfile.run({ $profile: profile, $based_on: basedOn })
   );
+
+  // ── Step 6: HTML 生成 ────────────────────────────────
+  const { generateHtml } = await import("./generate/html");
+  await generateHtml(db, q, ROOT_DIR);
+  console.log("[done] HTML generated → docs/index.html");
+
+  // ── Step 7: Slack 通知 ───────────────────────────────
+  const digestArticles = q.selectDigestArticles.all();
+  await notifyDigest(digestArticles, totalNew).catch((err) => {
+    console.error("[slack] Notification failed:", err instanceof Error ? err.message : err);
+  });
 
   console.log(`[done] Pipeline complete`);
   db.close();

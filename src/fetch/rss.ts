@@ -100,7 +100,7 @@ function parseRss2(channel: any, source: Source): ArticleInsert[] {
         $body_raw: null,
       } satisfies ArticleInsert;
     })
-    .filter((a): a is ArticleInsert => a !== null);
+    .filter((a): a is NonNullable<typeof a> => a !== null);
 }
 
 function parseAtom(feed: any, source: Source): ArticleInsert[] {
@@ -126,7 +126,7 @@ function parseAtom(feed: any, source: Source): ArticleInsert[] {
         $body_raw: null,
       } satisfies ArticleInsert;
     })
-    .filter((a): a is ArticleInsert => a !== null);
+    .filter((a): a is NonNullable<typeof a> => a !== null);
 }
 
 function decodeEntities(s: string): string {

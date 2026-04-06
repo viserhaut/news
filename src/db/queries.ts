@@ -15,17 +15,19 @@ export interface ArticleRow {
 }
 
 export interface ArticleInsert {
+  [key: string]: string | number | bigint | boolean | Uint8Array | null;
   $url_hash: string;
   $url: string;
   $title: string;
   $source_id: string;
-  $language: string;
+  $language: "ja" | "en";
   $category: string;
   $published_at: string | null;
   $body_raw: string | null;
 }
 
 export interface FetchLogInsert {
+  [key: string]: string | number | bigint | boolean | Uint8Array | null;
   $source_id: string;
   $status: "ok" | "error";
   $item_count: number | null;
@@ -33,6 +35,7 @@ export interface FetchLogInsert {
 }
 
 export interface SummaryInsert {
+  [key: string]: string | number | bigint | boolean | Uint8Array | null;
   $article_id: number;
   $title_ja: string;
   $summary_ja: string;
@@ -68,6 +71,18 @@ export interface RecentReadRow {
 export interface UserPreference {
   type: string;
   value: string;
+}
+
+export interface DigestArticleRow {
+  id: number;
+  url: string;
+  title_ja: string | null;
+  summary_ja: string | null;
+  category: string;
+  source_id: string;
+  published_at: string | null;
+  og_image: string | null;
+  personal_score: number | null;
 }
 
 export function makeQueries(db: Database) {
@@ -188,6 +203,23 @@ export function makeQueries(db: Database) {
     SELECT COUNT(*) as count FROM read_history
   `);
 
+  // ── Web UI 向け ────────────────────────────────────────
+  const selectDigestArticles = db.prepare<DigestArticleRow, []>(`
+    SELECT a.id, a.url, a.category, a.source_id, a.published_at, a.og_image,
+           s.title_ja, s.summary_ja,
+           COALESCE(s.personal_score, s.ai_score) AS personal_score
+    FROM articles a
+    JOIN summaries s ON s.article_id = a.id
+    WHERE a.expires_at > datetime('now')
+      AND s.title_ja IS NOT NULL
+    ORDER BY personal_score DESC
+    LIMIT 200
+  `);
+
+  const updateOgImage = db.prepare<void, { $id: number; $og_image: string | null }>(`
+    UPDATE articles SET og_image = $og_image WHERE id = $id
+  `);
+
   return {
     insertArticle,
     insertFetchLog,
@@ -209,5 +241,7 @@ export function makeQueries(db: Database) {
     updatePersonalScore,
     selectSummariesForBoost,
     countReadHistory,
+    selectDigestArticles,
+    updateOgImage,
   };
 }

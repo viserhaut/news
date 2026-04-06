@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
+  "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.viserhaut.news-backup</string>
+
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/bash</string>
+    <string>-c</string>
+    <string>export PATH="$HOME/.bun/bin:/usr/local/bin:/opt/homebrew/bin:$PATH"; cd /Users/viserhaut/dev/src/news &amp;&amp; bun run src/backup/sqlite.ts >> logs/backup.log 2>&amp;1</string>
+  </array>
+
+  <!-- 毎週日曜 0:00 JST -->
+  <key>StartCalendarInterval</key>
+  <dict>
+    <key>Weekday</key>
+    <integer>0</integer>
+    <key>Hour</key>
+    <integer>0</integer>
+    <key>Minute</key>
+    <integer>0</integer>
+  </dict>
+
+  <key>RunAtLoad</key>
+  <false/>
+
+  <key>StandardOutPath</key>
+  <string>/Users/viserhaut/dev/src/news/logs/backup-out.log</string>
+  <key>StandardErrorPath</key>
+  <string>/Users/viserhaut/dev/src/news/logs/backup-err.log</string>
+
+  <key>KeepAlive</key>
+  <false/>
+</dict>
+</plist>

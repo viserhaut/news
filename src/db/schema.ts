@@ -36,6 +36,9 @@ export function initDb(dbPath: string): Database {
   // 既存 DB への personal_score カラム追加（存在しなければ）
   try { db.run(`ALTER TABLE summaries ADD COLUMN personal_score REAL`); } catch {}
 
+  // 既存 DB への og_image カラム追加（存在しなければ）
+  try { db.run(`ALTER TABLE articles ADD COLUMN og_image TEXT`); } catch {}
+
 
   db.run(`
     CREATE TABLE IF NOT EXISTS fetch_logs (

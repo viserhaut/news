@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
+  "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.viserhaut.news-digest</string>
+
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/bash</string>
+    <string>/Users/viserhaut/dev/src/news/scripts/run.sh</string>
+  </array>
+
+  <!-- 毎朝 4:00 JST（macOS はローカルタイムで動作） -->
+  <key>StartCalendarInterval</key>
+  <dict>
+    <key>Hour</key>
+    <integer>4</integer>
+    <key>Minute</key>
+    <integer>0</integer>
+  </dict>
+
+  <!-- スリープ中に時刻を過ぎた場合、起動後すぐに実行 -->
+  <key>RunAtLoad</key>
+  <false/>
+
+  <key>StandardOutPath</key>
+  <string>/Users/viserhaut/dev/src/news/logs/launchd-out.log</string>
+  <key>StandardErrorPath</key>
+  <string>/Users/viserhaut/dev/src/news/logs/launchd-err.log</string>
+
+  <!-- 異常終了しても再起動しない（翌日まで待つ） -->
+  <key>KeepAlive</key>
+  <false/>
+</dict>
+</plist>

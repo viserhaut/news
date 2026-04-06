@@ -5,7 +5,14 @@
   "private": true,
   "scripts": {
     "start": "bun run src/index.ts",
-    "dev": "bun --watch src/index.ts"
+    "generate": "bun run src/generate/html.ts",
+    "backup": "bun run src/backup/sqlite.ts",
+    "deploy": "bash scripts/run.sh",
+    "dev": "bun --watch src/index.ts",
+    "launchd:install": "cp launchd/com.viserhaut.news-digest.plist ~/Library/LaunchAgents/ && launchctl load ~/Library/LaunchAgents/com.viserhaut.news-digest.plist && cp launchd/com.viserhaut.news-backup.plist ~/Library/LaunchAgents/ && launchctl load ~/Library/LaunchAgents/com.viserhaut.news-backup.plist",
+    "launchd:uninstall": "launchctl unload ~/Library/LaunchAgents/com.viserhaut.news-digest.plist; launchctl unload ~/Library/LaunchAgents/com.viserhaut.news-backup.plist; rm -f ~/Library/LaunchAgents/com.viserhaut.news-{digest,backup}.plist",
+    "hooks:install": "bash scripts/install-hooks.sh",
+    "secrets:check": "gitleaks detect --config .gitleaks.toml --redact"
   },
   "devDependencies": {
     "@types/bun": "1.3.11"

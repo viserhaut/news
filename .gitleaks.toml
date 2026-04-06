@@ -1,0 +1,24 @@
+# gitleaks 設定
+# https://github.com/gitleaks/gitleaks
+
+title = "news-digest gitleaks config"
+
+[extend]
+# 公式のデフォルトルールセットを継承
+useDefault = true
+
+[[rules]]
+description = "Slack Webhook URL"
+id = "slack-webhook"
+regex = '''https://hooks\.slack\.com/services/[A-Z0-9]+/[A-Z0-9]+/[A-Za-z0-9]+'''
+tags = ["slack", "webhook"]
+
+[[rules]]
+description = "GitHub Personal Access Token"
+id = "github-pat"
+regex = '''gh[ps]_[A-Za-z0-9]{36,}'''
+tags = ["github", "pat"]
+
+[allowlist]
+# .env.example のプレースホルダーは許可
+paths = ['''.env\.example$''']
