@@ -7,6 +7,9 @@ import { fetchSource } from "./fetch/rss";
 import { fetchBody } from "./fetch/body";
 import { summarizeBatch } from "./llm/summarize";
 import { ClaudeAuthError } from "./llm/claude";
+import { computeTagAffinity, applyTagBoost } from "./personalize/layer1";
+import { maybeGenerateProfile } from "./personalize/layer2";
+import { buildPersonalContext } from "./personalize/inject";
 
 const ROOT_DIR = join(import.meta.dir, "..");
 const DB_PATH = process.env.DB_PATH ?? join(ROOT_DIR, "data", "digest.db");
@@ -81,7 +84,18 @@ async function main() {
 
   if (unsummarized.length > 0) {
     try {
-      const result = await summarizeBatch(unsummarized, (row) => q.insertSummary.run(row));
+      // Layer3: パーソナライズコンテキストを構築してプロンプトに注入
+      const affinityRows = q.selectReadCountByCategory.all();
+      const tagAffinity = computeTagAffinity(affinityRows);
+      const latestProfile = q.selectLatestProfile.get() as { profile: string; based_on: number } | null;
+      const preferences = q.selectUserPreferences.all() as Array<{ type: string; value: string }>;
+      const personalContext = buildPersonalContext(tagAffinity, latestProfile?.profile ?? null, preferences);
+
+      const result = await summarizeBatch(
+        unsummarized,
+        (row) => q.insertSummary.run(row),
+        personalContext
+      );
       console.log(`\n[done] Summaries saved: ${result.saved}, errors: ${result.errors}`);
     } catch (err) {
       if (err instanceof ClaudeAuthError) {
@@ -92,6 +106,30 @@ async function main() {
       throw err;
     }
   }
+
+  // ── Step 4: Layer1 タグブースト → personal_score 更新 ──
+  const summariesForBoost = q.selectSummariesForBoost.all() as Array<{
+    article_id: number;
+    ai_score: number;
+    category: string;
+  }>;
+  const affinityRows = q.selectReadCountByCategory.all();
+  const tagAffinity = computeTagAffinity(affinityRows);
+  const boosted = applyTagBoost(summariesForBoost, tagAffinity, (id, score) => {
+    q.updatePersonalScore.run({ $article_id: id, $personal_score: score });
+  });
+  console.log(`[personalize] Layer1: ${boosted} personal_scores updated`);
+
+  // ── Step 5: Layer2 セマンティックプロファイル更新（必要時のみ）──
+  const recentReads = q.selectRecentReads.all();
+  const latestProfile = q.selectLatestProfile.get() as { profile: string; based_on: number } | null;
+  const totalReads = (q.countReadHistory.get() as { count: number })?.count ?? 0;
+  await maybeGenerateProfile(
+    recentReads,
+    latestProfile,
+    totalReads,
+    (profile, basedOn) => q.insertSemanticProfile.run({ $profile: profile, $based_on: basedOn })
+  );
 
   console.log(`[done] Pipeline complete`);
   db.close();

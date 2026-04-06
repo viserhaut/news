@@ -38,9 +38,14 @@ interface SummaryOutput {
   ai_score: number;
 }
 
-function buildPrompt(articles: ArticleInput[]): string {
+function buildPrompt(articles: ArticleInput[], personalContext?: string | null): string {
   // 記事コンテンツは JSON.stringify で自動エスケープ（プロンプトインジェクション緩和）
   const articlesJson = JSON.stringify(articles, null, 2);
+
+  // Layer3: パーソナライズコンテキストがあれば挿入
+  const personalSection = personalContext
+    ? `\n${personalContext}\n`
+    : "";
 
   return `あなたはSREエンジニアかつAIエージェント個人開発者のためのニュースキュレーターです。
 
@@ -48,7 +53,7 @@ function buildPrompt(articles: ArticleInput[]): string {
 - 本業SRE: Kubernetes, IaC (Terraform/Pulumi), Observability, セキュリティ
 - AIエージェント開発: Claude, LLM, MCP, Claude Code
 - 個人開発・副業・収益化: インディーハッカー, SaaS, プロダクト開発
-
+${personalSection}
 以下の記事リストを読み、各記事に対してJSON配列を返してください。
 説明文・マークダウン・コードブロックは一切不要です。JSONのみを出力してください。
 
@@ -97,7 +102,8 @@ export interface SummarizeResult {
 
 export async function summarizeBatch(
   articles: UnsummarizedRow[],
-  insertSummary: (row: SummaryInsert) => void
+  insertSummary: (row: SummaryInsert) => void,
+  personalContext?: string | null
 ): Promise<SummarizeResult> {
   let saved = 0;
   let errors = 0;
@@ -117,7 +123,7 @@ export async function summarizeBatch(
     }));
 
     try {
-      const prompt = buildPrompt(inputs);
+      const prompt = buildPrompt(inputs, personalContext);
       const raw = await callClaude(prompt);
       const outputs = parseResponse(raw);
 

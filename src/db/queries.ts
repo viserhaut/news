@@ -50,6 +50,26 @@ export interface UnsummarizedRow {
   body_raw: string | null;
 }
 
+export interface CategoryReadRow {
+  category: string;
+  cnt: number;
+  decayed_count: number;
+}
+
+export interface RecentReadRow {
+  title: string;
+  title_ja: string | null;
+  summary_ja: string | null;
+  category: string;
+  source_id: string;
+  feedback: string | null;
+}
+
+export interface UserPreference {
+  type: string;
+  value: string;
+}
+
 export function makeQueries(db: Database) {
   // TTL: 365日後
   const insertArticle = db.prepare<void, ArticleInsert>(`
@@ -95,6 +115,79 @@ export function makeQueries(db: Database) {
     VALUES ($article_id, $title_ja, $summary_ja, $ai_score)
   `);
 
+  // ── 読了履歴 ──────────────────────────────────────────
+  const insertReadHistory = db.prepare<void, { $article_id: number; $feedback: string | null }>(`
+    INSERT INTO read_history (article_id, feedback) VALUES ($article_id, $feedback)
+  `);
+
+  const updateReadFeedback = db.prepare<void, { $article_id: number; $feedback: string }>(`
+    UPDATE read_history SET feedback = $feedback
+    WHERE id = (SELECT MAX(id) FROM read_history WHERE article_id = $article_id)
+  `);
+
+  // Layer1 用: 30日以内のカテゴリ別読了集計（指数減衰）
+  const selectReadCountByCategory = db.prepare<CategoryReadRow, []>(`
+    SELECT a.category,
+           COUNT(*) as cnt,
+           SUM(exp(-0.3 * (julianday('now') - julianday(r.read_at)))) as decayed_count
+    FROM read_history r
+    JOIN articles a ON a.id = r.article_id
+    WHERE r.read_at > datetime('now', '-30 days')
+    GROUP BY a.category
+  `);
+
+  // Layer2 用: 最近100件の読了記事
+  const selectRecentReads = db.prepare<RecentReadRow, []>(`
+    SELECT a.title, s.title_ja, s.summary_ja, a.category, a.source_id, r.feedback
+    FROM read_history r
+    JOIN articles a ON a.id = r.article_id
+    LEFT JOIN summaries s ON s.article_id = a.id
+    ORDER BY r.read_at DESC
+    LIMIT 100
+  `);
+
+  // ── セマンティックプロファイル ───────────────────────
+  const insertSemanticProfile = db.prepare<void, { $profile: string; $based_on: number }>(`
+    INSERT INTO semantic_profile (profile, based_on) VALUES ($profile, $based_on)
+  `);
+
+  const selectLatestProfile = db.prepare<{ profile: string; based_on: number }, []>(`
+    SELECT profile, based_on FROM semantic_profile ORDER BY id DESC LIMIT 1
+  `);
+
+  // ── ユーザー設定 ──────────────────────────────────────
+  const selectUserPreferences = db.prepare<UserPreference, []>(`
+    SELECT type, value FROM user_preferences ORDER BY type, value
+  `);
+
+  const insertUserPreference = db.prepare<void, { $type: string; $value: string }>(`
+    INSERT OR IGNORE INTO user_preferences (type, value) VALUES ($type, $value)
+  `);
+
+  const deleteUserPreference = db.prepare<void, { $type: string; $value: string }>(`
+    DELETE FROM user_preferences WHERE type = $type AND value = $value
+  `);
+
+  // ── personal_score 更新 ───────────────────────────────
+  const updatePersonalScore = db.prepare<void, { $article_id: number; $personal_score: number }>(`
+    UPDATE summaries SET personal_score = $personal_score WHERE article_id = $article_id
+  `);
+
+  // personal_score が未設定の summaries を取得（ai_score と category を含む）
+  const selectSummariesForBoost = db.prepare<
+    { article_id: number; ai_score: number; category: string },
+    []
+  >(`
+    SELECT s.article_id, s.ai_score, a.category
+    FROM summaries s
+    JOIN articles a ON a.id = s.article_id
+  `);
+
+  // 読了件数（プロファイル再生成トリガー判定用）
+  const countReadHistory = db.prepare<{ count: number }, []>(`
+    SELECT COUNT(*) as count FROM read_history
+  `);
+
   return {
     insertArticle,
     insertFetchLog,
@@ -104,5 +197,17 @@ export function makeQueries(db: Database) {
     selectArticlesWithoutBody,
     selectUnsummarized,
     insertSummary,
+    insertReadHistory,
+    updateReadFeedback,
+    selectReadCountByCategory,
+    selectRecentReads,
+    insertSemanticProfile,
+    selectLatestProfile,
+    selectUserPreferences,
+    insertUserPreference,
+    deleteUserPreference,
+    updatePersonalScore,
+    selectSummariesForBoost,
+    countReadHistory,
   };
 }

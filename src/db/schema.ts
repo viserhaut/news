@@ -25,13 +25,17 @@ export function initDb(dbPath: string): Database {
 
   db.run(`
     CREATE TABLE IF NOT EXISTS summaries (
-      article_id INTEGER PRIMARY KEY REFERENCES articles(id) ON DELETE CASCADE,
-      title_ja   TEXT,
-      summary_ja TEXT,
-      ai_score   REAL,
-      scored_at  DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+      article_id     INTEGER PRIMARY KEY REFERENCES articles(id) ON DELETE CASCADE,
+      title_ja       TEXT,
+      summary_ja     TEXT,
+      ai_score       REAL,
+      personal_score REAL,
+      scored_at      DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
     )
   `);
+  // 既存 DB への personal_score カラム追加（存在しなければ）
+  try { db.run(`ALTER TABLE summaries ADD COLUMN personal_score REAL`); } catch {}
+
 
   db.run(`
     CREATE TABLE IF NOT EXISTS fetch_logs (
@@ -53,10 +57,31 @@ export function initDb(dbPath: string): Database {
     )
   `);
 
+  db.run(`
+    CREATE TABLE IF NOT EXISTS semantic_profile (
+      id         INTEGER PRIMARY KEY AUTOINCREMENT,
+      profile    TEXT    NOT NULL,
+      based_on   INTEGER NOT NULL,
+      created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+    )
+  `);
+
+  db.run(`
+    CREATE TABLE IF NOT EXISTS user_preferences (
+      id         INTEGER PRIMARY KEY AUTOINCREMENT,
+      type       TEXT    NOT NULL,
+      value      TEXT    NOT NULL,
+      created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+      UNIQUE(type, value)
+    )
+  `);
+
   db.run(`CREATE INDEX IF NOT EXISTS idx_articles_fetched_at ON articles(fetched_at)`);
   db.run(`CREATE INDEX IF NOT EXISTS idx_articles_expires_at ON articles(expires_at)`);
   db.run(`CREATE INDEX IF NOT EXISTS idx_articles_source_id  ON articles(source_id)`);
-  db.run(`CREATE INDEX IF NOT EXISTS idx_fetch_logs_source   ON fetch_logs(source_id, fetched_at)`);
+  db.run(`CREATE INDEX IF NOT EXISTS idx_fetch_logs_source    ON fetch_logs(source_id, fetched_at)`);
+  db.run(`CREATE INDEX IF NOT EXISTS idx_read_history_article ON read_history(article_id)`);
+  db.run(`CREATE INDEX IF NOT EXISTS idx_read_history_read_at ON read_history(read_at)`);
 
   return db;
 }
