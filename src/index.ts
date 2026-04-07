@@ -12,6 +12,7 @@ import { computeTagAffinity, applyTagBoost } from "./personalize/layer1";
 import { maybeGenerateProfile } from "./personalize/layer2";
 import { buildPersonalContext } from "./personalize/inject";
 import { notifyDigest, notifyError } from "./notify/slack";
+import type { DigestArticleRow } from "./db/queries";
 
 const ROOT_DIR = join(import.meta.dir, "..");
 const DB_PATH = process.env.DB_PATH ?? join(ROOT_DIR, "data", "digest.db");
@@ -144,7 +145,13 @@ async function main() {
 
   // ── Step 7: Slack 通知 ───────────────────────────────
   const digestArticles = q.selectDigestArticles.all();
-  await notifyDigest(digestArticles, totalNew).catch((err) => {
+  // Slack 通知は48時間以内の記事のみ（古い記事が Top5 に入り込むのを防ぐ）
+  const cutoff = Date.now() - 24 * 60 * 60 * 1000;
+  const recentArticles = (digestArticles as DigestArticleRow[]).filter((a) => {
+    if (!a.published_at) return true;
+    return new Date(a.published_at).getTime() > cutoff;
+  });
+  await notifyDigest(recentArticles, totalNew).catch((err) => {
     console.error("[slack] Notification failed:", err instanceof Error ? err.message : err);
   });
 
