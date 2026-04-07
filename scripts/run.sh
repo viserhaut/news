@@ -11,6 +11,12 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh" --no-use
 export PATH="$HOME/.bun/bin:$HOME/.local/bin:/usr/local/bin:/opt/homebrew/bin:$PATH"
 
+# claude CLI: NVM 管理の Node.js バイナリを PATH に追加
+if [ -d "$NVM_DIR/versions/node" ]; then
+  NODE_BIN=$(ls -d "$NVM_DIR/versions/node"/*/bin 2>/dev/null | tail -1)
+  [ -n "$NODE_BIN" ] && export PATH="$NODE_BIN:$PATH"
+fi
+
 # ログディレクトリ
 LOG_DIR="$PROJECT_DIR/logs"
 mkdir -p "$LOG_DIR"
