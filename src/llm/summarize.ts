@@ -124,7 +124,19 @@ export async function summarizeBatch(
 
     try {
       const prompt = buildPrompt(inputs, personalContext);
-      const raw = await callClaude(prompt);
+      // タイムアウト時に1回リトライ
+      let raw: string;
+      try {
+        raw = await callClaude(prompt);
+      } catch (firstErr) {
+        const msg = firstErr instanceof Error ? firstErr.message : String(firstErr);
+        if (msg.includes("code 143") || msg.includes("SIGTERM")) {
+          console.warn(`[llm] Batch ${batchNum} timed out, retrying...`);
+          raw = await callClaude(prompt);
+        } else {
+          throw firstErr;
+        }
+      }
       const outputs = parseResponse(raw);
 
       // id でマップして保存

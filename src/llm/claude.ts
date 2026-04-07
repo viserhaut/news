@@ -1,4 +1,4 @@
-const CLAUDE_TIMEOUT_MS = 180_000;
+const CLAUDE_TIMEOUT_MS = 300_000; // 5分（10記事×本文付きでも余裕を持たせる）
 
 export class ClaudeAuthError extends Error {
   constructor() {
