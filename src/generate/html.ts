@@ -48,7 +48,7 @@ function getTier(score: number): Tier {
   for (const t of TIERS) {
     if (score >= t.min) return t;
   }
-  return TIERS[TIERS.length - 1];
+  return TIERS[TIERS.length - 1]!;
 }
 
 // ── カテゴリラベル ────────────────────────────────────
