@@ -44,6 +44,6 @@ jobs:
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
           claude_args: |
-            --max-turns 10
+            --max-turns 30
             --model ${{ vars.ANTHROPIC_MODEL }}
             --allowedTools "Read,Edit,Write,MultiEdit,Glob,Grep,LS,Bash(bun:*),Bash(git:*),Bash(gh:*)"
