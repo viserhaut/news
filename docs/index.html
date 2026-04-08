@@ -228,6 +228,30 @@ footer { text-align: center; color: var(--text-dim); font-size: 0.6875rem; paddi
 footer a { color: var(--text-dim); text-decoration: none; }
 footer a:hover { color: var(--accent-light); }
 
+.bookmark-btn {
+  background: none; border: none; padding: 0 0.125rem; cursor: pointer;
+  color: var(--text-dim); font-size: 0.875rem; line-height: 1;
+  transition: color 0.12s ease; flex-shrink: 0;
+}
+.bookmark-btn:hover { color: #f59e0b; }
+.bookmark-btn.is-bookmarked { color: #f59e0b; }
+
+.copy-btn {
+  background: none; border: none; padding: 0 0.125rem; cursor: pointer;
+  color: var(--text-dim); font-size: 0.75rem; line-height: 1;
+  transition: color 0.12s ease; white-space: nowrap; flex-shrink: 0;
+}
+.copy-btn:hover { color: var(--accent-light); }
+.copy-btn.copied { color: #10b981; font-size: 0.6875rem; }
+
+.export-btn {
+  display: block; width: 100%; padding: 0.4rem 0.625rem; margin-top: 0.25rem;
+  background: none; border: 1px solid var(--border); border-radius: 6px;
+  color: var(--text-muted); font-size: 0.8125rem; cursor: pointer;
+  text-align: left; transition: all 0.12s ease;
+}
+.export-btn:hover { border-color: var(--accent-light); color: var(--accent-light); }
+
 @media (max-width: 768px) {
   .layout { flex-direction: column; }
   .sidebar {
@@ -339,6 +363,11 @@ footer a:hover { color: var(--accent-light); }
         <span class="toc-count">65</span>
       </a>
     </div>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-heading">ブックマーク</div>
+    <button class="export-btn" id="export-bookmarks-btn">📥 ブックマークを書き出す</button>
   </div>
 </aside>
 
@@ -4843,6 +4872,111 @@ restoreState();
 setActiveBtn('read-filters', currentReadFilter);
 setActiveBtn('category-filters', currentCategoryFilter);
 applyFilters();
+
+// ── ブックマーク機能 ──────────────────────────────────
+var BOOKMARK_KEY = 'bookmarks';
+
+function getBookmarks() {
+  try { return JSON.parse(localStorage.getItem(BOOKMARK_KEY) || '[]'); } catch (e) { return []; }
+}
+function saveBookmarks(arr) {
+  localStorage.setItem(BOOKMARK_KEY, JSON.stringify(arr));
+}
+function isBookmarked(url) {
+  return getBookmarks().indexOf(url) !== -1;
+}
+function toggleBookmark(url) {
+  var bms = getBookmarks();
+  var idx = bms.indexOf(url);
+  if (idx === -1) bms.push(url);
+  else bms.splice(idx, 1);
+  saveBookmarks(bms);
+  return idx === -1; // true if now bookmarked
+}
+
+// ── カードにブックマーク・コピーボタン挿入 ──────────
+document.querySelectorAll('.card').forEach(function(card) {
+  var link = card.querySelector('.card-title a');
+  if (!link) return;
+  var url = link.href;
+  var meta = card.querySelector('.card-meta');
+  if (!meta) return;
+
+  var bookmarked = isBookmarked(url);
+  var bBtn = document.createElement('button');
+  bBtn.className = 'bookmark-btn' + (bookmarked ? ' is-bookmarked' : '');
+  bBtn.setAttribute('aria-label', bookmarked ? 'ブックマーク解除' : 'ブックマークに追加');
+  bBtn.textContent = bookmarked ? '★' : '☆';
+  meta.appendChild(bBtn);
+
+  var cBtn = document.createElement('button');
+  cBtn.className = 'copy-btn';
+  cBtn.setAttribute('aria-label', 'URLをコピー');
+  cBtn.textContent = '🔗';
+  meta.appendChild(cBtn);
+});
+
+// ── ブックマーク・コピー イベント ─────────────────────
+document.querySelector('.main').addEventListener('click', function(e) {
+  var bBtn = e.target.closest('.bookmark-btn');
+  if (bBtn) {
+    var bCard = bBtn.closest('.card');
+    if (!bCard) return;
+    var bLink = bCard.querySelector('.card-title a');
+    if (!bLink) return;
+    var nowBm = toggleBookmark(bLink.href);
+    bBtn.textContent = nowBm ? '★' : '☆';
+    bBtn.classList.toggle('is-bookmarked', nowBm);
+    bBtn.setAttribute('aria-label', nowBm ? 'ブックマーク解除' : 'ブックマークに追加');
+    return;
+  }
+
+  var cBtn = e.target.closest('.copy-btn');
+  if (cBtn) {
+    var cCard = cBtn.closest('.card');
+    if (!cCard) return;
+    var cLink = cCard.querySelector('.card-title a');
+    if (!cLink) return;
+    navigator.clipboard.writeText(cLink.href).then(function() {
+      cBtn.textContent = '✓ Copied';
+      cBtn.classList.add('copied');
+      setTimeout(function() {
+        cBtn.textContent = '🔗';
+        cBtn.classList.remove('copied');
+      }, 1000);
+    });
+    return;
+  }
+});
+
+// ── Markdown エクスポート ─────────────────────────────
+function exportBookmarks() {
+  var bms = getBookmarks();
+  if (bms.length === 0) { alert('ブックマークがありません'); return; }
+  var today = new Date().toISOString().slice(0, 10);
+  var lines = ['# Bookmarks - ' + today, ''];
+  bms.forEach(function(url) {
+    var title = url;
+    document.querySelectorAll('.card-title a').forEach(function(a) {
+      if (a.href === url) title = a.textContent.trim();
+    });
+    var safeTitle = title.replace(/\\/g, '\\\\').replace(/\[/g, '\\[').replace(/\]/g, '\\]');
+    var safeUrl = url.replace(/\(/g, '%28').replace(/\)/g, '%29');
+    lines.push('- [' + safeTitle + '](' + safeUrl + ')');
+  });
+  var content = lines.join('\n') + '\n';
+  var blob = new Blob([content], { type: 'text/markdown; charset=utf-8' });
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'bookmarks-' + today + '.md';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(a.href);
+}
+
+var exportBtnEl = document.getElementById('export-bookmarks-btn');
+if (exportBtnEl) { exportBtnEl.addEventListener('click', exportBookmarks); }
 </script>
 </body>
 </html>
