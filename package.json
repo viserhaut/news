@@ -4,6 +4,7 @@
   "type": "module",
   "private": true,
   "scripts": {
+    "typecheck": "tsc --noEmit",
     "start": "bun run src/index.ts",
     "generate": "bun run src/generate/html.ts",
     "backup": "bun run src/backup/sqlite.ts",
