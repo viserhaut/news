@@ -252,6 +252,32 @@ footer a:hover { color: var(--accent-light); }
 }
 .export-btn:hover { border-color: var(--accent-light); color: var(--accent-light); }
 
+.card.focused {
+  border-left: 3px solid var(--accent); padding-left: calc(1.25rem - 2px);
+}
+
+.kbd-modal-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.55);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 1000; backdrop-filter: blur(2px);
+}
+.kbd-modal {
+  background: var(--surface); border: 1px solid var(--border-light);
+  border-radius: 12px; padding: 1.5rem 2rem; max-width: 400px; width: 90%;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+}
+.kbd-modal h3 { font-size: 1rem; font-weight: 600; margin-bottom: 1rem; }
+.kbd-table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
+.kbd-table td { padding: 0.5rem 0.5rem; color: var(--text-muted); vertical-align: middle; }
+.kbd-table td:first-child { width: 110px; white-space: nowrap; }
+.kbd-table tr + tr td { border-top: 1px solid var(--border); }
+kbd {
+  display: inline-block; padding: 0.125rem 0.375rem;
+  border: 1px solid var(--border-light); border-radius: 4px;
+  background: var(--bg); font-size: 0.75rem; font-family: monospace;
+  color: var(--text); line-height: 1.4;
+}
+
 @media (max-width: 768px) {
   .layout { flex-direction: column; }
   .sidebar {
@@ -4977,6 +5003,96 @@ function exportBookmarks() {
 
 var exportBtnEl = document.getElementById('export-bookmarks-btn');
 if (exportBtnEl) { exportBtnEl.addEventListener('click', exportBookmarks); }
+
+// ── キーボードショートカット ──────────────────────────
+var focusedCard = null;
+var kbdModal = null;
+
+function getVisibleCards() {
+  return Array.from(document.querySelectorAll('.card:not([style*="display: none"])'));
+}
+
+function setFocus(card) {
+  if (focusedCard) focusedCard.classList.remove('focused');
+  focusedCard = card;
+  if (card) {
+    card.classList.add('focused');
+    card.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+  }
+}
+
+function moveFocus(dir) {
+  var cards = getVisibleCards();
+  if (!cards.length) return;
+  var idx = focusedCard ? cards.indexOf(focusedCard) : -1;
+  var next;
+  if (idx === -1) {
+    next = dir === 1 ? 0 : cards.length - 1;
+  } else {
+    next = dir === 1 ? Math.min(idx + 1, cards.length - 1) : Math.max(idx - 1, 0);
+  }
+  setFocus(cards[next]);
+}
+
+function showKbdModal() {
+  if (kbdModal) { kbdModal.remove(); kbdModal = null; return; }
+  var overlay = document.createElement('div');
+  overlay.className = 'kbd-modal-overlay';
+  overlay.innerHTML =
+    '<div class="kbd-modal">' +
+      '<h3>キーボードショートカット</h3>' +
+      '<table class="kbd-table">' +
+        '<tr><td><kbd>j</kbd> / <kbd>k</kbd></td><td>次/前の記事へ移動</td></tr>' +
+        '<tr><td><kbd>r</kbd></td><td>既読トグル</td></tr>' +
+        '<tr><td><kbd>b</kbd></td><td>ブックマークトグル</td></tr>' +
+        '<tr><td><kbd>?</kbd></td><td>このヘルプを表示</td></tr>' +
+        '<tr><td><kbd>Esc</kbd></td><td>モーダルを閉じる</td></tr>' +
+      '</table>' +
+    '</div>';
+  overlay.addEventListener('click', function(e) {
+    if (e.target === overlay) { overlay.remove(); kbdModal = null; }
+  });
+  document.body.appendChild(overlay);
+  kbdModal = overlay;
+}
+
+document.addEventListener('keydown', function(e) {
+  var tag = document.activeElement ? document.activeElement.tagName : '';
+  if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+
+  switch (e.key) {
+    case 'j':
+      moveFocus(1);
+      e.preventDefault();
+      break;
+    case 'k':
+      moveFocus(-1);
+      e.preventDefault();
+      break;
+    case 'r':
+      if (focusedCard) toggleRead(focusedCard);
+      break;
+    case 'b':
+      if (focusedCard) {
+        var bLink = focusedCard.querySelector('.card-title a');
+        var bBtn = focusedCard.querySelector('.bookmark-btn');
+        if (bLink && bBtn) {
+          var nowBm = toggleBookmark(bLink.href);
+          bBtn.textContent = nowBm ? '\u2605' : '\u2606';
+          bBtn.classList.toggle('is-bookmarked', nowBm);
+          bBtn.setAttribute('aria-label', nowBm ? '\u30d6\u30c3\u30af\u30de\u30fc\u30af\u89e3\u9664' : '\u30d6\u30c3\u30af\u30de\u30fc\u30af\u306b\u8ffd\u52a0');
+        }
+      }
+      break;
+    case '?':
+      showKbdModal();
+      e.preventDefault();
+      break;
+    case 'Escape':
+      if (kbdModal) { kbdModal.remove(); kbdModal = null; }
+      break;
+  }
+});
 </script>
 </body>
 </html>
