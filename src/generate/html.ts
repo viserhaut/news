@@ -326,19 +326,26 @@ body {
 
 /* 詳細パネル */
 .detail-overlay {
-  display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4);
-  z-index: 200; backdrop-filter: blur(2px);
+  display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+  z-index: 200; backdrop-filter: blur(4px);
+  opacity: 0; transition: opacity 0.2s ease;
 }
-.detail-overlay.open { display: block; }
+.detail-overlay.open { display: flex; opacity: 1; }
 
 .detail-panel {
-  position: fixed; top: 0; right: 0; height: 100%; width: 420px; max-width: 100%;
-  background: var(--surface); border-left: 1px solid var(--border);
-  z-index: 201; display: flex; flex-direction: column;
-  transform: translateX(100%); transition: transform 0.25s ease;
-  box-shadow: -4px 0 24px rgba(0,0,0,0.15);
+  position: fixed; top: 50%; left: 50%; z-index: 201;
+  width: 560px; max-width: calc(100vw - 2rem); max-height: calc(100vh - 4rem);
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 14px; display: flex; flex-direction: column;
+  box-shadow: 0 24px 64px rgba(0,0,0,0.3), 0 4px 16px rgba(0,0,0,0.15);
+  transform: translate(-50%, -48%) scale(0.95);
+  opacity: 0; transition: transform 0.22s cubic-bezier(0.34,1.56,0.64,1), opacity 0.18s ease;
+  pointer-events: none;
 }
-.detail-panel.open { transform: translateX(0); }
+.detail-panel.open {
+  transform: translate(-50%, -50%) scale(1);
+  opacity: 1; pointer-events: auto;
+}
 
 .detail-panel-header {
   display: flex; align-items: flex-start; gap: 0.75rem;
