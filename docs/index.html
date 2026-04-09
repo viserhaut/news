@@ -360,6 +360,12 @@ kbd {
     </div>
 
     <div class="sidebar-section">
+      <div class="filter-list">
+        <button class="filter-btn" id="bookmark-filter-btn">★ ブックマーク</button>
+      </div>
+    </div>
+
+    <div class="sidebar-section">
       <div class="sidebar-heading">カテゴリ</div>
       <div class="filter-list" id="category-filters">
         <button class="filter-btn active" data-value="all">すべて</button>
@@ -4790,6 +4796,7 @@ function updateSectionVisibility(section) {
 var params = new URLSearchParams(location.search);
 var currentReadFilter = params.get('read') || 'all';
 var currentCategoryFilter = params.get('category') || 'all';
+var currentBookmarkFilter = false;
 var currentSearch = '';
 
 function updateURL() {
@@ -4811,6 +4818,10 @@ function applyFilters() {
     if (currentReadFilter === 'unread' && isRead) show = false;
     if (currentReadFilter === 'read' && !isRead) show = false;
     if (currentCategoryFilter !== 'all' && cat !== currentCategoryFilter) show = false;
+    if (currentBookmarkFilter) {
+      var cardLink = card.querySelector('.card-title a');
+      if (!cardLink || !isBookmarked(cardLink.href)) show = false;
+    }
     if (q && !title.toLowerCase().includes(q) && !summary.toLowerCase().includes(q)) show = false;
     if (show && card.style.display === 'none' && getSet(SKIP_KEY).has(Number(card.dataset.id))) show = false;
     if (show) card.style.display = '';
@@ -4845,6 +4856,13 @@ function filterByCategory(cat) {
   applyFilters();
 }
 
+function toggleBookmarkFilter() {
+  currentBookmarkFilter = !currentBookmarkFilter;
+  var btn = document.getElementById('bookmark-filter-btn');
+  if (btn) btn.classList.toggle('active', currentBookmarkFilter);
+  applyFilters();
+}
+
 // ── イベント委譲 ──────────────────────────────────────
 document.querySelector('.main').addEventListener('click', function(e) {
   var readBtn = e.target.closest('.read-btn');
@@ -4872,6 +4890,8 @@ document.getElementById('read-filters').addEventListener('click', function(e) {
   var btn = e.target.closest('.filter-btn');
   if (btn) filterArticles(btn.dataset.value || 'all');
 });
+
+document.getElementById('bookmark-filter-btn').addEventListener('click', toggleBookmarkFilter);
 
 var searchEl = document.getElementById('search');
 var searchTimer = null;
