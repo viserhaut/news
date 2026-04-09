@@ -329,6 +329,16 @@ footer a:hover { color: var(--accent-light); }
       </div>
     </div>
 
+    <div class="sidebar-section" id="date-filters">
+      <div class="sidebar-heading">期間</div>
+      <div class="filter-list">
+        <button class="filter-btn active" data-value="all">すべて</button>
+        <button class="filter-btn" data-value="today">今日</button>
+        <button class="filter-btn" data-value="3days">3日</button>
+        <button class="filter-btn" data-value="week">1週間</button>
+      </div>
+    </div>
+
     <div class="sidebar-section toc">
       <div class="sidebar-heading">セクション</div>
       <a class="toc-link" href="#must-read">
@@ -4744,12 +4754,14 @@ function updateSectionVisibility(section) {
 var params = new URLSearchParams(location.search);
 var currentReadFilter = params.get('read') || 'all';
 var currentCategoryFilter = params.get('category') || 'all';
+var currentDateFilter = params.get('date') || 'all';
 var currentSearch = '';
 
 function updateURL() {
   var p = new URLSearchParams(location.search);
   currentReadFilter === 'all' ? p.delete('read') : p.set('read', currentReadFilter);
   currentCategoryFilter === 'all' ? p.delete('category') : p.set('category', currentCategoryFilter);
+  currentDateFilter === 'all' ? p.delete('date') : p.set('date', currentDateFilter);
   var qs = p.toString();
   history.replaceState(null, '', qs ? '?' + qs : location.pathname);
 }
@@ -4765,6 +4777,22 @@ function applyFilters() {
     if (currentReadFilter === 'unread' && isRead) show = false;
     if (currentReadFilter === 'read' && !isRead) show = false;
     if (currentCategoryFilter !== 'all' && cat !== currentCategoryFilter) show = false;
+    if (currentDateFilter !== 'all') {
+      var dateStr = card.dataset.date;
+      if (dateStr) {
+        var cardDate = new Date(dateStr);
+        var now = new Date();
+        var cutoff;
+        if (currentDateFilter === 'today') {
+          cutoff = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        } else if (currentDateFilter === '3days') {
+          cutoff = new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000);
+        } else if (currentDateFilter === 'week') {
+          cutoff = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+        }
+        if (cutoff && cardDate < cutoff) show = false;
+      }
+    }
     if (q && !title.toLowerCase().includes(q) && !summary.toLowerCase().includes(q)) show = false;
     if (show && card.style.display === 'none' && getSet(SKIP_KEY).has(Number(card.dataset.id))) show = false;
     if (show) card.style.display = '';
@@ -4799,6 +4827,12 @@ function filterByCategory(cat) {
   applyFilters();
 }
 
+function filterByDate(period) {
+  currentDateFilter = period;
+  setActiveBtn('date-filters', period);
+  applyFilters();
+}
+
 // ── イベント委譲 ──────────────────────────────────────
 document.querySelector('.main').addEventListener('click', function(e) {
   var readBtn = e.target.closest('.read-btn');
@@ -4828,6 +4862,11 @@ document.getElementById('category-filters').addEventListener('click', function(e
 document.getElementById('read-filters').addEventListener('click', function(e) {
   var btn = e.target.closest('.filter-btn');
   if (btn) filterArticles(btn.dataset.value || 'all');
+});
+
+document.getElementById('date-filters').addEventListener('click', function(e) {
+  var btn = e.target.closest('.filter-btn');
+  if (btn) filterByDate(btn.dataset.value || 'all');
 });
 
 var searchEl = document.getElementById('search');
@@ -4884,6 +4923,7 @@ function shareArticle(btn) {
 restoreState();
 setActiveBtn('read-filters', currentReadFilter);
 setActiveBtn('category-filters', currentCategoryFilter);
+setActiveBtn('date-filters', currentDateFilter);
 applyFilters();
 initShareButtons();
 </script>
