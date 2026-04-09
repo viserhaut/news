@@ -70,6 +70,21 @@ function categoryLabel(cat: string): string {
   return CATEGORY_LABELS[cat] ?? cat;
 }
 
+// ── 要約を箇条書きに変換 ──────────────────────────────
+function summaryHtml(summary: string | null | undefined): string {
+  if (!summary) return "";
+  // 「。」で文を分割して箇条書きに
+  const sentences = summary
+    .split(/。(?!」|』|\s*$)/)
+    .map((s) => s.trim())
+    .filter((s) => s.length > 0);
+  if (sentences.length <= 1) {
+    return `<p class="card-summary">${esc(summary)}</p>`;
+  }
+  const items = sentences.map((s) => `<li>${esc(s)}。</li>`).join("");
+  return `<ul class="card-summary-list">${items}</ul>`;
+}
+
 // ── カード HTML ───────────────────────────────────────
 function cardHtml(a: DigestArticleRow): string {
   const score = typeof a.personal_score === "number" ? a.personal_score : 0;
@@ -77,12 +92,12 @@ function cardHtml(a: DigestArticleRow): string {
   const tier = getTier(score);
 
   return `<article class="card${a.detail_summary_ja ? " has-detail" : ""}" data-id="${a.id}" data-category="${esc(a.category)}" data-tier="${tier.id}" data-date="${esc(a.published_at ?? "")}"${a.detail_summary_ja ? ` data-detail="${esc(a.detail_summary_ja)}" data-url="${safeUrl(a.url)}" data-title="${esc(a.title_ja ?? a.url)}" data-summary="${esc(a.summary_ja ?? "")}"` : ""}>
-  <button class="skip-btn" aria-label="スキップ">✕</button>
+  <button type="button" class="skip-btn" aria-label="スキップ">✕</button>
   <div class="card-row">
-    <button class="read-btn" aria-label="既読にする"></button>
+    <button type="button" class="read-btn" aria-label="既読にする"></button>
     <div class="card-body">
       <h3 class="card-title"><a href="${safeUrl(a.url)}" target="_blank" rel="noopener noreferrer">${esc(a.title_ja ?? a.url)}</a></h3>
-      <p class="card-summary">${esc(a.summary_ja ?? "")}</p>
+      ${summaryHtml(a.summary_ja)}
       <div class="card-meta">
         <span class="feed-name">${esc(a.source_id)}</span>
         <span class="sep">·</span>
@@ -107,8 +122,8 @@ function tierSectionHtml(tier: Tier, cards: DigestArticleRow[]): string {
     <span class="tier-bar" style="background:${tier.color}"></span>
     <h2>${tier.label}</h2>
     <span class="tier-count">${cards.length}</span>
-    <button class="mark-section-read">全て既読</button>
-    <button class="skip-section-btn">スキップ</button>
+    <button type="button" class="mark-section-read">全て既読</button>
+    <button type="button" class="skip-section-btn">スキップ</button>
   </div>
   ${cardsHtml}
 </section>`;
@@ -253,7 +268,8 @@ body {
 
 .card {
   background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
-  padding: 1rem 1.25rem; margin-bottom: 0.5rem; transition: all 0.15s ease;
+  padding: 1rem 1.25rem; margin-bottom: 0.5rem;
+  transition: background 0.15s ease, border-color 0.15s ease;
   position: relative;
 }
 .card:hover { background: var(--surface-hover); border-color: var(--border-light); }
@@ -312,8 +328,8 @@ body {
 .card-score { flex-shrink: 0; margin-top: 0.125rem; }
 
 .score-ring {
-  width: 2.75rem; height: 2.75rem; border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
+  width: 2.75rem; aspect-ratio: 1; border-radius: 50%;
+  display: grid; place-content: center;
   background: conic-gradient(var(--color) calc(var(--pct) * 1%), var(--border) 0);
   position: relative;
 }
@@ -409,27 +425,29 @@ kbd {
   color: var(--text); line-height: 1.4;
 }
 
-/* 詳細パネル */
-.detail-overlay {
-  display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5);
-  z-index: 200; backdrop-filter: blur(4px);
-  opacity: 0; transition: opacity 0.2s ease;
-}
-.detail-overlay.open { display: flex; opacity: 1; }
-
-.detail-panel {
-  position: fixed; top: 50%; left: 50%; z-index: 201;
+/* 詳細パネル（ネイティブ <dialog> 使用） */
+#detail-dialog {
+  border: 1px solid var(--border); border-radius: 14px; padding: 0;
   width: 760px; max-width: calc(100vw - 2rem); max-height: calc(100vh - 4rem);
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: 14px; display: flex; flex-direction: column;
+  background: var(--surface); color: var(--text);
   box-shadow: 0 24px 64px rgba(0,0,0,0.3), 0 4px 16px rgba(0,0,0,0.15);
-  transform: translate(-50%, -48%) scale(0.95);
-  opacity: 0; transition: transform 0.22s cubic-bezier(0.34,1.56,0.64,1), opacity 0.18s ease;
-  pointer-events: none;
+  display: flex; flex-direction: column;
+  /* 閉じた状態 */
+  opacity: 0; transform: scale(0.95) translateY(2%);
+  transition: opacity 0.18s ease, transform 0.22s cubic-bezier(0.34,1.56,0.64,1),
+              display 0.22s allow-discrete, overlay 0.22s allow-discrete;
 }
-.detail-panel.open {
-  transform: translate(-50%, -50%) scale(1);
-  opacity: 1; pointer-events: auto;
+#detail-dialog[open] { opacity: 1; transform: scale(1) translateY(0); }
+@starting-style {
+  #detail-dialog[open] { opacity: 0; transform: scale(0.95) translateY(2%); }
+}
+#detail-dialog::backdrop {
+  background: rgba(0,0,0,0.5); backdrop-filter: blur(4px);
+  transition: display 0.22s allow-discrete, overlay 0.22s allow-discrete,
+              background-color 0.2s ease;
+}
+@starting-style {
+  #detail-dialog[open]::backdrop { background-color: transparent; }
 }
 
 .detail-panel-header {
@@ -497,6 +515,53 @@ kbd {
 footer { text-align: center; color: var(--text-dim); font-size: 0.6875rem; padding: 1.5rem 0; }
 footer a { color: var(--text-dim); text-decoration: none; }
 footer a:hover { color: var(--accent-light); }
+
+/* 要約の箇条書き表示 */
+.card-summary-list {
+  font-size: 0.8125rem; color: var(--text-muted); line-height: 1.6;
+  margin-bottom: 0.375rem; padding-left: 1rem; list-style: none;
+}
+.card-summary-list li { position: relative; padding-left: 0.875rem; margin-bottom: 0.1rem; }
+.card-summary-list li::before {
+  content: "·"; position: absolute; left: 0; color: var(--accent-light); font-weight: 700;
+}
+.card:not(:hover) .card-summary-list li:nth-child(n+3) { display: none; }
+
+/* トップへ戻るボタン */
+.back-to-top {
+  position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 100;
+  width: 2.5rem; height: 2.5rem; border-radius: 50%;
+  background: var(--accent); color: #fff; border: none;
+  font-size: 1rem; cursor: pointer;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+.back-to-top.visible { opacity: 1; pointer-events: auto; }
+@media (any-hover: hover) {
+  .back-to-top:hover { transform: translateY(-2px); }
+  .card:hover { background: var(--surface-hover); border-color: var(--border-light); }
+  .filter-btn:hover { background: var(--surface); color: var(--text); }
+  .toc-link:hover { background: var(--surface); color: var(--text); }
+  .read-btn:hover { border-color: var(--accent-light); color: var(--accent-light); }
+  .skip-btn:hover { border-color: #ef4444; color: #ef4444; background: rgba(239,68,68,0.1); }
+  .detail-panel-link:hover { opacity: 0.85; }
+  .bookmark-btn:hover { color: #f59e0b; }
+  .copy-btn:hover { color: var(--accent-light); }
+  .share-btn:hover { border-color: var(--accent-light); color: var(--accent-light); }
+  .export-btn:hover { border-color: var(--accent-light); color: var(--accent-light); }
+  .theme-toggle:hover { border-color: var(--accent-light); color: var(--accent-light); }
+  .mark-section-read:hover { border-color: var(--accent-light); color: var(--accent-light); }
+  .skip-section-btn:hover { border-color: #ef4444; color: #ef4444; }
+  .score-ring[data-tooltip]:hover::after { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    transition-duration: 1ms !important;
+    animation-duration: 1ms !important;
+  }
+}
 
 @media (max-width: 768px) {
   .layout { flex-direction: column; }
@@ -791,6 +856,7 @@ function buildSourceFilters() {
   sources.sort();
   sources.forEach(function(source) {
     var btn = document.createElement('button');
+    btn.type = 'button';
     btn.className = 'filter-btn';
     btn.dataset.value = source;
     btn.textContent = source;
@@ -819,36 +885,33 @@ document.querySelector('.main').addEventListener('click', function(e) {
   if (articleLink) { markRead(articleLink.closest('.card')); return; }
 
   var card = e.target.closest('.card.has-detail');
-  if (card && !e.target.closest('.read-btn, .skip-btn')) {
+  if (card && !e.target.closest('.read-btn, .skip-btn, .bookmark-btn, .copy-btn, .share-btn')) {
     openDetailPanel(card);
   }
 });
 
-// ── 詳細パネル ────────────────────────────────────────
-var detailPanel = document.getElementById('detail-panel');
-var detailOverlay = document.getElementById('detail-overlay');
+// ── 詳細パネル（ネイティブ dialog） ──────────────────
+var detailDialog = document.getElementById('detail-dialog');
 
 function openDetailPanel(card) {
   document.getElementById('detail-panel-title').textContent = card.dataset.title || '';
   document.getElementById('detail-panel-summary').textContent = card.dataset.summary || '';
   document.getElementById('detail-panel-detail').textContent = card.dataset.detail || '';
-  var link = document.getElementById('detail-panel-link');
-  link.href = card.dataset.url || '#';
-  detailPanel.classList.add('open');
-  detailOverlay.classList.add('open');
-  document.body.style.overflow = 'hidden';
+  document.getElementById('detail-panel-link').href = card.dataset.url || '#';
+  detailDialog.showModal();
 }
 
 function closeDetailPanel() {
-  detailPanel.classList.remove('open');
-  detailOverlay.classList.remove('open');
-  document.body.style.overflow = '';
+  detailDialog.close();
 }
 
 document.getElementById('detail-panel-close').addEventListener('click', closeDetailPanel);
-detailOverlay.addEventListener('click', closeDetailPanel);
-document.addEventListener('keydown', function(e) {
-  if (e.key === 'Escape' && detailPanel.classList.contains('open')) closeDetailPanel();
+detailDialog.addEventListener('click', function(e) {
+  // backdrop クリックで閉じる（dialog 要素外クリック）
+  var rect = detailDialog.getBoundingClientRect();
+  if (e.clientX < rect.left || e.clientX > rect.right || e.clientY < rect.top || e.clientY > rect.bottom) {
+    closeDetailPanel();
+  }
 });
 
 document.getElementById('category-filters').addEventListener('click', function(e) {
@@ -1060,7 +1123,7 @@ function showKbdModal() {
 document.addEventListener('keydown', function(e) {
   var tag = document.activeElement ? document.activeElement.tagName : '';
   if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
-  if (detailPanel && detailPanel.classList.contains('open')) return;
+  if (detailDialog && detailDialog.open) return;
   switch (e.key) {
     case 'j': moveFocus(1); e.preventDefault(); break;
     case 'k': moveFocus(-1); e.preventDefault(); break;
@@ -1079,6 +1142,20 @@ document.addEventListener('keydown', function(e) {
     case '?': showKbdModal(); e.preventDefault(); break;
     case 'Escape': if (kbdModal) { kbdModal.remove(); kbdModal = null; } break;
   }
+});
+
+// ── トップへ戻る ──────────────────────────────────────
+var backToTopBtn = document.getElementById('back-to-top');
+var mainEl = document.querySelector('.main');
+mainEl.addEventListener('scroll', function() {
+  backToTopBtn.classList.toggle('visible', mainEl.scrollTop > 400);
+}, { passive: true });
+window.addEventListener('scroll', function() {
+  backToTopBtn.classList.toggle('visible', window.scrollY > 400);
+}, { passive: true });
+backToTopBtn.addEventListener('click', function() {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  mainEl.scrollTo({ top: 0, behavior: 'smooth' });
 });
 
 // ── 初期化 ────────────────────────────────────────────
@@ -1142,7 +1219,7 @@ export async function generateHtml(
     .map((c) => {
       const label = c === "all" ? "すべて" : categoryLabel(c);
       const active = c === "all" ? ' class="filter-btn active"' : ' class="filter-btn"';
-      return `<button${active} data-value="${esc(c)}">${esc(label)}</button>`;
+      return `<button type="button"${active} data-value="${esc(c)}">${esc(label)}</button>`;
     })
     .join("\n");
 
@@ -1181,7 +1258,7 @@ export async function generateHtml(
       </svg>
       News Digest
     </div>
-    <button class="theme-toggle" id="theme-toggle" title="テーマ切り替え">
+    <button type="button" class="theme-toggle" id="theme-toggle" title="テーマ切り替え">
       <span class="theme-icon"></span>
     </button>
   </div>
@@ -1198,15 +1275,15 @@ export async function generateHtml(
     </div>
   </div>
 
-  <button class="mobile-filter-toggle" id="mobile-filter-toggle">フィルター ▾</button>
+  <button type="button" class="mobile-filter-toggle" id="mobile-filter-toggle">フィルター ▾</button>
 
   <div class="sidebar-collapsible" id="sidebar-collapsible">
     <div class="sidebar-section" id="read-filters">
       <div class="sidebar-heading">表示</div>
       <div class="filter-list">
-        <button class="filter-btn active" data-value="all">すべて</button>
-        <button class="filter-btn" data-value="unread">未読のみ</button>
-        <button class="filter-btn" data-value="read">既読のみ</button>
+        <button type="button" class="filter-btn active" data-value="all">すべて</button>
+        <button type="button" class="filter-btn" data-value="unread">未読のみ</button>
+        <button type="button" class="filter-btn" data-value="read">既読のみ</button>
       </div>
     </div>
 
@@ -1220,17 +1297,17 @@ export async function generateHtml(
     <div class="sidebar-section" id="date-filters">
       <div class="sidebar-heading">期間</div>
       <div class="filter-list">
-        <button class="filter-btn active" data-value="all">すべて</button>
-        <button class="filter-btn" data-value="today">今日</button>
-        <button class="filter-btn" data-value="3days">3日</button>
-        <button class="filter-btn" data-value="week">1週間</button>
+        <button type="button" class="filter-btn active" data-value="all">すべて</button>
+        <button type="button" class="filter-btn" data-value="today">今日</button>
+        <button type="button" class="filter-btn" data-value="3days">3日</button>
+        <button type="button" class="filter-btn" data-value="week">1週間</button>
       </div>
     </div>
 
     <div class="sidebar-section">
       <div class="sidebar-heading">ソース</div>
       <div class="filter-list" id="source-filters">
-        <button class="filter-btn active" data-value="all">すべて</button>
+        <button type="button" class="filter-btn active" data-value="all">すべて</button>
       </div>
     </div>
 
@@ -1239,7 +1316,7 @@ export async function generateHtml(
       <div class="filter-list">
         <button class="filter-btn" id="bookmark-filter-btn" data-value="bookmarked">★ ブックマーク</button>
       </div>
-      <button class="export-btn" id="export-bookmarks-btn">📥 書き出す</button>
+      <button type="button" class="export-btn" id="export-bookmarks-btn">📥 書き出す</button>
     </div>
 
     <div class="sidebar-section toc">
@@ -1250,9 +1327,9 @@ export async function generateHtml(
 </aside>
 
 <main class="main">
-  <div class="search-wrap">
+  <search class="search-wrap">
     <input id="search" class="search-input" type="search" placeholder="キーワード検索..." aria-label="記事を検索">
-  </div>
+  </search>
 
   ${sections}
 
@@ -1266,12 +1343,14 @@ export async function generateHtml(
 
 </div>
 
-<!-- 詳細パネル -->
-<div class="detail-overlay" id="detail-overlay"></div>
-<div class="detail-panel" id="detail-panel" role="dialog" aria-modal="true" aria-labelledby="detail-panel-title">
+<!-- トップへ戻るボタン -->
+<button type="button" class="back-to-top" id="back-to-top" aria-label="トップへ戻る">↑</button>
+
+<!-- 詳細パネル（ネイティブ dialog） -->
+<dialog id="detail-dialog" aria-labelledby="detail-panel-title">
   <div class="detail-panel-header">
     <h2 id="detail-panel-title"></h2>
-    <button class="detail-panel-close" id="detail-panel-close" aria-label="閉じる">✕</button>
+    <button type="button" class="detail-panel-close" id="detail-panel-close" aria-label="閉じる">✕</button>
   </div>
   <div class="detail-panel-body">
     <p class="detail-panel-summary" id="detail-panel-summary"></p>
@@ -1281,7 +1360,7 @@ export async function generateHtml(
   <div class="detail-panel-footer">
     <a class="detail-panel-link" id="detail-panel-link" href="#" target="_blank" rel="noopener noreferrer">元記事を読む →</a>
   </div>
-</div>
+</dialog>
 
 <script>
 ${JS}
