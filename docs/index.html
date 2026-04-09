@@ -212,6 +212,68 @@ body {
   font-variant-numeric: tabular-nums; color: var(--text-muted);
 }
 
+.has-detail { cursor: pointer; }
+.has-detail:hover .card-title a { text-decoration: underline; }
+
+/* 詳細パネル */
+.detail-overlay {
+  display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4);
+  z-index: 200; backdrop-filter: blur(2px);
+}
+.detail-overlay.open { display: block; }
+
+.detail-panel {
+  position: fixed; top: 0; right: 0; height: 100%; width: 420px; max-width: 100%;
+  background: var(--surface); border-left: 1px solid var(--border);
+  z-index: 201; display: flex; flex-direction: column;
+  transform: translateX(100%); transition: transform 0.25s ease;
+  box-shadow: -4px 0 24px rgba(0,0,0,0.15);
+}
+.detail-panel.open { transform: translateX(0); }
+
+.detail-panel-header {
+  display: flex; align-items: flex-start; gap: 0.75rem;
+  padding: 1rem 1rem 0.75rem; border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.detail-panel-header h2 {
+  flex: 1; font-size: 0.9375rem; font-weight: 600; line-height: 1.5;
+  color: var(--text); margin: 0;
+}
+.detail-panel-close {
+  flex-shrink: 0; background: none; border: none; color: var(--text-dim);
+  font-size: 1.125rem; cursor: pointer; padding: 0.125rem 0.25rem; line-height: 1;
+  transition: color 0.12s ease;
+}
+.detail-panel-close:hover { color: var(--text); }
+
+.detail-panel-body {
+  flex: 1; overflow-y: auto; padding: 1rem;
+  scrollbar-width: thin; scrollbar-color: var(--border) transparent;
+}
+.detail-panel-body::-webkit-scrollbar { width: 4px; }
+.detail-panel-body::-webkit-scrollbar-thumb { background: var(--border-light); border-radius: 4px; }
+
+.detail-panel-summary {
+  font-size: 0.8125rem; color: var(--text-muted); line-height: 1.7;
+  margin: 0 0 1rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border-light);
+}
+.detail-panel-detail {
+  font-size: 0.8125rem; color: var(--text-muted); line-height: 1.9;
+  white-space: pre-wrap;
+}
+
+.detail-panel-footer {
+  padding: 0.875rem 1rem; border-top: 1px solid var(--border); flex-shrink: 0;
+}
+.detail-panel-link {
+  display: block; text-align: center; padding: 0.625rem 1rem;
+  background: var(--accent-light); color: #fff; border-radius: 8px;
+  font-size: 0.875rem; font-weight: 600; text-decoration: none;
+  transition: opacity 0.12s ease;
+}
+.detail-panel-link:hover { opacity: 0.85; }
+
 .search-wrap { margin-bottom: 1.5rem; }
 .search-input {
   width: 100%; padding: 0.5rem 0.875rem; border: 1px solid var(--border);
@@ -326,17 +388,17 @@ footer a:hover { color: var(--accent-light); }
       <a class="toc-link" href="#must-read">
         <span class="toc-dot" style="background:#10b981"></span>
         Must Read
-        <span class="toc-count">59</span>
+        <span class="toc-count">70</span>
       </a>
 <a class="toc-link" href="#recommended">
         <span class="toc-dot" style="background:#3b82f6"></span>
         Recommended
-        <span class="toc-count">76</span>
+        <span class="toc-count">90</span>
       </a>
 <a class="toc-link" href="#worth-a-look">
         <span class="toc-dot" style="background:#f59e0b"></span>
         Worth a Look
-        <span class="toc-count">65</span>
+        <span class="toc-count">40</span>
       </a>
     </div>
   </div>
@@ -351,7 +413,7 @@ footer a:hover { color: var(--accent-light); }
   <div class="tier-header">
     <span class="tier-bar" style="background:#10b981"></span>
     <h2>Must Read</h2>
-    <span class="tier-count">59</span>
+    <span class="tier-count">70</span>
     <button class="mark-section-read">既読</button>
     <button class="skip-section-btn">スキップ</button>
   </div>
@@ -418,6 +480,27 @@ footer a:hover { color: var(--accent-light); }
     </div>
   </div>
 </article>
+<article class="card" data-id="1431" data-category="ai_tools" data-tier="must-read" data-date="2026-04-09T10:24:05.000Z">
+  <div class="card-row">
+    <button class="read-btn" aria-label="既読にする"></button>
+    <button class="skip-btn" aria-label="スキップ">✕</button>
+    <div class="card-body">
+      <h3 class="card-title"><a href="https://zenn.dev/dragon1208/articles/4c1b5549faadc4" target="_blank" rel="noopener noreferrer">スケーラブルなAIエージェントの設計思想：「脳」と「手」の分離</a></h3>
+      <p class="card-summary">AnthropicのManaged Agents設計における「Brain（推論）とHands（実行）の分離」アーキテクチャを解説した記事。コンテキストウィンドウと長期記憶の分離、TTFTの改善、スキルによる自己進化など実践的な設計指針が網羅されている。AIエージェント開発者として自社システム設計の参考になる重要な一次情報。</p>
+      <div class="card-meta">
+        <span class="feed-name">zenn_claude</span>
+        <span class="sep">·</span>
+        <span class="date">4/9</span>
+        <span class="tag">AIツール</span>
+      </div>
+    </div>
+    <div class="card-score">
+      <div class="score-ring" style="--pct:100;--color:#10b981">
+        <span>100</span>
+      </div>
+    </div>
+  </div>
+</article>
 <article class="card" data-id="21" data-category="cloud" data-tier="must-read" data-date="2026-04-06T16:51:00.000Z">
   <div class="card-row">
     <button class="read-btn" aria-label="既読にする"></button>
@@ -430,6 +513,27 @@ footer a:hover { color: var(--accent-light); }
         <span class="sep">·</span>
         <span class="date">4/7</span>
         <span class="tag">クラウド</span>
+      </div>
+    </div>
+    <div class="card-score">
+      <div class="score-ring" style="--pct:100;--color:#10b981">
+        <span>100</span>
+      </div>
+    </div>
+  </div>
+</article>
+<article class="card" data-id="1436" data-category="ai_tools" data-tier="must-read" data-date="2026-04-09T06:40:57.000Z">
+  <div class="card-row">
+    <button class="read-btn" aria-label="既読にする"></button>
+    <button class="skip-btn" aria-label="スキップ">✕</button>
+    <div class="card-body">
+      <h3 class="card-title"><a href="https://zenn.dev/dely_jp/articles/82c25c727be94e" target="_blank" rel="noopener noreferrer">Claude CodeでALBログ分析スキルを作って運用</a></h3>
+      <p class="card-summary">AWS ALBアクセスログのS3ダウンロード〜集計〜Markdownレポート生成までをClaude Code Skillsに落とし込んだ実践事例。定常的な手作業をスキル化してチーム共有できる点が肝。SRE兼Claude Code活用者のこのユーザーには、SRE業務の自動化アイデアとして直結する内容。</p>
+      <div class="card-meta">
+        <span class="feed-name">zenn_claude</span>
+        <span class="sep">·</span>
+        <span class="date">4/9</span>
+        <span class="tag">AIツール</span>
       </div>
     </div>
     <div class="card-score">
@@ -523,6 +627,27 @@ footer a:hover { color: var(--accent-light); }
     </div>
   </div>
 </article>
+<article class="card" data-id="1438" data-category="ai_tools" data-tier="must-read" data-date="2026-04-09T04:49:32.000Z">
+  <div class="card-row">
+    <button class="read-btn" aria-label="既読にする"></button>
+    <button class="skip-btn" aria-label="スキップ">✕</button>
+    <div class="card-body">
+      <h3 class="card-title"><a href="https://zenn.dev/sprix_it/articles/3211f5068cec29" target="_blank" rel="noopener noreferrer">Anthropic Managed Agentsを実際に触ってみた</a></h3>
+      <p class="card-summary">2026年4月リリースのAnthropic Managed Agentsを実際にAPIで検証した記事。「頭脳（モデル）・手（サンドボックス）・記録（セッションログ）」を分離するアーキテクチャを実コードで確認している。Claudeを使ったエージェント開発に注力するこのユーザーには、新API習得の観点で即価値がある。</p>
+      <div class="card-meta">
+        <span class="feed-name">zenn_claude</span>
+        <span class="sep">·</span>
+        <span class="date">4/9</span>
+        <span class="tag">AIツール</span>
+      </div>
+    </div>
+    <div class="card-score">
+      <div class="score-ring" style="--pct:98;--color:#10b981">
+        <span>98</span>
+      </div>
+    </div>
+  </div>
+</article>
 <article class="card" data-id="1382" data-category="ai_tools" data-tier="must-read" data-date="2026-04-08T12:04:04.000Z">
   <div class="card-row">
     <button class="read-btn" aria-label="既読にする"></button>
@@ -598,6 +723,27 @@ footer a:hover { color: var(--accent-light); }
         <span class="sep">·</span>
         <span class="date">4/8</span>
         <span class="tag">クラウド</span>
+      </div>
+    </div>
+    <div class="card-score">
+      <div class="score-ring" style="--pct:97;--color:#10b981">
+        <span>97</span>
+      </div>
+    </div>
+  </div>
+</article>
+<article class="card" data-id="1439" data-category="ai_tools" data-tier="must-read" data-date="2026-04-09T04:30:48.000Z">
+  <div class="card-row">
+    <button class="read-btn" aria-label="既読にする"></button>
+    <button class="skip-btn" aria-label="スキップ">✕</button>
+    <div class="card-body">
+      <h3 class="card-title"><a href="https://zenn.dev/watabean/articles/mcp-inspector-cli" target="_blank" rel="noopener noreferrer">MCP仕様理解のためのInspector自作 — JSON-RPCレベルの可視化</a></h3>
+      <p class="card-summary">公式MCPインスペクターを使わず、JSON-RPCレベルでMCP通信を可視化するCLIツールを自作した記事。クライアント側のcapability実装責務や、SSE→Streamable HTTP移行、ツール定義のトークンコストなど深い仕様が整理されている。MCPを実務で使うこのユーザーにとってプロトコル理解を深める良質な資料。</p>
+      <div class="card-meta">
+        <span class="feed-name">zenn_claude</span>
+        <span class="sep">·</span>
+        <span class="date">4/9</span>
+        <span class="tag">AIツール</span>
       </div>
     </div>
     <div class="card-score">
@@ -745,6 +891,48 @@ footer a:hover { color: var(--accent-light); }
         <span class="sep">·</span>
         <span class="date">4/6</span>
         <span class="tag">クラウド</span>
+      </div>
+    </div>
+    <div class="card-score">
+      <div class="score-ring" style="--pct:95;--color:#10b981">
+        <span>95</span>
+      </div>
+    </div>
+  </div>
+</article>
+<article class="card" data-id="1440" data-category="ai_tools" data-tier="must-read" data-date="2026-04-09T04:08:44.000Z">
+  <div class="card-row">
+    <button class="read-btn" aria-label="既読にする"></button>
+    <button class="skip-btn" aria-label="スキップ">✕</button>
+    <div class="card-body">
+      <h3 class="card-title"><a href="https://zenn.dev/bun913/articles/003b6dd4ee1c8d" target="_blank" rel="noopener noreferrer">Claude Code Skillsの実践活用事例 — 月次品質レポート自動化</a></h3>
+      <p class="card-summary">JIRA・Datadog・Slack Canvasの情報をClaude Code Skillsで統合し、月次品質レポートを自動生成した事例。障害とインフラメトリクスの相関分析まで自動化している点が実践的。Claude Code Skills活用に強い関心を持つこのユーザーにとって、SRE業務への直接応用例として参考になる。</p>
+      <div class="card-meta">
+        <span class="feed-name">zenn_claude</span>
+        <span class="sep">·</span>
+        <span class="date">4/9</span>
+        <span class="tag">AIツール</span>
+      </div>
+    </div>
+    <div class="card-score">
+      <div class="score-ring" style="--pct:95;--color:#10b981">
+        <span>95</span>
+      </div>
+    </div>
+  </div>
+</article>
+<article class="card" data-id="1437" data-category="ai_tools" data-tier="must-read" data-date="2026-04-09T05:39:46.000Z">
+  <div class="card-row">
+    <button class="read-btn" aria-label="既読にする"></button>
+    <button class="skip-btn" aria-label="スキップ">✕</button>
+    <div class="card-body">
+      <h3 class="card-title"><a href="https://zenn.dev/yukitakeshita/articles/8bd5f02bc59201" target="_blank" rel="noopener noreferrer">Claude Code同士を会話させるMCPサーバー「cc-to-cc」</a></h3>
+      <p class="card-summary">独立起動した複数のClaude Codeセッション間でメッセージをやり取りするMCPサーバーを自作した記事。フロントエンド/バックエンド並行開発時の「人間メッセンジャー」問題を解消する実用的なアプローチ。複数プロジェクトを並行開発するユーザーにとって、マルチエージェント連携の具体的な実装例として参考になる。</p>
+      <div class="card-meta">
+        <span class="feed-name">zenn_claude</span>
+        <span class="sep">·</span>
+        <span class="date">4/9</span>
+        <span class="tag">AIツール</span>
       </div>
     </div>
     <div class="card-score">
@@ -964,6 +1152,48 @@ footer a:hover { color: var(--accent-light); }
     </div>
   </div>
 </article>
+<article class="card" data-id="1396" data-category="community" data-tier="must-read" data-date="2026-04-09T01:21:05.000Z">
+  <div class="card-row">
+    <button class="read-btn" aria-label="既読にする"></button>
+    <button class="skip-btn" aria-label="スキップ">✕</button>
+    <div class="card-body">
+      <h3 class="card-title"><a href="https://zenn.dev/tokium_dev/articles/claude-code-evolutionary-memory" target="_blank" rel="noopener noreferrer">Claude Codeのメモリを3階層化して「学習」を実現する方法</a></h3>
+      <p class="card-summary">Claude Codeのメモリ構造を3階層に設計することで、単なる記憶保存から実際の行動変容（学習）を実現した実践レポート。SessionEnd Hookや進化プロトコルファイルなど具体的な仕組みも紹介されている。Claude Codeを日常的に活用するAIエージェント開発者にとって、すぐに取り入れられる実践的な知見が詰まっている。Slack日次振り返りの自動化など応用例も含まれる。</p>
+      <div class="card-meta">
+        <span class="feed-name">hatena</span>
+        <span class="sep">·</span>
+        <span class="date">4/9</span>
+        <span class="tag">コミュニティ</span>
+      </div>
+    </div>
+    <div class="card-score">
+      <div class="score-ring" style="--pct:93;--color:#10b981">
+        <span>93</span>
+      </div>
+    </div>
+  </div>
+</article>
+<article class="card" data-id="1434" data-category="ai_tools" data-tier="must-read" data-date="2026-04-09T08:20:19.000Z">
+  <div class="card-row">
+    <button class="read-btn" aria-label="既読にする"></button>
+    <button class="skip-btn" aria-label="スキップ">✕</button>
+    <div class="card-body">
+      <h3 class="card-title"><a href="https://zenn.dev/kai_kou/articles/187-claude-api-1m-context-migration-guide" target="_blank" rel="noopener noreferrer">Claude API 1Mコンテキストベータ廃止 — 4/30期限の移行チェックリスト</a></h3>
+      <p class="card-summary">2026年4月30日にClaude Sonnet 4.5/4向け1Mトークンコンテキストベータが廃止され、ベータヘッダーを外さないと200kに制限される。移行手順と新機能output-300kへの切り替え方をまとめたガイド。Claude APIを使って個人開発・エージェント開発をするこのユーザーには期限が迫った実務対応として重要。</p>
+      <div class="card-meta">
+        <span class="feed-name">zenn_claude</span>
+        <span class="sep">·</span>
+        <span class="date">4/9</span>
+        <span class="tag">AIツール</span>
+      </div>
+    </div>
+    <div class="card-score">
+      <div class="score-ring" style="--pct:93;--color:#10b981">
+        <span>93</span>
+      </div>
+    </div>
+  </div>
+</article>
 <article class="card" data-id="890" data-category="ai_tools" data-tier="must-read" data-date="2026-04-06T23:30:05.000Z">
   <div class="card-row">
     <button class="read-btn" aria-label="既読にする"></button>
@@ -1017,6 +1247,27 @@ footer a:hover { color: var(--accent-light); }
         <span class="feed-name">zenn_claude</span>
         <span class="sep">·</span>
         <span class="date">4/6</span>
+        <span class="tag">AIツール</span>
+      </div>
+    </div>
+    <div class="card-score">
+      <div class="score-ring" style="--pct:92;--color:#10b981">
+        <span>92</span>
+      </div>
+    </div>
+  </div>
+</article>
+<article class="card" data-id="1432" data-category="ai_tools" data-tier="must-read" data-date="2026-04-09T10:11:44.000Z">
+  <div class="card-row">
+    <button class="read-btn" aria-label="既読にする"></button>
+    <button class="skip-btn" aria-label="スキップ">✕</button>
+    <div class="card-body">
+      <h3 class="card-title"><a href="https://zenn.dev/jospeh232/articles/96f26f10ea5cfa" target="_blank" rel="noopener noreferrer">Claude Codeコード流出が示すセキュリティ設計の変化</a></h3>
+      <p class="card-summary">Claude Codeのソースコード流出事例を起点に、「完全に隠す」から「露出しても致命傷にならない層分け（Compartment設計）」へのセキュリティ思想の転換を論じた記事。NIST Zero Trust Architectureとの接続も整理されている。SREかつセキュリティに関心を持つこのユーザーには、AI時代のシステム設計思想として示唆が大きい。</p>
+      <div class="card-meta">
+        <span class="feed-name">zenn_claude</span>
+        <span class="sep">·</span>
+        <span class="date">4/9</span>
         <span class="tag">AIツール</span>
       </div>
     </div>
@@ -1510,6 +1761,27 @@ footer a:hover { color: var(--accent-light); }
     </div>
   </div>
 </article>
+<article class="card" data-id="1492" data-category="ai_tools" data-tier="must-read" data-date="2026-04-09T02:34:15.000Z">
+  <div class="card-row">
+    <button class="read-btn" aria-label="既読にする"></button>
+    <button class="skip-btn" aria-label="スキップ">✕</button>
+    <div class="card-body">
+      <h3 class="card-title"><a href="https://www.reddit.com/r/LocalLLaMA/comments/1sgd7fp/its_insane_how_lobotomized_opus_46_is_right_now/" target="_blank" rel="noopener noreferrer">Claude Opus 4.6 の性能低下について — Gemma 4 31B にも負けるという報告</a></h3>
+      <p class="card-summary">Claude Opus 4.6が特定のベンチマーク（carwash test）でGemma 4 31Bに劣るという性能評価の議論。Claudeユーザーとして現在のモデル品質の実態を把握するうえで重要な情報。AIエージェント開発においてモデル選定やバージョン固定の判断に影響する可能性がある。実用ベンチマークによるモデル比較の観点から注目したいスレッド。</p>
+      <div class="card-meta">
+        <span class="feed-name">reddit_localllama</span>
+        <span class="sep">·</span>
+        <span class="date">4/9</span>
+        <span class="tag">AIツール</span>
+      </div>
+    </div>
+    <div class="card-score">
+      <div class="score-ring" style="--pct:86;--color:#10b981">
+        <span>86</span>
+      </div>
+    </div>
+  </div>
+</article>
 <article class="card" data-id="109" data-category="ai_tools" data-tier="must-read" data-date="2026-04-06T19:00:28.000Z">
   <div class="card-row">
     <button class="read-btn" aria-label="既読にする"></button>
@@ -1594,13 +1866,34 @@ footer a:hover { color: var(--accent-light); }
     </div>
   </div>
 </article>
+<article class="card" data-id="1446" data-category="community" data-tier="must-read" data-date="2026-04-08T16:01:32.000Z">
+  <div class="card-row">
+    <button class="read-btn" aria-label="既読にする"></button>
+    <button class="skip-btn" aria-label="スキップ">✕</button>
+    <div class="card-body">
+      <h3 class="card-title"><a href="https://ai.meta.com/blog/introducing-muse-spark-msl/?_fb_noscript=1" target="_blank" rel="noopener noreferrer">Muse Spark：パーソナル超知性に向けたスケーリング</a></h3>
+      <p class="card-summary">MetaがMuse Sparkを正式発表。ネイティブマルチモーダル推論モデルでツール使用・視覚的CoT・マルチエージェントオーケストレーションをサポート。AIエージェント開発に直接関わる機能セットで、MCPやClaudeと競合・補完する存在として重要。アーキテクチャや性能詳細を確認する価値が高い。</p>
+      <div class="card-meta">
+        <span class="feed-name">hacker_news</span>
+        <span class="sep">·</span>
+        <span class="date">4/9</span>
+        <span class="tag">コミュニティ</span>
+      </div>
+    </div>
+    <div class="card-score">
+      <div class="score-ring" style="--pct:85;--color:#10b981">
+        <span>85</span>
+      </div>
+    </div>
+  </div>
+</article>
 </section>
 
 <section id="recommended" class="tier-section">
   <div class="tier-header">
     <span class="tier-bar" style="background:#3b82f6"></span>
     <h2>Recommended</h2>
-    <span class="tier-count">76</span>
+    <span class="tier-count">90</span>
     <button class="mark-section-read">既読</button>
     <button class="skip-section-btn">スキップ</button>
   </div>
@@ -1637,6 +1930,31 @@ footer a:hover { color: var(--accent-light); }
         <span class="sep">·</span>
         <span class="date">4/7</span>
         <span class="tag">AIツール</span>
+      </div>
+    </div>
+    <div class="card-score">
+      <div class="score-ring" style="--pct:84;--color:#3b82f6">
+        <span>84</span>
+      </div>
+    </div>
+  </div>
+</article>
+<article class="card has-detail" data-id="1549" data-category="community" data-tier="recommended" data-date="2026-04-09T00:46:17.000Z" data-detail="・Claude Codeはエンジニアコミュニティで特に高い支持を得ているAIコーディングツール
+・「開発者と読み解くAIの世界」連載としてImpress窓の杜が掲載
+・開発現場での実際の変化・ワークフローへの影響を軸に解説
+・本文の詳細テキストは取得できておらず、具体的な技術内容は不明
+・Claude Code利用者・検討者向けの入門〜実践的な解説記事と推測" data-url="https://forest.watch.impress.co.jp/docs/serial/aidev/2097897.html" data-title="エンジニアに人気の「Claude Code」は何がすごい？開発現場での変化を紐解く" data-summary="Claude Codeがエンジニアの間でなぜ人気を集めているかを、開発現場での実際の変化から解説した記事。AIエージェント開発を実務で活用しているこのユーザーにとって、Claude Codeの特徴と現場での位置づけを整理する上で直接参考になる。本文の詳細は取得できていないが、Impressの「開発者と読み解くAIの世界」連載の一部。">
+  <div class="card-row">
+    <button class="read-btn" aria-label="既読にする"></button>
+    <button class="skip-btn" aria-label="スキップ">✕</button>
+    <div class="card-body">
+      <h3 class="card-title"><a href="https://forest.watch.impress.co.jp/docs/serial/aidev/2097897.html" target="_blank" rel="noopener noreferrer">エンジニアに人気の「Claude Code」は何がすごい？開発現場での変化を紐解く</a></h3>
+      <p class="card-summary">Claude Codeがエンジニアの間でなぜ人気を集めているかを、開発現場での実際の変化から解説した記事。AIエージェント開発を実務で活用しているこのユーザーにとって、Claude Codeの特徴と現場での位置づけを整理する上で直接参考になる。本文の詳細は取得できていないが、Impressの「開発者と読み解くAIの世界」連載の一部。</p>
+      <div class="card-meta">
+        <span class="feed-name">hatena</span>
+        <span class="sep">·</span>
+        <span class="date">4/9</span>
+        <span class="tag">コミュニティ</span>
       </div>
     </div>
     <div class="card-score">
@@ -1940,6 +2258,27 @@ footer a:hover { color: var(--accent-light); }
     </div>
   </div>
 </article>
+<article class="card" data-id="1503" data-category="cloud" data-tier="recommended" data-date="2026-04-09T01:10:17.000Z">
+  <div class="card-row">
+    <button class="read-btn" aria-label="既読にする"></button>
+    <button class="skip-btn" aria-label="スキップ">✕</button>
+    <div class="card-body">
+      <h3 class="card-title"><a href="https://www.reddit.com/r/kubernetes/comments/1sgbddh/my_home_lab_setup_to_learn_k8s/" target="_blank" rel="noopener noreferrer">K8s学習のためのホームラボ構成</a></h3>
+      <p class="card-summary">Kubernetesを自宅環境で学ぶためのホームラボ構成例を紹介するスレッド。ハードウェア選定やクラスタ構成の実践的な情報が含まれると思われる。SREとしてK8sスキルを深めるための参考事例として価値がある。オンプレ環境でのK8s運用知識はクラウド本番環境にも応用できる。</p>
+      <div class="card-meta">
+        <span class="feed-name">reddit_kubernetes</span>
+        <span class="sep">·</span>
+        <span class="date">4/9</span>
+        <span class="tag">クラウド</span>
+      </div>
+    </div>
+    <div class="card-score">
+      <div class="score-ring" style="--pct:82;--color:#3b82f6">
+        <span>82</span>
+      </div>
+    </div>
+  </div>
+</article>
 <article class="card" data-id="77" data-category="community" data-tier="recommended" data-date="2026-04-05T08:56:18.000Z">
   <div class="card-row">
     <button class="read-btn" aria-label="既読にする"></button>
@@ -2066,6 +2405,27 @@ footer a:hover { color: var(--accent-light); }
     </div>
   </div>
 </article>
+<article class="card" data-id="1407" data-category="community" data-tier="recommended" data-date="2026-04-09T00:06:25.000Z">
+  <div class="card-row">
+    <button class="read-btn" aria-label="既読にする"></button>
+    <button class="skip-btn" aria-label="スキップ">✕</button>
+    <div class="card-body">
+      <h3 class="card-title"><a href="https://zenn.dev/dely_jp/articles/ef573ae39b9162" target="_blank" rel="noopener noreferrer">仕様書は「使い捨て」にした方がうまくいった――仕様駆動開発3ヶ月の転換</a></h3>
+      <p class="card-summary">AWS AI-DLCのConstructionフェーズに着想を得てClaude Codeと仕様駆動開発を3ヶ月実践した知見。/execute-planスキルによる自動化と、コードベースノイズ問題を経て使い捨てドキュメント方針へ転換した経緯を詳述。Claude Codeを用いた個人・チーム開発ワークフロー改善に直接応用できる。</p>
+      <div class="card-meta">
+        <span class="feed-name">hatena</span>
+        <span class="sep">·</span>
+        <span class="date">4/9</span>
+        <span class="tag">コミュニティ</span>
+      </div>
+    </div>
+    <div class="card-score">
+      <div class="score-ring" style="--pct:81;--color:#3b82f6">
+        <span>81</span>
+      </div>
+    </div>
+  </div>
+</article>
 <article class="card" data-id="1292" data-category="ai_tools" data-tier="recommended" data-date="2026-04-08T08:00:24.000Z">
   <div class="card-row">
     <button class="read-btn" aria-label="既読にする"></button>
@@ -2120,6 +2480,27 @@ footer a:hover { color: var(--accent-light); }
         <span class="sep">·</span>
         <span class="date">4/6</span>
         <span class="tag">AI研究</span>
+      </div>
+    </div>
+    <div class="card-score">
+      <div class="score-ring" style="--pct:80;--color:#3b82f6">
+        <span>80</span>
+      </div>
+    </div>
+  </div>
+</article>
+<article class="card" data-id="1398" data-category="community" data-tier="recommended" data-date="2026-04-08T12:23:52.000Z">
+  <div class="card-row">
+    <button class="read-btn" aria-label="既読にする"></button>
+    <button class="skip-btn" aria-label="スキップ">✕</button>
+    <div class="card-body">
+      <h3 class="card-title"><a href="https://codezine.jp/news/detail/23899" target="_blank" rel="noopener noreferrer">Amazon S3 Files発表 — S3バケットをファイルシステムとして利用可能に</a></h3>
+      <p class="card-summary">AWSがS3バケットをファイルシステムとしてマウント・操作できる新機能「Amazon S3 Files」を発表した。S3の操作パラダイムが変わる可能性があり、ECS/AWSを日常的に扱うSREとして実務への影響を早期に把握しておく価値が高い。IaCでのリソース管理やデータパイプライン設計にも影響しうる注目情報。</p>
+      <div class="card-meta">
+        <span class="feed-name">hatena</span>
+        <span class="sep">·</span>
+        <span class="date">4/8</span>
+        <span class="tag">コミュニティ</span>
       </div>
     </div>
     <div class="card-score">
@@ -2188,6 +2569,48 @@ footer a:hover { color: var(--accent-light); }
     <div class="card-score">
       <div class="score-ring" style="--pct:80;--color:#3b82f6">
         <span>80</span>
+      </div>
+    </div>
+  </div>
+</article>
+<article class="card" data-id="1397" data-category="community" data-tier="recommended" data-date="2026-04-08T03:05:27.000Z">
+  <div class="card-row">
+    <button class="read-btn" aria-label="既読にする"></button>
+    <button class="skip-btn" aria-label="スキップ">✕</button>
+    <div class="card-body">
+      <h3 class="card-title"><a href="https://dev.classmethod.jp/articles/claude-code-multi-agent-on-windows11-wsl-tmux/" target="_blank" rel="noopener noreferrer">Windows 11でClaude Codeのマルチエージェント開発環境をゼロから構築 — WSL + Arch Linux + tmux</a></h3>
+      <p class="card-summary">Windows 11上でWSL・Arch Linux・tmuxを組み合わせてClaude Codeのマルチエージェント開発環境をスクラッチから構築する手順を詳解した記事。Claude Codeのsplit panes活用によるマルチエージェント運用は直接の関心領域に合致する。macOS環境のユーザーには直接適用できないが、Claude Codeの環境構築・tmux分割活用のノウハウとして参考になる実践的内容。</p>
+      <div class="card-meta">
+        <span class="feed-name">hatena</span>
+        <span class="sep">·</span>
+        <span class="date">4/8</span>
+        <span class="tag">コミュニティ</span>
+      </div>
+    </div>
+    <div class="card-score">
+      <div class="score-ring" style="--pct:80;--color:#3b82f6">
+        <span>80</span>
+      </div>
+    </div>
+  </div>
+</article>
+<article class="card" data-id="1406" data-category="community" data-tier="recommended" data-date="2026-04-09T08:03:29.000Z">
+  <div class="card-row">
+    <button class="read-btn" aria-label="既読にする"></button>
+    <button class="skip-btn" aria-label="スキップ">✕</button>
+    <div class="card-body">
+      <h3 class="card-title"><a href="https://tech-blog.localmet.com/entry/2026/04/09/165926" target="_blank" rel="noopener noreferrer">Embedding modelの双曲性を利用したRAG精度向上の可能性</a></h3>
+      <p class="card-summary">双曲空間embeddingがRAGの検索品質を改善するかを再現実験で検証した技術記事。階層構造を持つ知識の検索精度向上と矛盾検知への応用可能性を報告している。AIエージェント（ERP）開発スタートアップのCTOによる実践的な知見であり、RAGを活用したAIエージェント開発者として参考になる視点を提供する。双曲空間の理論的背景から実装の再現まで踏み込んだ内容。</p>
+      <div class="card-meta">
+        <span class="feed-name">hatena</span>
+        <span class="sep">·</span>
+        <span class="date">4/9</span>
+        <span class="tag">コミュニティ</span>
+      </div>
+    </div>
+    <div class="card-score">
+      <div class="score-ring" style="--pct:79;--color:#3b82f6">
+        <span>79</span>
       </div>
     </div>
   </div>
@@ -2297,6 +2720,27 @@ footer a:hover { color: var(--accent-light); }
     </div>
   </div>
 </article>
+<article class="card" data-id="1471" data-category="ai_research" data-tier="recommended" data-date="2026-04-08T23:07:44.000Z">
+  <div class="card-row">
+    <button class="read-btn" aria-label="既読にする"></button>
+    <button class="skip-btn" aria-label="スキップ">✕</button>
+    <div class="card-body">
+      <h3 class="card-title"><a href="https://simonwillison.net/2026/Apr/8/muse-spark/#atom-everything" target="_blank" rel="noopener noreferrer">MetaがMuse Sparkを発表、meta.ai に新ツール群</a></h3>
+      <p class="card-summary">MetaがLlama 4以来約1年ぶりの新モデル「Muse Spark」を発表。ホスト型でオープンウェイトではなく、APIは一部ユーザー向けプレビュー段階。LLMエコシステムの動向を追うユーザーには主要プレイヤーの戦略変化として把握しておく価値がある。Simon Willisonによる簡潔な解説。</p>
+      <div class="card-meta">
+        <span class="feed-name">simon_willison</span>
+        <span class="sep">·</span>
+        <span class="date">4/9</span>
+        <span class="tag">AI研究</span>
+      </div>
+    </div>
+    <div class="card-score">
+      <div class="score-ring" style="--pct:79;--color:#3b82f6">
+        <span>79</span>
+      </div>
+    </div>
+  </div>
+</article>
 <article class="card" data-id="806" data-category="ai_tools" data-tier="recommended" data-date="2026-04-07T00:56:37.000Z">
   <div class="card-row">
     <button class="read-btn" aria-label="既読にする"></button>
@@ -2308,6 +2752,27 @@ footer a:hover { color: var(--accent-light); }
         <span class="feed-name">reddit_localllama</span>
         <span class="sep">·</span>
         <span class="date">4/7</span>
+        <span class="tag">AIツール</span>
+      </div>
+    </div>
+    <div class="card-score">
+      <div class="score-ring" style="--pct:79;--color:#3b82f6">
+        <span>79</span>
+      </div>
+    </div>
+  </div>
+</article>
+<article class="card" data-id="1433" data-category="ai_tools" data-tier="recommended" data-date="2026-04-09T08:40:19.000Z">
+  <div class="card-row">
+    <button class="read-btn" aria-label="既読にする"></button>
+    <button class="skip-btn" aria-label="スキップ">✕</button>
+    <div class="card-body">
+      <h3 class="card-title"><a href="https://zenn.dev/canly/articles/e7300b4d758119" target="_blank" rel="noopener noreferrer">Claude Teamプラン完全ガイド【2026/4最新】</a></h3>
+      <p class="card-summary">Standardシートでもクラウドコードが使えるようになったClaude Teamプランの管理画面機能を網羅解説。サイレント追加される新設定の把握や運用課題への対処法も含む。チームでClaude Codeを活用する観点から管理者目線の情報として参考になるが、個人利用メインなら優先度は低め。</p>
+      <div class="card-meta">
+        <span class="feed-name">zenn_claude</span>
+        <span class="sep">·</span>
+        <span class="date">4/9</span>
         <span class="tag">AIツール</span>
       </div>
     </div>
@@ -2435,6 +2900,27 @@ footer a:hover { color: var(--accent-light); }
         <span class="sep">·</span>
         <span class="date">4/7</span>
         <span class="tag">AIツール</span>
+      </div>
+    </div>
+    <div class="card-score">
+      <div class="score-ring" style="--pct:78;--color:#3b82f6">
+        <span>78</span>
+      </div>
+    </div>
+  </div>
+</article>
+<article class="card" data-id="1409" data-category="community" data-tier="recommended" data-date="2026-04-08T04:34:52.000Z">
+  <div class="card-row">
+    <button class="read-btn" aria-label="既読にする"></button>
+    <button class="skip-btn" aria-label="スキップ">✕</button>
+    <div class="card-body">
+      <h3 class="card-title"><a href="https://zenn.dev/dely_jp/articles/5d4e89c275789f" target="_blank" rel="noopener noreferrer">Claude Codeを並列実行するWezTermターミナル構成</a></h3>
+      <p class="card-summary">VSCodeからWezTerm＋Neovimへ移行し、Claude Codeを複数ペインで並列実行するターミナル環境の構築方法を紹介。タブマーカーやオーバーレイ表示など応答検知の工夫も含む。Claude Codeを日常的に活用しているユーザーにとって即実践できる設定知識。</p>
+      <div class="card-meta">
+        <span class="feed-name">hatena</span>
+        <span class="sep">·</span>
+        <span class="date">4/8</span>
+        <span class="tag">コミュニティ</span>
       </div>
     </div>
     <div class="card-score">
@@ -2650,6 +3136,27 @@ footer a:hover { color: var(--accent-light); }
     <div class="card-score">
       <div class="score-ring" style="--pct:77;--color:#3b82f6">
         <span>77</span>
+      </div>
+    </div>
+  </div>
+</article>
+<article class="card" data-id="1495" data-category="ai_tools" data-tier="recommended" data-date="2026-04-08T19:02:41.000Z">
+  <div class="card-row">
+    <button class="read-btn" aria-label="既読にする"></button>
+    <button class="skip-btn" aria-label="スキップ">✕</button>
+    <div class="card-body">
+      <h3 class="card-title"><a href="https://www.reddit.com/r/LocalLLaMA/comments/1sg2686/it_finally_happened_i_actually_had_a_use_case_for/" target="_blank" rel="noopener noreferrer">ローカルLLMが実際に役立ったユースケース体験談</a></h3>
+      <p class="card-summary">実務でローカルLLMが初めて有効活用できた具体的なユースケースの共有。クラウドAPIに頼らないオンデバイスAI活用の実例として参考になる。AIエージェント開発者として、どのタスクにローカルLLMが適しているかの判断材料になる。プライバシーやコスト面でのトレードオフ考察も含まれる可能性がある。</p>
+      <div class="card-meta">
+        <span class="feed-name">reddit_localllama</span>
+        <span class="sep">·</span>
+        <span class="date">4/9</span>
+        <span class="tag">AIツール</span>
+      </div>
+    </div>
+    <div class="card-score">
+      <div class="score-ring" style="--pct:76;--color:#3b82f6">
+        <span>76</span>
       </div>
     </div>
   </div>
@@ -2885,6 +3392,27 @@ footer a:hover { color: var(--accent-light); }
     </div>
   </div>
 </article>
+<article class="card" data-id="1408" data-category="community" data-tier="recommended" data-date="2026-04-08T14:55:12.000Z">
+  <div class="card-row">
+    <button class="read-btn" aria-label="既読にする"></button>
+    <button class="skip-btn" aria-label="スキップ">✕</button>
+    <div class="card-body">
+      <h3 class="card-title"><a href="https://www.publickey1.jp/blog/26/amazon_s3amazon_s3_filesaws.html" target="_blank" rel="noopener noreferrer">Amazon S3がファイルシステムとしてアクセス可能に――「Amazon S3 Files」提供開始</a></h3>
+      <p class="card-summary">AWSがS3バケットをファイルシステムとして直接マウント可能にする新機能「Amazon S3 Files」を発表。Amazon EFSベースでS3操作に変換する仕組みで、従来のオブジェクトストレージ制約を緩和する。SREとして管理するクラウド基盤でのストレージ設計選択肢が広がる注目アップデート。</p>
+      <div class="card-meta">
+        <span class="feed-name">hatena</span>
+        <span class="sep">·</span>
+        <span class="date">4/8</span>
+        <span class="tag">コミュニティ</span>
+      </div>
+    </div>
+    <div class="card-score">
+      <div class="score-ring" style="--pct:74;--color:#3b82f6">
+        <span>74</span>
+      </div>
+    </div>
+  </div>
+</article>
 <article class="card" data-id="884" data-category="ai_tools" data-tier="recommended" data-date="2026-04-07T01:56:14.000Z">
   <div class="card-row">
     <button class="read-btn" aria-label="既読にする"></button>
@@ -2896,6 +3424,27 @@ footer a:hover { color: var(--accent-light); }
         <span class="feed-name">zenn_claude</span>
         <span class="sep">·</span>
         <span class="date">4/7</span>
+        <span class="tag">AIツール</span>
+      </div>
+    </div>
+    <div class="card-score">
+      <div class="score-ring" style="--pct:73;--color:#3b82f6">
+        <span>73</span>
+      </div>
+    </div>
+  </div>
+</article>
+<article class="card" data-id="1435" data-category="ai_tools" data-tier="recommended" data-date="2026-04-09T07:30:07.000Z">
+  <div class="card-row">
+    <button class="read-btn" aria-label="既読にする"></button>
+    <button class="skip-btn" aria-label="スキップ">✕</button>
+    <div class="card-body">
+      <h3 class="card-title"><a href="https://zenn.dev/ko___o/articles/a734808835223a" target="_blank" rel="noopener noreferrer">左手デバイスでClaude Code並行開発を加速する</a></h3>
+      <p class="card-summary">XPPen ACK05の物理ボタンにClaude Codeへの定型文入力を割り当て、承認・応答をワンボタン化するセットアップ記事。AutomatorとAppleScriptを組み合わせた実装。複数プロジェクト並行開発の効率化という点で参考になるが、ハードウェア依存のニッチな内容。</p>
+      <div class="card-meta">
+        <span class="feed-name">zenn_claude</span>
+        <span class="sep">·</span>
+        <span class="date">4/9</span>
         <span class="tag">AIツール</span>
       </div>
     </div>
@@ -3023,6 +3572,27 @@ footer a:hover { color: var(--accent-light); }
         <span class="sep">·</span>
         <span class="date">4/8</span>
         <span class="tag">AI研究</span>
+      </div>
+    </div>
+    <div class="card-score">
+      <div class="score-ring" style="--pct:72;--color:#3b82f6">
+        <span>72</span>
+      </div>
+    </div>
+  </div>
+</article>
+<article class="card" data-id="1494" data-category="ai_tools" data-tier="recommended" data-date="2026-04-09T09:48:52.000Z">
+  <div class="card-row">
+    <button class="read-btn" aria-label="既読にする"></button>
+    <button class="skip-btn" aria-label="スキップ">✕</button>
+    <div class="card-body">
+      <h3 class="card-title"><a href="https://www.reddit.com/r/LocalLLaMA/comments/1sgl3qz/gemma_4_on_llamacpp_should_be_stable_now/" target="_blank" rel="noopener noreferrer">Gemma 4 が llama.cpp で安定動作するようになった</a></h3>
+      <p class="card-summary">GoogleのGemma 4モデルがllama.cppで安定して実行できるようになったとの報告。ローカルLLM実行環境の最新対応状況として把握しておく価値がある。AIエージェント開発でオンプレLLMを検討する際の選択肢が広がる。</p>
+      <div class="card-meta">
+        <span class="feed-name">reddit_localllama</span>
+        <span class="sep">·</span>
+        <span class="date">4/9</span>
+        <span class="tag">AIツール</span>
       </div>
     </div>
     <div class="card-score">
@@ -3200,13 +3770,34 @@ footer a:hover { color: var(--accent-light); }
     </div>
   </div>
 </article>
+<article class="card" data-id="1497" data-category="ai_tools" data-tier="recommended" data-date="2026-04-09T03:55:27.000Z">
+  <div class="card-row">
+    <button class="read-btn" aria-label="既読にする"></button>
+    <button class="skip-btn" aria-label="スキップ">✕</button>
+    <div class="card-body">
+      <h3 class="card-title"><a href="https://www.reddit.com/r/LocalLLaMA/comments/1sgex6u/new_model_lgaiexaoneexaone4533b/" target="_blank" rel="noopener noreferrer">新モデル: EXAONE-4.5-33B リリース</a></h3>
+      <p class="card-summary">LGAI社によるEXAONE 4.5シリーズ（33Bパラメータ）のリリースアナウンス。オープンウェイト大規模LLMの新選択肢として注目に値する。AIエージェント開発においてモデル選定の幅が広がる可能性がある。1496と重複情報のため合わせて参照推奨。</p>
+      <div class="card-meta">
+        <span class="feed-name">reddit_localllama</span>
+        <span class="sep">·</span>
+        <span class="date">4/9</span>
+        <span class="tag">AIツール</span>
+      </div>
+    </div>
+    <div class="card-score">
+      <div class="score-ring" style="--pct:70;--color:#3b82f6">
+        <span>70</span>
+      </div>
+    </div>
+  </div>
+</article>
 </section>
 
 <section id="worth-a-look" class="tier-section">
   <div class="tier-header">
     <span class="tier-bar" style="background:#f59e0b"></span>
     <h2>Worth a Look</h2>
-    <span class="tier-count">65</span>
+    <span class="tier-count">40</span>
     <button class="mark-section-read">既読</button>
     <button class="skip-section-btn">スキップ</button>
   </div>
@@ -3294,6 +3885,27 @@ footer a:hover { color: var(--accent-light); }
     </div>
   </div>
 </article>
+<article class="card" data-id="1394" data-category="community" data-tier="worth-a-look" data-date="2026-04-08T21:21:39.000Z">
+  <div class="card-row">
+    <button class="read-btn" aria-label="既読にする"></button>
+    <button class="skip-btn" aria-label="スキップ">✕</button>
+    <div class="card-body">
+      <h3 class="card-title"><a href="https://atmarkit.itmedia.co.jp/ait/articles/2604/09/news014.html" target="_blank" rel="noopener noreferrer">AIが一貫したUIを生成するためのGoogle提唱「DESIGN.md」標準</a></h3>
+      <p class="card-summary">GoogleがAIによるUI生成の一貫性問題を解決するために提唱した「DESIGN.md」という新標準の紹介記事。AIエージェントがコードを生成する際のUI統一性の課題に対するアプローチとして、個人開発・AIエージェント開発の観点から参考になる。Claude Codeなどでフロントエンドを生成する際に活用できる可能性がある。記事本文がエンコード崩れしているため詳細は不明だが、概要は把握できる。</p>
+      <div class="card-meta">
+        <span class="feed-name">hatena</span>
+        <span class="sep">·</span>
+        <span class="date">4/9</span>
+        <span class="tag">コミュニティ</span>
+      </div>
+    </div>
+    <div class="card-score">
+      <div class="score-ring" style="--pct:69;--color:#f59e0b">
+        <span>69</span>
+      </div>
+    </div>
+  </div>
+</article>
 <article class="card" data-id="734" data-category="security" data-tier="worth-a-look" data-date="2026-04-07T02:02:05.000Z">
   <div class="card-row">
     <button class="read-btn" aria-label="既読にする"></button>
@@ -3336,6 +3948,27 @@ footer a:hover { color: var(--accent-light); }
     </div>
   </div>
 </article>
+<article class="card" data-id="1422" data-category="security" data-tier="worth-a-look" data-date="2026-04-08T23:25:20.000Z">
+  <div class="card-row">
+    <button class="read-btn" aria-label="既読にする"></button>
+    <button class="skip-btn" aria-label="スキップ">✕</button>
+    <div class="card-body">
+      <h3 class="card-title"><a href="https://www.security-next.com/183205" target="_blank" rel="noopener noreferrer">米CISA、Ivanti EPMM脆弱性の悪用を確認――行政機関に緊急対応を要請</a></h3>
+      <p class="card-summary">Ivanti EPMMのコードインジェクション脆弱性「CVE-2026-1340」が実際に悪用されており、CISAがKEVカタログに追加・緊急対応を要請。認証不要でリモートコード実行が可能な深刻度の高い脆弱性。SREとして管理するエンドポイント管理基盤の即時パッチ確認が必要。</p>
+      <div class="card-meta">
+        <span class="feed-name">security_next</span>
+        <span class="sep">·</span>
+        <span class="date">4/9</span>
+        <span class="tag">セキュリティ</span>
+      </div>
+    </div>
+    <div class="card-score">
+      <div class="score-ring" style="--pct:68;--color:#f59e0b">
+        <span>68</span>
+      </div>
+    </div>
+  </div>
+</article>
 <article class="card" data-id="936" data-category="ai_research" data-tier="worth-a-look" data-date="2026-04-07T06:21:36.000Z">
   <div class="card-row">
     <button class="read-btn" aria-label="既読にする"></button>
@@ -3348,6 +3981,27 @@ footer a:hover { color: var(--accent-light); }
         <span class="sep">·</span>
         <span class="date">4/7</span>
         <span class="tag">AI研究</span>
+      </div>
+    </div>
+    <div class="card-score">
+      <div class="score-ring" style="--pct:68;--color:#f59e0b">
+        <span>68</span>
+      </div>
+    </div>
+  </div>
+</article>
+<article class="card" data-id="1496" data-category="ai_tools" data-tier="worth-a-look" data-date="2026-04-09T01:49:46.000Z">
+  <div class="card-row">
+    <button class="read-btn" aria-label="既読にする"></button>
+    <button class="skip-btn" aria-label="スキップ">✕</button>
+    <div class="card-body">
+      <h3 class="card-title"><a href="https://www.reddit.com/r/LocalLLaMA/comments/1sgc8ir/exaone_45_released/" target="_blank" rel="noopener noreferrer">EXAONE 4.5 リリース</a></h3>
+      <p class="card-summary">EXAONE 4.5モデルのリリース情報（1497と同一トピック）。ローカルLLMの新モデルとして性能・ライセンスを確認する価値がある。AIエージェント開発でのモデル選定候補として把握しておきたい情報。</p>
+      <div class="card-meta">
+        <span class="feed-name">reddit_localllama</span>
+        <span class="sep">·</span>
+        <span class="date">4/9</span>
+        <span class="tag">AIツール</span>
       </div>
     </div>
     <div class="card-score">
@@ -3431,6 +4085,27 @@ footer a:hover { color: var(--accent-light); }
         <span class="feed-name">hacker_news</span>
         <span class="sep">·</span>
         <span class="date">4/8</span>
+        <span class="tag">コミュニティ</span>
+      </div>
+    </div>
+    <div class="card-score">
+      <div class="score-ring" style="--pct:67;--color:#f59e0b">
+        <span>67</span>
+      </div>
+    </div>
+  </div>
+</article>
+<article class="card" data-id="1399" data-category="community" data-tier="worth-a-look" data-date="2026-04-09T05:33:12.000Z">
+  <div class="card-row">
+    <button class="read-btn" aria-label="既読にする"></button>
+    <button class="skip-btn" aria-label="スキップ">✕</button>
+    <div class="card-body">
+      <h3 class="card-title"><a href="https://gigazine.net/news/20260409-gemini-notebooklm/" target="_blank" rel="noopener noreferrer">GeminiにNotebookLMが統合 — Geminiからノートブックを作成可能に</a></h3>
+      <p class="card-summary">GoogleがGeminiとNotebookLMを統合し、Geminiのインターフェースから直接ノートブックを作成・管理できるようになった。LLMエコシステムの拡張動向として把握しておく価値があり、AIエージェント開発者としてGoogle系ツールの進化を追う上で参考になる。Claude・MCPを中心に開発するユーザーへの直接的影響は限定的だが、競合動向として知っておきたい情報。</p>
+      <div class="card-meta">
+        <span class="feed-name">hatena</span>
+        <span class="sep">·</span>
+        <span class="date">4/9</span>
         <span class="tag">コミュニティ</span>
       </div>
     </div>
@@ -3609,6 +4284,27 @@ footer a:hover { color: var(--accent-light); }
     </div>
   </div>
 </article>
+<article class="card" data-id="1425" data-category="security" data-tier="worth-a-look" data-date="2026-04-09T02:51:25.000Z">
+  <div class="card-row">
+    <button class="read-btn" aria-label="既読にする"></button>
+    <button class="skip-btn" aria-label="スキップ">✕</button>
+    <div class="card-body">
+      <h3 class="card-title"><a href="https://www.security-next.com/183195" target="_blank" rel="noopener noreferrer">GitLabにセキュリティアップデート――脆弱性12件を修正</a></h3>
+      <p class="card-summary">GitLab CE/EEに影響する12件の脆弱性を修正するアップデート（18.10.3/18.9.5/18.8.9）がリリース。「High」評価の脆弱性3件を含み、WebSocketのアクセス制御不備が含まれる。CI/CDパイプラインの基盤としてGitLabを運用するSREは早期適用を検討すべき。</p>
+      <div class="card-meta">
+        <span class="feed-name">security_next</span>
+        <span class="sep">·</span>
+        <span class="date">4/9</span>
+        <span class="tag">セキュリティ</span>
+      </div>
+    </div>
+    <div class="card-score">
+      <div class="score-ring" style="--pct:66;--color:#f59e0b">
+        <span>66</span>
+      </div>
+    </div>
+  </div>
+</article>
 <article class="card" data-id="943" data-category="ai_tools" data-tier="worth-a-look" data-date="2026-04-07T14:20:29.000Z">
   <div class="card-row">
     <button class="read-btn" aria-label="既読にする"></button>
@@ -3714,6 +4410,27 @@ footer a:hover { color: var(--accent-light); }
     </div>
   </div>
 </article>
+<article class="card" data-id="1483" data-category="ai_research" data-tier="worth-a-look" data-date="2026-04-09T09:21:23.000Z">
+  <div class="card-row">
+    <button class="read-btn" aria-label="既読にする"></button>
+    <button class="skip-btn" aria-label="スキップ">✕</button>
+    <div class="card-body">
+      <h3 class="card-title"><a href="https://www.reddit.com/r/MachineLearning/comments/1sgknct/studying_sutton_and_bartos_rl_book_and_its/" target="_blank" rel="noopener noreferrer">Sutton &amp; Barto のRLテキストとLLMへの応用（ツール使用・推論・エージェント）</a></h3>
+      <p class="card-summary">強化学習の古典的教科書とLLMの文脈（ツール使用・数学的推論・エージェント）との接点を議論するスレッド。AIエージェント開発に取り組むユーザーにとって、RLとLLMエージェントの理論的背景を整理する参考になる。Redditのためコンテンツは限定的。</p>
+      <div class="card-meta">
+        <span class="feed-name">reddit_ml</span>
+        <span class="sep">·</span>
+        <span class="date">4/9</span>
+        <span class="tag">AI研究</span>
+      </div>
+    </div>
+    <div class="card-score">
+      <div class="score-ring" style="--pct:65;--color:#f59e0b">
+        <span>65</span>
+      </div>
+    </div>
+  </div>
+</article>
 <article class="card" data-id="123" data-category="cloud" data-tier="worth-a-look" data-date="2026-03-31T16:05:06.000Z">
   <div class="card-row">
     <button class="read-btn" aria-label="既読にする"></button>
@@ -3726,6 +4443,27 @@ footer a:hover { color: var(--accent-light); }
         <span class="sep">·</span>
         <span class="date">4/1</span>
         <span class="tag">クラウド</span>
+      </div>
+    </div>
+    <div class="card-score">
+      <div class="score-ring" style="--pct:65;--color:#f59e0b">
+        <span>65</span>
+      </div>
+    </div>
+  </div>
+</article>
+<article class="card" data-id="1444" data-category="community" data-tier="worth-a-look" data-date="2026-04-08T17:44:25.000Z">
+  <div class="card-row">
+    <button class="read-btn" aria-label="既読にする"></button>
+    <button class="skip-btn" aria-label="スキップ">✕</button>
+    <div class="card-body">
+      <h3 class="card-title"><a href="https://nickvecchioni.github.io/thoughts/2026/04/08/anthropic-support-doesnt-exist/" target="_blank" rel="noopener noreferrer">Anthropicのサポートに1か月以上待ち続けている請求問題</a></h3>
+      <p class="card-summary">Claude MaxユーザーがAnthropicに予期せぬ追加請求$180を受け、1か月以上サポートから返答がないと報告。Anthropicのサポートがボットのみで人間に繋がれない構造的問題を指摘。Claude APIを業務・個人開発で利用するユーザーにとって、課金リスク管理として把握しておくべき情報。</p>
+      <div class="card-meta">
+        <span class="feed-name">hacker_news</span>
+        <span class="sep">·</span>
+        <span class="date">4/9</span>
+        <span class="tag">コミュニティ</span>
       </div>
     </div>
     <div class="card-score">
@@ -3903,678 +4641,6 @@ footer a:hover { color: var(--accent-light); }
     </div>
   </div>
 </article>
-<article class="card" data-id="72" data-category="community" data-tier="worth-a-look" data-date="2026-04-05T13:14:38.000Z">
-  <div class="card-row">
-    <button class="read-btn" aria-label="既読にする"></button>
-    <button class="skip-btn" aria-label="スキップ">✕</button>
-    <div class="card-body">
-      <h3 class="card-title"><a href="https://shkspr.mobi/blog/2026/04/someone-at-browserstack-is-leaking-users-email-address/" target="_blank" rel="noopener noreferrer">BrowserStackが内部からユーザーのメールアドレスを漏洩している</a></h3>
-      <p class="card-summary">ユニークメールアドレスを使い分けるユーザーがBrowserStackから第三者へのメールアドレス流出を確認。内部関係者による意図的リークの可能性を指摘している。セキュリティ領域を担うSREとして、SaaS利用時のサプライチェーンリスクとメールアドレス管理の参考になる事例。</p>
-      <div class="card-meta">
-        <span class="feed-name">hacker_news</span>
-        <span class="sep">·</span>
-        <span class="date">4/5</span>
-        <span class="tag">コミュニティ</span>
-      </div>
-    </div>
-    <div class="card-score">
-      <div class="score-ring" style="--pct:64;--color:#f59e0b">
-        <span>64</span>
-      </div>
-    </div>
-  </div>
-</article>
-<article class="card" data-id="752" data-category="community" data-tier="worth-a-look" data-date="2026-04-06T17:38:30.000Z">
-  <div class="card-row">
-    <button class="read-btn" aria-label="既読にする"></button>
-    <button class="skip-btn" aria-label="スキップ">✕</button>
-    <div class="card-body">
-      <h3 class="card-title"><a href="https://www.osnews.com/story/144737/adobe-secretly-modifies-your-hosts-file-for-the-stupidest-reason/" target="_blank" rel="noopener noreferrer">AdobeがCreative Cloud検出のためhostsファイルを無断変更</a></h3>
-      <p class="card-summary">Adobeがソフトウェア検出目的でユーザーのhostsファイルをひそかに書き換えていた件。SREおよびセキュリティ観点でエンドポイント挙動の監視・ソフトウェアサプライチェーンの信頼性に関わる事例として参考になる。開発マシンにAdobe製品を入れているエンジニアには特に影響あり。</p>
-      <div class="card-meta">
-        <span class="feed-name">hacker_news</span>
-        <span class="sep">·</span>
-        <span class="date">4/7</span>
-        <span class="tag">コミュニティ</span>
-      </div>
-    </div>
-    <div class="card-score">
-      <div class="score-ring" style="--pct:63;--color:#f59e0b">
-        <span>63</span>
-      </div>
-    </div>
-  </div>
-</article>
-<article class="card" data-id="934" data-category="ai_research" data-tier="worth-a-look" data-date="2026-04-07T12:32:42.000Z">
-  <div class="card-row">
-    <button class="read-btn" aria-label="既読にする"></button>
-    <button class="skip-btn" aria-label="スキップ">✕</button>
-    <div class="card-body">
-      <h3 class="card-title"><a href="https://www.reddit.com/r/MachineLearning/comments/1seunbr/d_mempalace_claims_100_on_locomo_and_a_perfect/" target="_blank" rel="noopener noreferrer">[議論] MemPalaceが自社ベンチマークで100%を主張するも無意味と判明</a></h3>
-      <p class="card-summary">MemPalaceというLLMメモリ管理ツールがLoCoMo・LongMemEvalで完全スコアを主張しているが、自社のBENCHMARKS.mdがその無意味さを自ら文書化している。ベンチマーク操作・自己評価の信頼性問題を示す事例。LLM・AIエージェント開発において評価指標の信頼性は直接関係する。</p>
-      <div class="card-meta">
-        <span class="feed-name">reddit_ml</span>
-        <span class="sep">·</span>
-        <span class="date">4/7</span>
-        <span class="tag">AI研究</span>
-      </div>
-    </div>
-    <div class="card-score">
-      <div class="score-ring" style="--pct:63;--color:#f59e0b">
-        <span>63</span>
-      </div>
-    </div>
-  </div>
-</article>
-<article class="card" data-id="1309" data-category="community" data-tier="worth-a-look" data-date="2026-04-08T03:03:33.000Z">
-  <div class="card-row">
-    <button class="read-btn" aria-label="既読にする"></button>
-    <button class="skip-btn" aria-label="スキップ">✕</button>
-    <div class="card-body">
-      <h3 class="card-title"><a href="https://dylanbutler.dev/blog/protect-your-shed/" target="_blank" rel="noopener noreferrer">個人プロジェクト（小屋）を守れ</a></h3>
-      <p class="card-summary">企業開発（超高層ビル）と個人開発（裏庭の小屋）を対比し、個人プロジェクトの自由と重要性を説くエッセイ。副業・個人開発・インディーハッカーとして活動しているユーザーのマインドセットに直接響く内容。「好奇心の住み処」としての個人プロジェクトを守ることの意義が語られている。</p>
-      <div class="card-meta">
-        <span class="feed-name">hacker_news</span>
-        <span class="sep">·</span>
-        <span class="date">4/8</span>
-        <span class="tag">コミュニティ</span>
-      </div>
-    </div>
-    <div class="card-score">
-      <div class="score-ring" style="--pct:63;--color:#f59e0b">
-        <span>63</span>
-      </div>
-    </div>
-  </div>
-</article>
-<article class="card" data-id="119" data-category="cloud" data-tier="worth-a-look" data-date="2026-04-05T17:37:22.000Z">
-  <div class="card-row">
-    <button class="read-btn" aria-label="既読にする"></button>
-    <button class="skip-btn" aria-label="スキップ">✕</button>
-    <div class="card-body">
-      <h3 class="card-title"><a href="https://www.reddit.com/r/kubernetes/comments/1sd9saf/oracle_db_on_k8s/" target="_blank" rel="noopener noreferrer">KubernetesでOracle DBを動かす</a></h3>
-      <p class="card-summary">Oracle DBをKubernetes上でホストする構成についての議論。ステートフルなDBワークロードをK8s上で扱う際の課題や設計パターンが含まれる可能性がある。SREとしてDB on K8sの運用知見として把握する価値はあるが、直接の関心領域ではない。</p>
-      <div class="card-meta">
-        <span class="feed-name">reddit_kubernetes</span>
-        <span class="sep">·</span>
-        <span class="date">4/6</span>
-        <span class="tag">クラウド</span>
-      </div>
-    </div>
-    <div class="card-score">
-      <div class="score-ring" style="--pct:63;--color:#f59e0b">
-        <span>63</span>
-      </div>
-    </div>
-  </div>
-</article>
-<article class="card" data-id="32" data-category="security" data-tier="worth-a-look" data-date="2026-04-06T02:10:15.000Z">
-  <div class="card-row">
-    <button class="read-btn" aria-label="既読にする"></button>
-    <button class="skip-btn" aria-label="スキップ">✕</button>
-    <div class="card-body">
-      <h3 class="card-title"><a href="https://www.security-next.com/183025" target="_blank" rel="noopener noreferrer">Amazon Athena ODBCドライバに6件の脆弱性、修正版リリース済み</a></h3>
-      <p class="card-summary">AWSのサーバレスクエリサービスAmazon Athena向けODBCドライバに6件の脆弱性が発見され、2026年3月のアップデートで修正済み。AWSを使うSREにとって関連性があり、Athena経由でのデータ分析基盤を運用している場合はドライバのバージョン確認が必要。</p>
-      <div class="card-meta">
-        <span class="feed-name">security_next</span>
-        <span class="sep">·</span>
-        <span class="date">4/6</span>
-        <span class="tag">セキュリティ</span>
-      </div>
-    </div>
-    <div class="card-score">
-      <div class="score-ring" style="--pct:62;--color:#f59e0b">
-        <span>62</span>
-      </div>
-    </div>
-  </div>
-</article>
-<article class="card" data-id="883" data-category="ai_tools" data-tier="worth-a-look" data-date="2026-04-07T03:27:26.000Z">
-  <div class="card-row">
-    <button class="read-btn" aria-label="既読にする"></button>
-    <button class="skip-btn" aria-label="スキップ">✕</button>
-    <div class="card-body">
-      <h3 class="card-title"><a href="https://zenn.dev/chobe/articles/d775fb36ff7bc9" target="_blank" rel="noopener noreferrer">ClaudeとNotionで個人スクラムのタスク管理を自動化</a></h3>
-      <p class="card-summary">Claude + Notion MCPを使い、チャットベースでスプリントボードを操作する個人スクラム管理を構築した事例。TODOリスト肥大化や優先順位付けの課題解決が動機。Claudeの個人生産性活用として参考になるが、SREやAIエージェント開発の主軸からは外れる軽量な応用例。</p>
-      <div class="card-meta">
-        <span class="feed-name">zenn_claude</span>
-        <span class="sep">·</span>
-        <span class="date">4/7</span>
-        <span class="tag">AIツール</span>
-      </div>
-    </div>
-    <div class="card-score">
-      <div class="score-ring" style="--pct:62;--color:#f59e0b">
-        <span>62</span>
-      </div>
-    </div>
-  </div>
-</article>
-<article class="card" data-id="1360" data-category="ai_tools" data-tier="worth-a-look" data-date="2026-04-08T16:44:50.000Z">
-  <div class="card-row">
-    <button class="read-btn" aria-label="既読にする"></button>
-    <button class="skip-btn" aria-label="スキップ">✕</button>
-    <div class="card-body">
-      <h3 class="card-title"><a href="https://www.reddit.com/r/LocalLLaMA/comments/1sfyacf/meta_releases_muse_spark_a_natively_multimodal/" target="_blank" rel="noopener noreferrer">MetaがネイティブマルチモーダルなMuse Sparkを公開</a></h3>
-      <p class="card-summary">Metaがマルチモーダル推論モデル「Muse Spark」をリリースした。テキスト・画像を統合処理するネイティブマルチモーダルアーキテクチャを採用している。LLMエコシステムの競合動向としてAIエージェント開発者が把握しておく価値がある。Claudeとの比較検討にも役立つ情報。</p>
-      <div class="card-meta">
-        <span class="feed-name">reddit_localllama</span>
-        <span class="sep">·</span>
-        <span class="date">4/9</span>
-        <span class="tag">AIツール</span>
-      </div>
-    </div>
-    <div class="card-score">
-      <div class="score-ring" style="--pct:62;--color:#f59e0b">
-        <span>62</span>
-      </div>
-    </div>
-  </div>
-</article>
-<article class="card" data-id="4" data-category="community" data-tier="worth-a-look" data-date="2026-04-05T23:31:03.000Z">
-  <div class="card-row">
-    <button class="read-btn" aria-label="既読にする"></button>
-    <button class="skip-btn" aria-label="スキップ">✕</button>
-    <div class="card-body">
-      <h3 class="card-title"><a href="https://www.techno-edge.net/article/2026/04/06/4972.html" target="_blank" rel="noopener noreferrer">ブラウザ完結・AI校正付き無料OCRツール「NDLOCR-Lite Web AI」登場</a></h3>
-      <p class="card-summary">国立国会図書館のOCRエンジンをベースに、生成AIによる校正機能をブラウザ上で提供する無料ツール。LLMを活用したドキュメント処理ツールの事例として、AIエージェント・個人開発の参考になる。SaaSや個人ツール開発のアイデアとしても示唆がある。</p>
-      <div class="card-meta">
-        <span class="feed-name">hatena</span>
-        <span class="sep">·</span>
-        <span class="date">4/6</span>
-        <span class="tag">コミュニティ</span>
-      </div>
-    </div>
-    <div class="card-score">
-      <div class="score-ring" style="--pct:61;--color:#f59e0b">
-        <span>61</span>
-      </div>
-    </div>
-  </div>
-</article>
-<article class="card" data-id="25" data-category="cloud" data-tier="worth-a-look" data-date="2026-03-30T16:11:28.000Z">
-  <div class="card-row">
-    <button class="read-btn" aria-label="既読にする"></button>
-    <button class="skip-btn" aria-label="スキップ">✕</button>
-    <div class="card-body">
-      <h3 class="card-title"><a href="https://aws.amazon.com/blogs/aws/aws-weekly-roundup-aws-ai-ml-scholars-program-agent-plugin-for-aws-serverless-and-more-march-30-2026/" target="_blank" rel="noopener noreferrer">AWS週刊まとめ: AIエージェント向けServerlessプラグイン、AI/MLスカラーズ他（3/30）</a></h3>
-      <p class="card-summary">AWS Serverless向けのAgent Pluginが注目トピックとして取り上げられた週まとめ。サーバーレス環境でのAIエージェント構築に直結するため、AIエージェント開発者として把握しておく価値がある。Aurora・Polly・SageMaker Studioのアップデートも含む。AIエージェント×AWSインフラの実装パターンとして参考になる可能性あり。</p>
-      <div class="card-meta">
-        <span class="feed-name">aws_blog</span>
-        <span class="sep">·</span>
-        <span class="date">3/31</span>
-        <span class="tag">クラウド</span>
-      </div>
-    </div>
-    <div class="card-score">
-      <div class="score-ring" style="--pct:61;--color:#f59e0b">
-        <span>61</span>
-      </div>
-    </div>
-  </div>
-</article>
-<article class="card" data-id="28" data-category="cloud" data-tier="worth-a-look" data-date="2026-03-23T16:40:41.000Z">
-  <div class="card-row">
-    <button class="read-btn" aria-label="既読にする"></button>
-    <button class="skip-btn" aria-label="スキップ">✕</button>
-    <div class="card-body">
-      <h3 class="card-title"><a href="https://aws.amazon.com/blogs/aws/aws-weekly-roundup-nvidia-nemotron-3-super-on-amazon-bedrock-nova-forge-sdk-amazon-corretto-26-and-more-march-23-2026/" target="_blank" rel="noopener noreferrer">AWS週刊まとめ: Amazon BedrockでNVIDIA Nemotron 3 Super、Nova Forge SDK他（3/23）</a></h3>
-      <p class="card-summary">Amazon BedrockにNVIDIA Nemotron 3 Superが追加され、Nova Forge SDKも発表された週のまとめ。LLMモデルの選択肢拡大はAIエージェント開発者として把握しておく価値がある。Nova Forge SDKはBedrockベースのエージェント構築に直結する可能性がある。Amazon Corretto 26など他のアップデートも含む。</p>
-      <div class="card-meta">
-        <span class="feed-name">aws_blog</span>
-        <span class="sep">·</span>
-        <span class="date">3/24</span>
-        <span class="tag">クラウド</span>
-      </div>
-    </div>
-    <div class="card-score">
-      <div class="score-ring" style="--pct:61;--color:#f59e0b">
-        <span>61</span>
-      </div>
-    </div>
-  </div>
-</article>
-<article class="card" data-id="40" data-category="security" data-tier="worth-a-look" data-date="2026-04-04T14:38:28.000Z">
-  <div class="card-row">
-    <button class="read-btn" aria-label="既読にする"></button>
-    <button class="skip-btn" aria-label="スキップ">✕</button>
-    <div class="card-body">
-      <h3 class="card-title"><a href="https://www.security-next.com/183000" target="_blank" rel="noopener noreferrer">FortiClient EMSに深刻な脆弱性、悪用確認済み</a></h3>
-      <p class="card-summary">FortinetのエンドポイントMMサーバ「FortiClient EMS」のAPIに認証バイパス可能な重大脆弱性（CVE-2026-35616）が発見され、すでに悪用が確認されている。ホットフィックスの即時適用が推奨されている。SREとしてエンドポイント管理製品を運用している場合は優先度高で対応が必要。</p>
-      <div class="card-meta">
-        <span class="feed-name">security_next</span>
-        <span class="sep">·</span>
-        <span class="date">4/4</span>
-        <span class="tag">セキュリティ</span>
-      </div>
-    </div>
-    <div class="card-score">
-      <div class="score-ring" style="--pct:61;--color:#f59e0b">
-        <span>61</span>
-      </div>
-    </div>
-  </div>
-</article>
-<article class="card" data-id="1299" data-category="ai_tools" data-tier="worth-a-look" data-date="2026-04-07T22:37:05.000Z">
-  <div class="card-row">
-    <button class="read-btn" aria-label="既読にする"></button>
-    <button class="skip-btn" aria-label="スキップ">✕</button>
-    <div class="card-body">
-      <h3 class="card-title"><a href="https://zenn.dev/tyler0702/articles/9be3e93935d19f" target="_blank" rel="noopener noreferrer">46テーマ作って半分後悔した — Tauri製アプリvillarの2ヶ月振り返り</a></h3>
-      <p class="card-summary">Tauri v2 + Rustで作ったMarkdownリーダー「villar」の開発振り返り。46テーマ実装・165E2Eテスト・Playwrightテスト戦略についての知見が含まれる。個人開発のデスクトップアプリ開発経験として参考にはなるが、このユーザーの中核関心であるSRE/AIエージェントとはやや距離がある。</p>
-      <div class="card-meta">
-        <span class="feed-name">zenn_claude</span>
-        <span class="sep">·</span>
-        <span class="date">4/8</span>
-        <span class="tag">AIツール</span>
-      </div>
-    </div>
-    <div class="card-score">
-      <div class="score-ring" style="--pct:60;--color:#f59e0b">
-        <span>60</span>
-      </div>
-    </div>
-  </div>
-</article>
-<article class="card" data-id="893" data-category="community" data-tier="worth-a-look" data-date="2026-04-07T10:25:12.000Z">
-  <div class="card-row">
-    <button class="read-btn" aria-label="既読にする"></button>
-    <button class="skip-btn" aria-label="スキップ">✕</button>
-    <div class="card-body">
-      <h3 class="card-title"><a href="https://www.juxt.pro/blog/a-bug-on-the-dark-side-of-the-moon/" target="_blank" rel="noopener noreferrer">Apollo 11誘導コンピューターコードに未文書バグを発見</a></h3>
-      <p class="card-summary">XTDB開発チームがAI支援の仕様解析によりアポロ11号の誘導コンピューター（AGC）コードに57年間見落とされてきたバグを発見。AIを使ったコード解析・仕様検証の実例として興味深い。SRE的なコードの信頼性・検証の観点でも示唆がある。</p>
-      <div class="card-meta">
-        <span class="feed-name">hacker_news</span>
-        <span class="sep">·</span>
-        <span class="date">4/7</span>
-        <span class="tag">コミュニティ</span>
-      </div>
-    </div>
-    <div class="card-score">
-      <div class="score-ring" style="--pct:60;--color:#f59e0b">
-        <span>60</span>
-      </div>
-    </div>
-  </div>
-</article>
-<article class="card" data-id="946" data-category="ai_tools" data-tier="worth-a-look" data-date="2026-04-07T08:42:08.000Z">
-  <div class="card-row">
-    <button class="read-btn" aria-label="既読にする"></button>
-    <button class="skip-btn" aria-label="スキップ">✕</button>
-    <div class="card-body">
-      <h3 class="card-title"><a href="https://www.reddit.com/r/LocalLLaMA/comments/1seqblr/turns_out_gemma_4_had_mtp_multi_token_prediction/" target="_blank" rel="noopener noreferrer">Gemma 4はもともとMTP（マルチトークン予測）を搭載していた</a></h3>
-      <p class="card-summary">Gemma 4にはMulti Token Prediction機能が当初から含まれていたことが判明した。MTPは推論速度向上に直結する技術であり、LLMの内部アーキテクチャを把握したいAIエージェント開発者に参考となる。ただし実運用への直接的な示唆は薄い。</p>
-      <div class="card-meta">
-        <span class="feed-name">reddit_localllama</span>
-        <span class="sep">·</span>
-        <span class="date">4/7</span>
-        <span class="tag">AIツール</span>
-      </div>
-    </div>
-    <div class="card-score">
-      <div class="score-ring" style="--pct:60;--color:#f59e0b">
-        <span>60</span>
-      </div>
-    </div>
-  </div>
-</article>
-<article class="card" data-id="1254" data-category="community" data-tier="worth-a-look" data-date="2026-04-08T16:03:30.000Z">
-  <div class="card-row">
-    <button class="read-btn" aria-label="既読にする"></button>
-    <button class="skip-btn" aria-label="スキップ">✕</button>
-    <div class="card-body">
-      <h3 class="card-title"><a href="https://dailydarkweb.net/suumo-chintai-at-home-homes-suffer-data-breach/" target="_blank" rel="noopener noreferrer">SUUMO・CHINTAI・AtHome・HOME&#x27;Sがデータ侵害被害</a></h3>
-      <p class="card-summary">日本の主要不動産ポータル4社が同時期にデータ侵害を受けたというセキュリティインシデント報告。SREとしてインシデント動向を把握しておく価値はあるが、技術的詳細や防御策の記載は乏しい。日本のサービス事業者を狙ったサプライチェーン型または同一脆弱性を突いた攻撃の可能性を示唆する。</p>
-      <div class="card-meta">
-        <span class="feed-name">hatena</span>
-        <span class="sep">·</span>
-        <span class="date">4/9</span>
-        <span class="tag">コミュニティ</span>
-      </div>
-    </div>
-    <div class="card-score">
-      <div class="score-ring" style="--pct:60;--color:#f59e0b">
-        <span>60</span>
-      </div>
-    </div>
-  </div>
-</article>
-<article class="card" data-id="1261" data-category="community" data-tier="worth-a-look" data-date="2026-04-08T04:51:06.000Z">
-  <div class="card-row">
-    <button class="read-btn" aria-label="既読にする"></button>
-    <button class="skip-btn" aria-label="スキップ">✕</button>
-    <div class="card-body">
-      <h3 class="card-title"><a href="https://zenn.dev/microsoft/articles/9fb85cdca2fb84" target="_blank" rel="noopener noreferrer">GitHub Copilot CLI for Beginners コースを無料で体験してみた</a></h3>
-      <p class="card-summary">GitHubが公開した無料の「GitHub Copilot CLI for Beginners」コースの体験レポート。2000スター超の人気コースで、一貫した題材と実践課題で体系的に学べる構成を解説。AIエージェント実務活用に関心があるユーザーとして学習リソースとして把握する価値があるが、1265と内容が重複しており優先度は低め。</p>
-      <div class="card-meta">
-        <span class="feed-name">hatena</span>
-        <span class="sep">·</span>
-        <span class="date">4/8</span>
-        <span class="tag">コミュニティ</span>
-      </div>
-    </div>
-    <div class="card-score">
-      <div class="score-ring" style="--pct:60;--color:#f59e0b">
-        <span>60</span>
-      </div>
-    </div>
-  </div>
-</article>
-<article class="card" data-id="853" data-category="community" data-tier="worth-a-look" data-date="2026-04-07T04:18:00.000Z">
-  <div class="card-row">
-    <button class="read-btn" aria-label="既読にする"></button>
-    <button class="skip-btn" aria-label="スキップ">✕</button>
-    <div class="card-body">
-      <h3 class="card-title"><a href="https://qiita.com/revsystem/items/d1573be74bdd4b04b1fb" target="_blank" rel="noopener noreferrer">1-bit LLM「Bonsai」をGoogle Pixel 7aのLinuxターミナルで動かす</a></h3>
-      <p class="card-summary">1-bit量子化LLMのBonsaiをAndroidデバイスのLinuxターミナル上で実行する手順を紹介したQiita記事。オンデバイスAI・LLMの軽量化動向に関心があるユーザーに参考になる。エッジ推論の実用性を測る実験として興味深い。</p>
-      <div class="card-meta">
-        <span class="feed-name">hatena</span>
-        <span class="sep">·</span>
-        <span class="date">4/7</span>
-        <span class="tag">コミュニティ</span>
-      </div>
-    </div>
-    <div class="card-score">
-      <div class="score-ring" style="--pct:60;--color:#f59e0b">
-        <span>60</span>
-      </div>
-    </div>
-  </div>
-</article>
-<article class="card" data-id="1355" data-category="ai_tools" data-tier="worth-a-look" data-date="2026-04-08T16:20:48.000Z">
-  <div class="card-row">
-    <button class="read-btn" aria-label="既読にする"></button>
-    <button class="skip-btn" aria-label="スキップ">✕</button>
-    <div class="card-body">
-      <h3 class="card-title"><a href="https://www.reddit.com/r/LocalLLaMA/comments/1sfxlpj/meta_new_reasoning_model_muse_spark/" target="_blank" rel="noopener noreferrer">MetaのMuse Spark（推論モデル）続報</a></h3>
-      <p class="card-summary">id:1360と同一トピックの別スレッド。MetaのMuse Sparkに関する追加的な議論が展開されている可能性がある。1360と合わせて確認するとより全体像を把握できる。</p>
-      <div class="card-meta">
-        <span class="feed-name">reddit_localllama</span>
-        <span class="sep">·</span>
-        <span class="date">4/9</span>
-        <span class="tag">AIツール</span>
-      </div>
-    </div>
-    <div class="card-score">
-      <div class="score-ring" style="--pct:59;--color:#f59e0b">
-        <span>59</span>
-      </div>
-    </div>
-  </div>
-</article>
-<article class="card" data-id="1263" data-category="community" data-tier="worth-a-look" data-date="2026-04-08T13:39:49.000Z">
-  <div class="card-row">
-    <button class="read-btn" aria-label="既読にする"></button>
-    <button class="skip-btn" aria-label="スキップ">✕</button>
-    <div class="card-body">
-      <h3 class="card-title"><a href="https://gigazine.net/news/20260408-ai-assistance-reduce-persistence/" target="_blank" rel="noopener noreferrer">AIによる支援は「粘り強さ」を低下させ成績を悪化させるという研究</a></h3>
-      <p class="card-summary">AI支援が学習者の問題解決への粘り強さを低下させるという研究結果を紹介。どのような使い方であれば悪影響が少ないかも考察している。Claude Codeをはじめとするコーディング支援AI活用者として、AI依存のリスクと適切な使い方を知っておく意味がある。実践的な示唆として「足場かけ」的な使い方の有効性が示唆されている。</p>
-      <div class="card-meta">
-        <span class="feed-name">hatena</span>
-        <span class="sep">·</span>
-        <span class="date">4/8</span>
-        <span class="tag">コミュニティ</span>
-      </div>
-    </div>
-    <div class="card-score">
-      <div class="score-ring" style="--pct:59;--color:#f59e0b">
-        <span>59</span>
-      </div>
-    </div>
-  </div>
-</article>
-<article class="card" data-id="1296" data-category="ai_tools" data-tier="worth-a-look" data-date="2026-04-08T01:19:26.000Z">
-  <div class="card-row">
-    <button class="read-btn" aria-label="既読にする"></button>
-    <button class="skip-btn" aria-label="スキップ">✕</button>
-    <div class="card-body">
-      <h3 class="card-title"><a href="https://zenn.dev/halfgenius/articles/c8f126d153a713" target="_blank" rel="noopener noreferrer">複数AI横並び比較WebアプリのベータローンチDay1体験記</a></h3>
-      <p class="card-summary">ChatGPT・Gemini・Claudeに同時質問し回答を横並び表示するWebアプリHalfGeniusのベータ版ローンチ初日の体験談。RAGによる長期記憶機能も搭載し、会話が蓄積されるほどアシスタントが個人を理解していく設計。個人開発・プロダクトローンチのリアルな記録として参考になるが、技術的深度は浅め。副業・個人開発のモチベーション系記事として読む価値はある。</p>
-      <div class="card-meta">
-        <span class="feed-name">zenn_claude</span>
-        <span class="sep">·</span>
-        <span class="date">4/8</span>
-        <span class="tag">AIツール</span>
-      </div>
-    </div>
-    <div class="card-score">
-      <div class="score-ring" style="--pct:59;--color:#f59e0b">
-        <span>59</span>
-      </div>
-    </div>
-  </div>
-</article>
-<article class="card" data-id="2" data-category="community" data-tier="worth-a-look" data-date="2026-04-06T03:07:42.000Z">
-  <div class="card-row">
-    <button class="read-btn" aria-label="既読にする"></button>
-    <button class="skip-btn" aria-label="スキップ">✕</button>
-    <div class="card-body">
-      <h3 class="card-title"><a href="https://zenn.dev/nabewata/articles/d5261127bdd3c5" target="_blank" rel="noopener noreferrer">非エンジニア向けGit入門サイトを個人開発した話</a></h3>
-      <p class="card-summary">非エンジニアの同僚にGitを教える経験から個人でGit入門サイトを作った開発者のZenn記事。個人開発・インディーハッカー的なプロダクト立案〜公開のフローが参考になる。ニーズ発見→プロダクト化のプロセスは副業・収益化の観点で示唆がある。</p>
-      <div class="card-meta">
-        <span class="feed-name">hatena</span>
-        <span class="sep">·</span>
-        <span class="date">4/6</span>
-        <span class="tag">コミュニティ</span>
-      </div>
-    </div>
-    <div class="card-score">
-      <div class="score-ring" style="--pct:59;--color:#f59e0b">
-        <span>59</span>
-      </div>
-    </div>
-  </div>
-</article>
-<article class="card" data-id="944" data-category="ai_tools" data-tier="worth-a-look" data-date="2026-04-07T14:36:19.000Z">
-  <div class="card-row">
-    <button class="read-btn" aria-label="既読にする"></button>
-    <button class="skip-btn" aria-label="スキップ">✕</button>
-    <div class="card-body">
-      <h3 class="card-title"><a href="https://www.reddit.com/r/LocalLLaMA/comments/1sexsvd/dflash_block_diffusion_for_flash_speculative/" target="_blank" rel="noopener noreferrer">DFlash: ブロック拡散を用いたフラッシュ投機的デコーディング</a></h3>
-      <p class="card-summary">ブロック拡散とフラッシュデコーディングを組み合わせた投機的デコーディング手法の研究。LLM推論の高速化技術であり、AIエージェント開発でのレイテンシ改善に関連する。実装への落とし込みにはギャップがあり、研究段階の情報として把握しておく程度の価値。</p>
-      <div class="card-meta">
-        <span class="feed-name">reddit_localllama</span>
-        <span class="sep">·</span>
-        <span class="date">4/7</span>
-        <span class="tag">AIツール</span>
-      </div>
-    </div>
-    <div class="card-score">
-      <div class="score-ring" style="--pct:59;--color:#f59e0b">
-        <span>59</span>
-      </div>
-    </div>
-  </div>
-</article>
-<article class="card" data-id="895" data-category="community" data-tier="worth-a-look" data-date="2026-04-06T19:50:16.000Z">
-  <div class="card-row">
-    <button class="read-btn" aria-label="既読にする"></button>
-    <button class="skip-btn" aria-label="スキップ">✕</button>
-    <div class="card-body">
-      <h3 class="card-title"><a href="https://github.com/matthartman/ghost-pepper" target="_blank" rel="noopener noreferrer">Show HN: Ghost Pepper — macOS向けローカル音声テキスト変換（ホールドトーク）</a></h3>
-      <p class="card-summary">Controlキーを押している間だけ録音し、離したらWhisperKit＋ローカルLLMで文字起こし・ペーストするmacOSアプリ。100%オンデバイス処理でプライバシー安全。オンデバイスAIや開発効率化ツールへの関心があるユーザーに関係する。</p>
-      <div class="card-meta">
-        <span class="feed-name">hacker_news</span>
-        <span class="sep">·</span>
-        <span class="date">4/7</span>
-        <span class="tag">コミュニティ</span>
-      </div>
-    </div>
-    <div class="card-score">
-      <div class="score-ring" style="--pct:59;--color:#f59e0b">
-        <span>59</span>
-      </div>
-    </div>
-  </div>
-</article>
-<article class="card" data-id="108" data-category="ai_tools" data-tier="worth-a-look" data-date="2026-04-06T15:45:53.000Z">
-  <div class="card-row">
-    <button class="read-btn" aria-label="既読にする"></button>
-    <button class="skip-btn" aria-label="スキップ">✕</button>
-    <div class="card-body">
-      <h3 class="card-title"><a href="https://www.reddit.com/r/LocalLLaMA/comments/1se2kna/4chan_data_can_almost_certainly_improve_model/" target="_blank" rel="noopener noreferrer">4Chanデータはモデル能力改善にほぼ確実に貢献する</a></h3>
-      <p class="card-summary">4Chanの投稿データを学習データに使うとモデル性能が向上するという主張のスレッド。LLM開発のデータ品質・倫理的議論として把握しておく価値はある。AIエージェント開発者としてモデル特性の背景知識として参考になる。</p>
-      <div class="card-meta">
-        <span class="feed-name">reddit_localllama</span>
-        <span class="sep">·</span>
-        <span class="date">4/7</span>
-        <span class="tag">AIツール</span>
-      </div>
-    </div>
-    <div class="card-score">
-      <div class="score-ring" style="--pct:59;--color:#f59e0b">
-        <span>59</span>
-      </div>
-    </div>
-  </div>
-</article>
-<article class="card" data-id="34" data-category="security" data-tier="worth-a-look" data-date="2026-04-06T06:23:46.000Z">
-  <div class="card-row">
-    <button class="read-btn" aria-label="既読にする"></button>
-    <button class="skip-btn" aria-label="スキップ">✕</button>
-    <div class="card-body">
-      <h3 class="card-title"><a href="https://www.security-next.com/183006" target="_blank" rel="noopener noreferrer">阿波銀行の開発テスト環境から顧客情報2.7万件が流出</a></h3>
-      <p class="card-summary">阿波銀行の情報共有システムのテスト環境が侵害され、2万7745件の顧客情報が外部に流出した。外部のセキュリティ事業者からの指摘で発覚した点が特徴的。SREとしてテスト環境の本番データ隔離・アクセス制御の重要性を再確認できる事例であり、個人開発のSaaS運用にも示唆がある。</p>
-      <div class="card-meta">
-        <span class="feed-name">security_next</span>
-        <span class="sep">·</span>
-        <span class="date">4/6</span>
-        <span class="tag">セキュリティ</span>
-      </div>
-    </div>
-    <div class="card-score">
-      <div class="score-ring" style="--pct:58;--color:#f59e0b">
-        <span>58</span>
-      </div>
-    </div>
-  </div>
-</article>
-<article class="card" data-id="515" data-category="ai_research" data-tier="worth-a-look" data-date="2026-04-06T23:16:18.000Z">
-  <div class="card-row">
-    <button class="read-btn" aria-label="既読にする"></button>
-    <button class="skip-btn" aria-label="スキップ">✕</button>
-    <div class="card-body">
-      <h3 class="card-title"><a href="https://www.reddit.com/r/MachineLearning/comments/1seexk0/d_hows_mlx_and_jax_pytorch_on_macbooks_these_days/" target="_blank" rel="noopener noreferrer">MacBookでのMLXとJAX/PyTorchの現状はどうか？</a></h3>
-      <p class="card-summary">MacBook上でのMLXおよびJAX/PyTorchのパフォーマンスや使い勝手についてのコミュニティ議論。オンデバイスAI・ローカルLLM実行に興味があるユーザーには周辺情報として有用。ただしSRE・クラウド・AIエージェント開発の主要テーマには直結しない。</p>
-      <div class="card-meta">
-        <span class="feed-name">reddit_ml</span>
-        <span class="sep">·</span>
-        <span class="date">4/7</span>
-        <span class="tag">AI研究</span>
-      </div>
-    </div>
-    <div class="card-score">
-      <div class="score-ring" style="--pct:58;--color:#f59e0b">
-        <span>58</span>
-      </div>
-    </div>
-  </div>
-</article>
-<article class="card" data-id="19" data-category="community" data-tier="worth-a-look" data-date="2026-04-06T00:31:16.000Z">
-  <div class="card-row">
-    <button class="read-btn" aria-label="既読にする"></button>
-    <button class="skip-btn" aria-label="スキップ">✕</button>
-    <div class="card-body">
-      <h3 class="card-title"><a href="https://zenn.dev/karamage/articles/4788b0b791ef2d" target="_blank" rel="noopener noreferrer">「ハーネスエンジニアリング」という言葉への違和感</a></h3>
-      <p class="card-summary">LLMのテスト・評価基盤を指す「ハーネスエンジニアリング」という言葉が先行して実体が曖昧になっているという意見記事。定義がバラバラで概念だけが独り歩きしている問題を指摘している。AIエージェント開発でLLMの評価基盤を設計する際、用語の使い方や業界の共通認識を把握するうえで参考になる。</p>
-      <div class="card-meta">
-        <span class="feed-name">hatena</span>
-        <span class="sep">·</span>
-        <span class="date">4/6</span>
-        <span class="tag">コミュニティ</span>
-      </div>
-    </div>
-    <div class="card-score">
-      <div class="score-ring" style="--pct:58;--color:#f59e0b">
-        <span>58</span>
-      </div>
-    </div>
-  </div>
-</article>
-<article class="card" data-id="947" data-category="ai_tools" data-tier="worth-a-look" data-date="2026-04-07T12:16:51.000Z">
-  <div class="card-row">
-    <button class="read-btn" aria-label="既読にする"></button>
-    <button class="skip-btn" aria-label="スキップ">✕</button>
-    <div class="card-body">
-      <h3 class="card-title"><a href="https://www.reddit.com/r/LocalLLaMA/comments/1seua77/gemma_4_31b_gguf_quants_ranked_by_kl_divergence/" target="_blank" rel="noopener noreferrer">Gemma 4 31B GGUFクオンタイズのKLダイバージェンス比較ランキング</a></h3>
-      <p class="card-summary">Gemma 4 31BのGGUFクオンタイズ（unsloth、bartowski、lmstudio-community、ggml-org）をKLダイバージェンスで品質比較したランキング。ローカルLLM実行時のモデル選定に役立つ実践的な指標。ローカル推論環境を整えるAIエージェント開発者には参考になるが、Claudeメインユーザーには間接的な情報。</p>
-      <div class="card-meta">
-        <span class="feed-name">reddit_localllama</span>
-        <span class="sep">·</span>
-        <span class="date">4/7</span>
-        <span class="tag">AIツール</span>
-      </div>
-    </div>
-    <div class="card-score">
-      <div class="score-ring" style="--pct:58;--color:#f59e0b">
-        <span>58</span>
-      </div>
-    </div>
-  </div>
-</article>
-<article class="card" data-id="139" data-category="ai_tools" data-tier="worth-a-look" data-date="2026-04-05T14:03:54.000Z">
-  <div class="card-row">
-    <button class="read-btn" aria-label="既読にする"></button>
-    <button class="skip-btn" aria-label="スキップ">✕</button>
-    <div class="card-body">
-      <h3 class="card-title"><a href="https://dev.to/rehaan_n_8c92c9ec197c60e8/complete-claude-ai-api-tutorial-for-developers-2026-2bh1" target="_blank" rel="noopener noreferrer">開発者向けClaude AI APIチュートリアル 2026年版</a></h3>
-      <p class="card-summary">Claude APIの基本的な使い方を解説した入門チュートリアル記事。AIエージェント開発者としてClaudeを活用している本ユーザーには参考になる可能性があるが、内容が初心者向けのため新規情報は少ない。id 138・137・136と同一内容の重複投稿と思われる。</p>
-      <div class="card-meta">
-        <span class="feed-name">devto_claudeai</span>
-        <span class="sep">·</span>
-        <span class="date">4/5</span>
-        <span class="tag">AIツール</span>
-      </div>
-    </div>
-    <div class="card-score">
-      <div class="score-ring" style="--pct:58;--color:#f59e0b">
-        <span>58</span>
-      </div>
-    </div>
-  </div>
-</article>
-<article class="card" data-id="1362" data-category="cloud" data-tier="worth-a-look" data-date="2026-04-08T10:01:22.000Z">
-  <div class="card-row">
-    <button class="read-btn" aria-label="既読にする"></button>
-    <button class="skip-btn" aria-label="スキップ">✕</button>
-    <div class="card-body">
-      <h3 class="card-title"><a href="https://www.reddit.com/r/kubernetes/comments/1sfohpv/weekly_show_off_your_new_tools_and_projects_thread/" target="_blank" rel="noopener noreferrer">週次：新ツール・プロジェクト紹介スレッド</a></h3>
-      <p class="card-summary">Kubernetesコミュニティの週次プロジェクト紹介スレッド。興味深いツールが含まれる可能性はあるが、本文が取得できていないため評価が難しい。定期的なコミュニティ動向把握として軽く確認する程度の価値がある。</p>
-      <div class="card-meta">
-        <span class="feed-name">reddit_kubernetes</span>
-        <span class="sep">·</span>
-        <span class="date">4/8</span>
-        <span class="tag">クラウド</span>
-      </div>
-    </div>
-    <div class="card-score">
-      <div class="score-ring" style="--pct:58;--color:#f59e0b">
-        <span>58</span>
-      </div>
-    </div>
-  </div>
-</article>
-<article class="card" data-id="58" data-category="community" data-tier="worth-a-look" data-date="2026-04-06T10:33:02.000Z">
-  <div class="card-row">
-    <button class="read-btn" aria-label="既読にする"></button>
-    <button class="skip-btn" aria-label="スキップ">✕</button>
-    <div class="card-body">
-      <h3 class="card-title"><a href="https://tboteproject.com/surveillancefindings/" target="_blank" rel="noopener noreferrer">年齢確認が大規模監視インフラになる危険性</a></h3>
-      <p class="card-summary">ブラジルや英国における年齢確認制度が、実質的な大規模個人監視インフラとして機能している実態を調査したレポート。プライバシー・セキュリティの観点でSREエンジニアには把握価値がある。SaaSプロダクト開発でコンプライアンス要件を検討する際にも参考になる。</p>
-      <div class="card-meta">
-        <span class="feed-name">hacker_news</span>
-        <span class="sep">·</span>
-        <span class="date">4/6</span>
-        <span class="tag">コミュニティ</span>
-      </div>
-    </div>
-    <div class="card-score">
-      <div class="score-ring" style="--pct:58;--color:#f59e0b">
-        <span>58</span>
-      </div>
-    </div>
-  </div>
-</article>
 </section>
 
   <div id="no-results" class="empty" style="display:none">
@@ -4582,10 +4648,27 @@ footer a:hover { color: var(--accent-light); }
     <p>フィルターを変更するか、検索キーワードを変えてみてください。</p>
   </div>
 
-  <footer>更新: 4/9 04:55</footer>
+  <footer>更新: 4/9 19:47</footer>
 </main>
 
 </div>
+
+<!-- 詳細パネル -->
+<div class="detail-overlay" id="detail-overlay"></div>
+<div class="detail-panel" id="detail-panel" role="dialog" aria-modal="true" aria-labelledby="detail-panel-title">
+  <div class="detail-panel-header">
+    <h2 id="detail-panel-title"></h2>
+    <button class="detail-panel-close" id="detail-panel-close" aria-label="閉じる">✕</button>
+  </div>
+  <div class="detail-panel-body">
+    <p class="detail-panel-summary" id="detail-panel-summary"></p>
+    <div class="detail-panel-detail" id="detail-panel-detail"></div>
+  </div>
+  <div class="detail-panel-footer">
+    <a class="detail-panel-link" id="detail-panel-link" href="#" target="_blank" rel="noopener noreferrer">元記事を読む →</a>
+  </div>
+</div>
+
 <script>
 // ── テーマ管理 ────────────────────────────────────────
 function getPreferredTheme() {
@@ -4805,7 +4888,39 @@ document.querySelector('.main').addEventListener('click', function(e) {
   if (skipSecBtn) { skipSectionAll(skipSecBtn); return; }
 
   var articleLink = e.target.closest('.card-title a');
-  if (articleLink) { markRead(articleLink.closest('.card')); }
+  if (articleLink) { markRead(articleLink.closest('.card')); return; }
+
+  var card = e.target.closest('.card.has-detail');
+  if (card && !e.target.closest('.read-btn, .skip-btn')) {
+    openDetailPanel(card);
+  }
+});
+
+// ── 詳細パネル ────────────────────────────────────────
+var detailPanel = document.getElementById('detail-panel');
+var detailOverlay = document.getElementById('detail-overlay');
+
+function openDetailPanel(card) {
+  document.getElementById('detail-panel-title').textContent = card.dataset.title || '';
+  document.getElementById('detail-panel-summary').textContent = card.dataset.summary || '';
+  document.getElementById('detail-panel-detail').textContent = card.dataset.detail || '';
+  var link = document.getElementById('detail-panel-link');
+  link.href = card.dataset.url || '#';
+  detailPanel.classList.add('open');
+  detailOverlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeDetailPanel() {
+  detailPanel.classList.remove('open');
+  detailOverlay.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+document.getElementById('detail-panel-close').addEventListener('click', closeDetailPanel);
+detailOverlay.addEventListener('click', closeDetailPanel);
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape' && detailPanel.classList.contains('open')) closeDetailPanel();
 });
 
 document.getElementById('category-filters').addEventListener('click', function(e) {

@@ -76,15 +76,13 @@ function cardHtml(a: DigestArticleRow): string {
   const scorePct = Math.round(score * 100);
   const tier = getTier(score);
 
-  return `<article class="card" data-id="${a.id}" data-category="${esc(a.category)}" data-tier="${tier.id}" data-date="${esc(a.published_at ?? "")}">
+  return `<article class="card${a.detail_summary_ja ? " has-detail" : ""}" data-id="${a.id}" data-category="${esc(a.category)}" data-tier="${tier.id}" data-date="${esc(a.published_at ?? "")}"${a.detail_summary_ja ? ` data-detail="${esc(a.detail_summary_ja)}" data-url="${safeUrl(a.url)}" data-title="${esc(a.title_ja ?? a.url)}" data-summary="${esc(a.summary_ja ?? "")}"` : ""}>
   <div class="card-row">
     <button class="read-btn" aria-label="既読にする"></button>
     <button class="skip-btn" aria-label="スキップ">✕</button>
     <div class="card-body">
       <h3 class="card-title"><a href="${safeUrl(a.url)}" target="_blank" rel="noopener noreferrer">${esc(a.title_ja ?? a.url)}</a></h3>
       <p class="card-summary">${esc(a.summary_ja ?? "")}</p>
-      ${a.detail_summary_ja ? `<button class="detail-toggle-btn" aria-expanded="false">詳細を見る ▾</button>
-      <div class="detail-content">${esc(a.detail_summary_ja)}</div>` : ""}
       <div class="card-meta">
         <span class="feed-name">${esc(a.source_id)}</span>
         <span class="sep">·</span>
@@ -323,20 +321,67 @@ body {
   font-variant-numeric: tabular-nums; color: var(--text-muted);
 }
 
-.detail-toggle-btn {
-  background: none; border: 1px solid var(--border); border-radius: 5px;
-  padding: 0.1875rem 0.5rem; color: var(--text-dim); font-size: 0.6875rem;
-  cursor: pointer; transition: all 0.12s ease; margin-top: 0.375rem;
-}
-.detail-toggle-btn:hover { border-color: var(--accent-light); color: var(--accent-light); }
+.has-detail { cursor: pointer; }
+.has-detail:hover .card-title a { text-decoration: underline; }
 
-.detail-content {
-  display: none; margin-top: 0.5rem; max-height: 300px; overflow-y: auto;
+/* 詳細パネル */
+.detail-overlay {
+  display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4);
+  z-index: 200; backdrop-filter: blur(2px);
+}
+.detail-overlay.open { display: block; }
+
+.detail-panel {
+  position: fixed; top: 0; right: 0; height: 100%; width: 420px; max-width: 100%;
+  background: var(--surface); border-left: 1px solid var(--border);
+  z-index: 201; display: flex; flex-direction: column;
+  transform: translateX(100%); transition: transform 0.25s ease;
+  box-shadow: -4px 0 24px rgba(0,0,0,0.15);
+}
+.detail-panel.open { transform: translateX(0); }
+
+.detail-panel-header {
+  display: flex; align-items: flex-start; gap: 0.75rem;
+  padding: 1rem 1rem 0.75rem; border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.detail-panel-header h2 {
+  flex: 1; font-size: 0.9375rem; font-weight: 600; line-height: 1.5;
+  color: var(--text); margin: 0;
+}
+.detail-panel-close {
+  flex-shrink: 0; background: none; border: none; color: var(--text-dim);
+  font-size: 1.125rem; cursor: pointer; padding: 0.125rem 0.25rem; line-height: 1;
+  transition: color 0.12s ease;
+}
+.detail-panel-close:hover { color: var(--text); }
+
+.detail-panel-body {
+  flex: 1; overflow-y: auto; padding: 1rem;
+  scrollbar-width: thin; scrollbar-color: var(--border) transparent;
+}
+.detail-panel-body::-webkit-scrollbar { width: 4px; }
+.detail-panel-body::-webkit-scrollbar-thumb { background: var(--border-light); border-radius: 4px; }
+
+.detail-panel-summary {
   font-size: 0.8125rem; color: var(--text-muted); line-height: 1.7;
-  border-left: 2px solid var(--border-light); padding-left: 0.75rem;
+  margin: 0 0 1rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border-light);
+}
+.detail-panel-detail {
+  font-size: 0.8125rem; color: var(--text-muted); line-height: 1.9;
   white-space: pre-wrap;
 }
-.detail-content.open { display: block; }
+
+.detail-panel-footer {
+  padding: 0.875rem 1rem; border-top: 1px solid var(--border); flex-shrink: 0;
+}
+.detail-panel-link {
+  display: block; text-align: center; padding: 0.625rem 1rem;
+  background: var(--accent-light); color: #fff; border-radius: 8px;
+  font-size: 0.875rem; font-weight: 600; text-decoration: none;
+  transition: opacity 0.12s ease;
+}
+.detail-panel-link:hover { opacity: 0.85; }
 
 .search-wrap { margin-bottom: 1.5rem; }
 .search-input {
@@ -610,15 +655,37 @@ document.querySelector('.main').addEventListener('click', function(e) {
   var articleLink = e.target.closest('.card-title a');
   if (articleLink) { markRead(articleLink.closest('.card')); return; }
 
-  var detailBtn = e.target.closest('.detail-toggle-btn');
-  if (detailBtn) {
-    var detail = detailBtn.nextElementSibling;
-    if (detail && detail.classList.contains('detail-content')) {
-      var isOpen = detail.classList.toggle('open');
-      detailBtn.setAttribute('aria-expanded', String(isOpen));
-      detailBtn.textContent = isOpen ? '詳細を閉じる ▴' : '詳細を見る ▾';
-    }
+  var card = e.target.closest('.card.has-detail');
+  if (card && !e.target.closest('.read-btn, .skip-btn')) {
+    openDetailPanel(card);
   }
+});
+
+// ── 詳細パネル ────────────────────────────────────────
+var detailPanel = document.getElementById('detail-panel');
+var detailOverlay = document.getElementById('detail-overlay');
+
+function openDetailPanel(card) {
+  document.getElementById('detail-panel-title').textContent = card.dataset.title || '';
+  document.getElementById('detail-panel-summary').textContent = card.dataset.summary || '';
+  document.getElementById('detail-panel-detail').textContent = card.dataset.detail || '';
+  var link = document.getElementById('detail-panel-link');
+  link.href = card.dataset.url || '#';
+  detailPanel.classList.add('open');
+  detailOverlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeDetailPanel() {
+  detailPanel.classList.remove('open');
+  detailOverlay.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+document.getElementById('detail-panel-close').addEventListener('click', closeDetailPanel);
+detailOverlay.addEventListener('click', closeDetailPanel);
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape' && detailPanel.classList.contains('open')) closeDetailPanel();
 });
 
 document.getElementById('category-filters').addEventListener('click', function(e) {
@@ -806,6 +873,23 @@ export async function generateHtml(
 </main>
 
 </div>
+
+<!-- 詳細パネル -->
+<div class="detail-overlay" id="detail-overlay"></div>
+<div class="detail-panel" id="detail-panel" role="dialog" aria-modal="true" aria-labelledby="detail-panel-title">
+  <div class="detail-panel-header">
+    <h2 id="detail-panel-title"></h2>
+    <button class="detail-panel-close" id="detail-panel-close" aria-label="閉じる">✕</button>
+  </div>
+  <div class="detail-panel-body">
+    <p class="detail-panel-summary" id="detail-panel-summary"></p>
+    <div class="detail-panel-detail" id="detail-panel-detail"></div>
+  </div>
+  <div class="detail-panel-footer">
+    <a class="detail-panel-link" id="detail-panel-link" href="#" target="_blank" rel="noopener noreferrer">元記事を読む →</a>
+  </div>
+</div>
+
 <script>
 ${JS}
 </script>
