@@ -20,10 +20,17 @@ RSS を収集・AI要約・スコアリングして GitHub Pages に静的 HTML 
 - OGP 画像 URL は `safeUrl()` 関数を通す（SSRF 防止）
 - RSS 本文はプロンプトに渡す前に `JSON.stringify` でエスケープ（プロンプトインジェクション対策）
 
+## Generated Files（絶対に直接編集しないこと）
+- `docs/index.html` は **生成物** であり直接編集禁止
+  - 機能追加・修正はすべて `src/generate/html.ts` に実装し `bun run generate` で再生成する
+  - PR での競合解消時も `docs/index.html` を直接編集せず、`html.ts` を修正して `bun run generate` で解決する
+  - 競合解消の手順: `git checkout origin/main -- docs/index.html` → `bun run generate` → `git add docs/index.html`
+
 ## Workflow
 - IMPORTANT: `main` への直接プッシュ禁止。必ずブランチを切って PR を出す
 - ブランチ名: `feature/<機能名>` または `fix/<内容>`
 - IMPORTANT: PR 作成前に `bun run typecheck` が通ることを確認する
+- PR マージ順序が依存する場合はコンフリクトを必ず解消してからマージする
 
 ## 変更禁止
 - `.env`, `.env.example` — シークレットが含まれる
