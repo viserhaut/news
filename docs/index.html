@@ -360,15 +360,15 @@ footer a:hover { color: var(--accent-light); }
       <span class="theme-icon"></span>
     </button>
   </div>
-  <div class="date-label">2026年4月9日</div>
+  <div class="date-label">2026年4月10日</div>
 
   <div class="stats-grid">
     <div class="stat-box">
-      <div class="stat-val">396</div>
+      <div class="stat-val">430</div>
       <div class="stat-lbl">記事</div>
     </div>
     <div class="stat-box">
-      <div class="stat-val" id="unread-count">396</div>
+      <div class="stat-val" id="unread-count">430</div>
       <div class="stat-lbl">未読</div>
     </div>
   </div>
@@ -402,22 +402,22 @@ footer a:hover { color: var(--accent-light); }
       <a class="toc-link" href="#must-read">
         <span class="toc-dot" style="background:#10b981"></span>
         Must Read
-        <span class="toc-count">70</span>
+        <span class="toc-count">73</span>
       </a>
 <a class="toc-link" href="#recommended">
         <span class="toc-dot" style="background:#3b82f6"></span>
         Recommended
-        <span class="toc-count">87</span>
+        <span class="toc-count">101</span>
       </a>
 <a class="toc-link" href="#worth-a-look">
         <span class="toc-dot" style="background:#f59e0b"></span>
         Worth a Look
-        <span class="toc-count">101</span>
+        <span class="toc-count">106</span>
       </a>
 <a class="toc-link" href="#low-priority">
         <span class="toc-dot" style="background:#6b7280"></span>
         Low Priority
-        <span class="toc-count">138</span>
+        <span class="toc-count">150</span>
       </a>
     </div>
   </div>
@@ -432,7 +432,7 @@ footer a:hover { color: var(--accent-light); }
   <div class="tier-header">
     <span class="tier-bar" style="background:#10b981"></span>
     <h2>Must Read</h2>
-    <span class="tier-count">70</span>
+    <span class="tier-count">73</span>
     <button class="mark-section-read">全て既読</button>
     <button class="skip-section-btn">スキップ</button>
   </div>
@@ -1402,6 +1402,36 @@ footer a:hover { color: var(--accent-light); }
     </div>
   </div>
 </article>
+<article class="card has-detail" data-id="1685" data-category="community" data-tier="must-read" data-date="2026-04-09T03:14:01.000Z" data-detail="・Anthropic公式APIドキュメントにManaged Agentsのセクションが追加
+・コアコンセプト・仕組み・いつ使うべきかの判断基準を解説
+・対応ツール一覧・ベータアクセス条件・レート制限の情報を含む
+・ブランドガイドライン：Claude Code・Claude Coworkと混同されないよう命名規則が必要
+・ブランドコンプライアンスに関しては営業チームへの問い合わせが必要
+・Messages API・Batch processing・Streamingなど周辺機能との連携も記述
+・エージェント構築時のアーキテクチャ判断の公式ガイドとして参照価値大
+・/v1/agents・/v1/sessionsエンドポイントが対象
+・現時点ではベータ段階でのアクセス制限あり
+・個人開発でClaudeエージェントをSaaSに組み込む際の実装指針として直結" data-url="https://platform.claude.com/docs/en/managed-agents/overview" data-title="Claude Managed Agents 概要 — Anthropic公式APIドキュメント" data-summary="AnthropicがClaude APIにManaged Agentsの概要ドキュメントを公開。セッション管理・ツール連携・レート制限・ブランドガイドラインなどエージェント構築に必要な情報を網羅。Claude APIを使ったAIエージェント開発を行うこのユーザーにとって最重要の一次資料。">
+  <div class="card-row">
+    <button class="read-btn" aria-label="既読にする"></button>
+    <button class="skip-btn" aria-label="スキップ">✕</button>
+    <div class="card-body">
+      <h3 class="card-title"><a href="https://platform.claude.com/docs/en/managed-agents/overview" target="_blank" rel="noopener noreferrer">Claude Managed Agents 概要 — Anthropic公式APIドキュメント</a></h3>
+      <p class="card-summary">AnthropicがClaude APIにManaged Agentsの概要ドキュメントを公開。セッション管理・ツール連携・レート制限・ブランドガイドラインなどエージェント構築に必要な情報を網羅。Claude APIを使ったAIエージェント開発を行うこのユーザーにとって最重要の一次資料。</p>
+      <div class="card-meta">
+        <span class="feed-name">hatena</span>
+        <span class="sep">·</span>
+        <span class="date">4/9</span>
+        <span class="tag">コミュニティ</span>
+      </div>
+    </div>
+    <div class="card-score">
+      <div class="score-ring" style="--pct:91;--color:#10b981">
+        <span>91</span>
+      </div>
+    </div>
+  </div>
+</article>
 <article class="card" data-id="48" data-category="ai_tools" data-tier="must-read" data-date="2026-04-06T01:00:08.000Z">
   <div class="card-row">
     <button class="read-btn" aria-label="既読にする"></button>
@@ -1654,6 +1684,33 @@ footer a:hover { color: var(--accent-light); }
     </div>
   </div>
 </article>
+<article class="card has-detail" data-id="1724" data-category="community" data-tier="must-read" data-date="2026-04-09T09:25:28.000Z" data-detail="・Claudeが自分自身のメッセージをユーザー発言と誤認識するバグ
+・ハルシネーションや権限境界の問題とは本質的に異なる
+・コンテキストウィンドウ限界付近（「Dumb Zone」）で再現しやすい
+・他のLLM（ChatGPTなど）でも類似報告があるが原因は異なる可能性
+・LLMアプリ開発者がロールプロンプト設計を見直す必要性を示唆
+・Anthropicへの報告・対策状況は不明
+・マルチターン会話・長文コンテキストを扱うエージェント開発者に特に関係する" data-url="https://dwyer.co.za/static/claude-mixes-up-who-said-what-and-thats-not-ok.html" data-title="Claudeの発言者混同バグ：ユーザー発言を自己発言と誤認" data-summary="ClaudeがユーザーのメッセージをAI自身が送ったと誤認識するバグについて詳述した記事。ハルシネーションとは異なるカテゴリの問題で、コンテキストウィンドウの上限付近（「Dumb Zone」）で発生しやすいとされる。Claude APIやアプリを開発・利用するうえで把握必須の挙動。">
+  <div class="card-row">
+    <button class="read-btn" aria-label="既読にする"></button>
+    <button class="skip-btn" aria-label="スキップ">✕</button>
+    <div class="card-body">
+      <h3 class="card-title"><a href="https://dwyer.co.za/static/claude-mixes-up-who-said-what-and-thats-not-ok.html" target="_blank" rel="noopener noreferrer">Claudeの発言者混同バグ：ユーザー発言を自己発言と誤認</a></h3>
+      <p class="card-summary">ClaudeがユーザーのメッセージをAI自身が送ったと誤認識するバグについて詳述した記事。ハルシネーションとは異なるカテゴリの問題で、コンテキストウィンドウの上限付近（「Dumb Zone」）で発生しやすいとされる。Claude APIやアプリを開発・利用するうえで把握必須の挙動。</p>
+      <div class="card-meta">
+        <span class="feed-name">hacker_news</span>
+        <span class="sep">·</span>
+        <span class="date">4/9</span>
+        <span class="tag">コミュニティ</span>
+      </div>
+    </div>
+    <div class="card-score">
+      <div class="score-ring" style="--pct:88;--color:#10b981">
+        <span>88</span>
+      </div>
+    </div>
+  </div>
+</article>
 <article class="card" data-id="847" data-category="community" data-tier="must-read" data-date="2026-04-07T05:25:01.000Z">
   <div class="card-row">
     <button class="read-btn" aria-label="既読にする"></button>
@@ -1885,6 +1942,36 @@ footer a:hover { color: var(--accent-light); }
     </div>
   </div>
 </article>
+<article class="card has-detail" data-id="1690" data-category="community" data-tier="must-read" data-date="2026-04-08T15:08:38.000Z" data-detail="・GoodpatchのCEOが3月頭、事業部全員にClaude Codeで1アプリをデプロイするよう大号令
+・自身が年間300万円のSaaSクローンをClaude Codeで1日で作れたことが契機
+・社内では「#CC令」のハッシュタグが生まれ、過去最大の社内ムーブメントに発展
+・1ヶ月で200個のアプリと300件のナレッジが蓄積
+・エンジニア以外（営業等）もアプリ開発に参加した
+・組織全体へのAIコーディングツール展開の成功事例として注目
+・Claude Codeの業務適用範囲の広さを示す実例
+・非技術者でも1アプリ作成・デプロイできる水準の使いやすさを示す
+・知識共有ツール（esa）との連携でナレッジ管理も促進
+・個人開発・副業文脈でのClaude Code活用の参考になる視点を含む" data-url="https://note.com/naofumit/n/n2835cd8fbe87" data-title="全社Claude Code大号令 — 1ヶ月で200アプリ・300件ナレッジから見えたこと" data-summary="Goodpatch CEOが全社員にClaude Codeで1アプリ作成・デプロイを義務付けた取り組みの振り返り。1ヶ月で200個のアプリと300件のナレッジが生まれ、社内最大のムーブメントになった。Claude Codeをチームや組織全体に展開する際の実践知として、AIエージェント開発に強い関心を持つこのユーザーに直接参考になる事例。">
+  <div class="card-row">
+    <button class="read-btn" aria-label="既読にする"></button>
+    <button class="skip-btn" aria-label="スキップ">✕</button>
+    <div class="card-body">
+      <h3 class="card-title"><a href="https://note.com/naofumit/n/n2835cd8fbe87" target="_blank" rel="noopener noreferrer">全社Claude Code大号令 — 1ヶ月で200アプリ・300件ナレッジから見えたこと</a></h3>
+      <p class="card-summary">Goodpatch CEOが全社員にClaude Codeで1アプリ作成・デプロイを義務付けた取り組みの振り返り。1ヶ月で200個のアプリと300件のナレッジが生まれ、社内最大のムーブメントになった。Claude Codeをチームや組織全体に展開する際の実践知として、AIエージェント開発に強い関心を持つこのユーザーに直接参考になる事例。</p>
+      <div class="card-meta">
+        <span class="feed-name">hatena</span>
+        <span class="sep">·</span>
+        <span class="date">4/9</span>
+        <span class="tag">コミュニティ</span>
+      </div>
+    </div>
+    <div class="card-score">
+      <div class="score-ring" style="--pct:85;--color:#10b981">
+        <span>85</span>
+      </div>
+    </div>
+  </div>
+</article>
 <article class="card" data-id="1446" data-category="community" data-tier="must-read" data-date="2026-04-08T16:01:32.000Z">
   <div class="card-row">
     <button class="read-btn" aria-label="既読にする"></button>
@@ -1912,7 +1999,7 @@ footer a:hover { color: var(--accent-light); }
   <div class="tier-header">
     <span class="tier-bar" style="background:#3b82f6"></span>
     <h2>Recommended</h2>
-    <span class="tier-count">87</span>
+    <span class="tier-count">101</span>
     <button class="mark-section-read">全て既読</button>
     <button class="skip-section-btn">スキップ</button>
   </div>
@@ -1933,6 +2020,66 @@ footer a:hover { color: var(--accent-light); }
     <div class="card-score">
       <div class="score-ring" style="--pct:85;--color:#3b82f6">
         <span>85</span>
+      </div>
+    </div>
+  </div>
+</article>
+<article class="card has-detail" data-id="1681" data-category="community" data-tier="recommended" data-date="2026-04-08T21:28:21.000Z" data-detail="・GitHub CopilotはプロンプトもOSSとして公開しており、実装を直接参照できる
+・Agentモードの基本動作定義・Planエージェントによる計画生成の仕組みを解説
+・インストラクション初期化・カスタムエージェント作成・会話圧縮の実装パターン
+・ファイルリンク化・チャットタイトル生成・コミットメッセージ生成の実装も公開
+・Copilotアイデンティティ（モデルの振る舞い・人格定義）の設計が参照可能
+・プロダクション投入済みのエージェントプロンプトとして信頼性が高い
+・自社AIエージェントのプロンプト設計にそのまま応用できる
+・Claude CodeやMCPエージェント開発のシステムプロンプト設計に直接役立つ
+・競合製品の設計思想を合法的に学べる希少な機会
+・エージェント品質向上のためのベンチマーク事例として価値大" data-url="https://zenn.dev/microsoft/articles/github-copilot-prompts" data-title="エージェント開発の参考に — GitHub CopilotのOSSシステムプロンプトを解剖" data-summary="GitHub CopilotがシステムプロンプトをOSSで公開していることを活かし、Planエージェント・カスタムエージェント・コミットメッセージ生成などの実装を詳細解説。AIエージェント開発者にとってプロダクション品質のプロンプト設計を学べる貴重な一次資料。">
+  <div class="card-row">
+    <button class="read-btn" aria-label="既読にする"></button>
+    <button class="skip-btn" aria-label="スキップ">✕</button>
+    <div class="card-body">
+      <h3 class="card-title"><a href="https://zenn.dev/microsoft/articles/github-copilot-prompts" target="_blank" rel="noopener noreferrer">エージェント開発の参考に — GitHub CopilotのOSSシステムプロンプトを解剖</a></h3>
+      <p class="card-summary">GitHub CopilotがシステムプロンプトをOSSで公開していることを活かし、Planエージェント・カスタムエージェント・コミットメッセージ生成などの実装を詳細解説。AIエージェント開発者にとってプロダクション品質のプロンプト設計を学べる貴重な一次資料。</p>
+      <div class="card-meta">
+        <span class="feed-name">hatena</span>
+        <span class="sep">·</span>
+        <span class="date">4/9</span>
+        <span class="tag">コミュニティ</span>
+      </div>
+    </div>
+    <div class="card-score">
+      <div class="score-ring" style="--pct:84;--color:#3b82f6">
+        <span>84</span>
+      </div>
+    </div>
+  </div>
+</article>
+<article class="card has-detail" data-id="1675" data-category="community" data-tier="recommended" data-date="2026-04-09T10:24:14.000Z" data-detail="・2026年4月7日、Amazon S3 FilesがGA（一般提供）開始
+・S3バケットをNFS v4.1/v4.2ファイルシステムとしてマウント可能になった
+・対応コンピューティング環境：EC2、EKS、ECS、Lambda
+・不要になる層の例：EFSをS3のフロントとして使うパターン、ファイル共有のための中間サービス
+・新たに可能になること：LambdaからS3を直接ファイルAPIで読み書き（/tmp制限の回避）
+・EKS上のステートフルワークロードでEFSの代替候補として評価できる
+・制約：コミット間隔（約60秒）、大規模バケット（5000万オブジェクト超）でのrenameコスト
+・バージョニング有効化が必須要件
+・VPC内からのアクセス制限、ネームスペース非互換に注意が必要
+・既存EFS/NFS依存アーキテクチャの棚卸しポイントとなる重要なアップデート" data-url="https://zenn.dev/genda_jp/articles/b6ff5ea33c7a71" data-title="S3 Filesで消えるアーキテクチャ層、生まれるアーキテクチャ" data-summary="AWS S3 FilesがGAとなり、S3バケットをNFS v4.1/v4.2マウントポイントとして利用できるようになった。EC2・EKS・ECS・Lambdaから直接ファイルシステムとして扱えることで、EFS代替や共有ストレージ層の設計が根本から変わる。ECSやEKSを日常的に扱うSREにとってアーキテクチャ見直しの直接的なトリガーとなる。">
+  <div class="card-row">
+    <button class="read-btn" aria-label="既読にする"></button>
+    <button class="skip-btn" aria-label="スキップ">✕</button>
+    <div class="card-body">
+      <h3 class="card-title"><a href="https://zenn.dev/genda_jp/articles/b6ff5ea33c7a71" target="_blank" rel="noopener noreferrer">S3 Filesで消えるアーキテクチャ層、生まれるアーキテクチャ</a></h3>
+      <p class="card-summary">AWS S3 FilesがGAとなり、S3バケットをNFS v4.1/v4.2マウントポイントとして利用できるようになった。EC2・EKS・ECS・Lambdaから直接ファイルシステムとして扱えることで、EFS代替や共有ストレージ層の設計が根本から変わる。ECSやEKSを日常的に扱うSREにとってアーキテクチャ見直しの直接的なトリガーとなる。</p>
+      <div class="card-meta">
+        <span class="feed-name">hatena</span>
+        <span class="sep">·</span>
+        <span class="date">4/9</span>
+        <span class="tag">コミュニティ</span>
+      </div>
+    </div>
+    <div class="card-score">
+      <div class="score-ring" style="--pct:84;--color:#3b82f6">
+        <span>84</span>
       </div>
     </div>
   </div>
@@ -2235,6 +2382,36 @@ footer a:hover { color: var(--accent-light); }
     </div>
   </div>
 </article>
+<article class="card has-detail" data-id="1676" data-category="community" data-tier="recommended" data-date="2026-04-09T13:17:10.000Z" data-detail="・GRU傘下のAPT28（Fancy Bear）が世界120カ国以上でキャンペーンを展開
+・標的はTP-LinkとMikroTikの家庭・SOHO向けルーター、計1万8000台超
+・攻撃手法：DNS設定を書き換えてMicrosoft Outlookのログインページをフィッシングサイトへリダイレクト
+・資格情報（認証情報）を大規模に収集し、スパイ活動の足がかりに利用
+・英国NCSC（国家サイバーセキュリティセンター）が2026年4月7日に手法を公表
+・米司法省＋FBIが「Operation Masquerade」として被害ルーターを遠隔修復する異例の作戦を実施
+・エッジデバイスのファームウェア更新・デフォルトパスワード変更・管理UIのWAN公開禁止が対策の基本
+・社内DNSリゾルバをDNSSECやDNS-over-HTTPSに切り替えることでDNSハイジャックを軽減可能
+・Zeek/Suricataなどのネットワーク監視でDNS応答の異常を検知する仕組みが有効
+・ゼロトラスト設計においてエッジルーターを信頼境界に含めないことの重要性を改めて示す事例" data-url="https://joho-todai.com/russia-gru-hijacks-routers-steal-outlook-credentials/" data-title="ロシアGRU、家庭用ルーター1万8000台を乗っ取りOutlook認証情報を窃取" data-summary="ロシア軍情報機関GRU傘下のAPT28が120カ国1万8000台のTP-Link/MikroTikルーターのDNS設定を改ざんし、Outlookの認証情報を大規模窃取。FBIが異例の遠隔修復作戦「Operation Masquerade」を実施した。SREとしてインフラのエッジデバイスセキュリティとDNSハイジャック対策を見直す必要性が高い。">
+  <div class="card-row">
+    <button class="read-btn" aria-label="既読にする"></button>
+    <button class="skip-btn" aria-label="スキップ">✕</button>
+    <div class="card-body">
+      <h3 class="card-title"><a href="https://joho-todai.com/russia-gru-hijacks-routers-steal-outlook-credentials/" target="_blank" rel="noopener noreferrer">ロシアGRU、家庭用ルーター1万8000台を乗っ取りOutlook認証情報を窃取</a></h3>
+      <p class="card-summary">ロシア軍情報機関GRU傘下のAPT28が120カ国1万8000台のTP-Link/MikroTikルーターのDNS設定を改ざんし、Outlookの認証情報を大規模窃取。FBIが異例の遠隔修復作戦「Operation Masquerade」を実施した。SREとしてインフラのエッジデバイスセキュリティとDNSハイジャック対策を見直す必要性が高い。</p>
+      <div class="card-meta">
+        <span class="feed-name">hatena</span>
+        <span class="sep">·</span>
+        <span class="date">4/9</span>
+        <span class="tag">コミュニティ</span>
+      </div>
+    </div>
+    <div class="card-score">
+      <div class="score-ring" style="--pct:82;--color:#3b82f6">
+        <span>82</span>
+      </div>
+    </div>
+  </div>
+</article>
 <article class="card" data-id="451" data-category="security" data-tier="recommended" data-date="2026-04-06T23:30:50.000Z">
   <div class="card-row">
     <button class="read-btn" aria-label="既読にする"></button>
@@ -2436,6 +2613,34 @@ footer a:hover { color: var(--accent-light); }
         <span class="sep">·</span>
         <span class="date">4/8</span>
         <span class="tag">AIツール</span>
+      </div>
+    </div>
+    <div class="card-score">
+      <div class="score-ring" style="--pct:81;--color:#3b82f6">
+        <span>81</span>
+      </div>
+    </div>
+  </div>
+</article>
+<article class="card has-detail" data-id="1770" data-category="ai_research" data-tier="recommended" data-date="2026-04-09T17:15:54.000Z" data-detail="・GPU クラウドのコールドスタートp99レイテンシに関するコミュニティ実測調査
+・p50ではなくp99を重視している点がSREとしての問題意識と一致
+・対象プラットフォーム：Modal, RunPod, Lambda Labs, Vast.aiなどが想定範囲
+・ウォームプール戦略やプリウォームの費用対効果も議論
+・SLO設計においてコールドスタートのテーリングは見落とされがち
+・2026年時点での各社コールドスタート改善状況を把握できる
+・AI推論サービスのインフラ選定において定量的な比較材料になる
+・自社サービスにGPU推論を組み込む際の参考データとして価値あり" data-url="https://www.reddit.com/r/MachineLearning/comments/1sgvw83/cold_start_latency_on_gpu_cloud_platforms_in_2026/" data-title="2026年のGPUクラウドプラットフォームにおけるコールドスタートレイテンシ（p99）の実測データ" data-summary="GPU クラウド各社のコールドスタートレイテンシについてp99の実データを求めるディスカッション。p50ではなくp99に特化した点がSRE的視点として重要。SLO設計や推論インフラ選定において実測値は欠かせない情報であり、AI推論基盤を検討するエンジニアに有用。">
+  <div class="card-row">
+    <button class="read-btn" aria-label="既読にする"></button>
+    <button class="skip-btn" aria-label="スキップ">✕</button>
+    <div class="card-body">
+      <h3 class="card-title"><a href="https://www.reddit.com/r/MachineLearning/comments/1sgvw83/cold_start_latency_on_gpu_cloud_platforms_in_2026/" target="_blank" rel="noopener noreferrer">2026年のGPUクラウドプラットフォームにおけるコールドスタートレイテンシ（p99）の実測データ</a></h3>
+      <p class="card-summary">GPU クラウド各社のコールドスタートレイテンシについてp99の実データを求めるディスカッション。p50ではなくp99に特化した点がSRE的視点として重要。SLO設計や推論インフラ選定において実測値は欠かせない情報であり、AI推論基盤を検討するエンジニアに有用。</p>
+      <div class="card-meta">
+        <span class="feed-name">reddit_ml</span>
+        <span class="sep">·</span>
+        <span class="date">4/10</span>
+        <span class="tag">AI研究</span>
       </div>
     </div>
     <div class="card-score">
@@ -2781,6 +2986,36 @@ footer a:hover { color: var(--accent-light); }
     </div>
   </div>
 </article>
+<article class="card has-detail" data-id="1689" data-category="community" data-tier="recommended" data-date="2026-04-08T16:08:28.000Z" data-detail="・`claude-ps`というBashスクリプトでtmuxペインのClaude Codeセッションを一覧・監視
+・`-w/--watch`オプションで指定間隔（デフォルト1秒）の自動更新に対応
+・BOLD/GREEN/YELLOW/DIMなどANSIカラーで視認性を向上
+・`set -euo pipefail`でエラー処理を厳格化した安全な実装
+・MIT Licenseで公開
+・複数エージェントを並列で走らせるヘビーユーザー向けのオペレーションツール
+・tmux環境でのClaude Code運用の生産性を高めるテクニック
+・SREとしてのターミナル管理スキルと親和性が高い
+・スクリプト本体が短くカスタマイズしやすい構成
+・Claude Code並列実行の管理課題に対する実践的なアプローチ" data-url="https://www.pandanoir.info/entry/2026/04/08/205822" data-title="tmuxで起動中のClaude Codeセッションを横断監視するスクリプト" data-summary="tmuxペインで並列起動しているClaude Codeの複数セッションを一元監視するBashスクリプト`claude-ps`の紹介。watchモードやカラー表示に対応。複数のClaude Codeエージェントを同時稼働させるワークフローを持つユーザーにとってそのまま使える実用ツール。">
+  <div class="card-row">
+    <button class="read-btn" aria-label="既読にする"></button>
+    <button class="skip-btn" aria-label="スキップ">✕</button>
+    <div class="card-body">
+      <h3 class="card-title"><a href="https://www.pandanoir.info/entry/2026/04/08/205822" target="_blank" rel="noopener noreferrer">tmuxで起動中のClaude Codeセッションを横断監視するスクリプト</a></h3>
+      <p class="card-summary">tmuxペインで並列起動しているClaude Codeの複数セッションを一元監視するBashスクリプト`claude-ps`の紹介。watchモードやカラー表示に対応。複数のClaude Codeエージェントを同時稼働させるワークフローを持つユーザーにとってそのまま使える実用ツール。</p>
+      <div class="card-meta">
+        <span class="feed-name">hatena</span>
+        <span class="sep">·</span>
+        <span class="date">4/9</span>
+        <span class="tag">コミュニティ</span>
+      </div>
+    </div>
+    <div class="card-score">
+      <div class="score-ring" style="--pct:79;--color:#3b82f6">
+        <span>79</span>
+      </div>
+    </div>
+  </div>
+</article>
 <article class="card" data-id="79" data-category="community" data-tier="recommended" data-date="2026-04-05T00:13:55.000Z">
   <div class="card-row">
     <button class="read-btn" aria-label="既読にする"></button>
@@ -2939,6 +3174,33 @@ footer a:hover { color: var(--accent-light); }
         <span class="feed-name">reddit_localllama</span>
         <span class="sep">·</span>
         <span class="date">4/7</span>
+        <span class="tag">AIツール</span>
+      </div>
+    </div>
+    <div class="card-score">
+      <div class="score-ring" style="--pct:78;--color:#3b82f6">
+        <span>78</span>
+      </div>
+    </div>
+  </div>
+</article>
+<article class="card has-detail" data-id="1772" data-category="ai_tools" data-tier="recommended" data-date="2026-04-09T14:36:58.000Z" data-detail="・小型ローカルLLMがMythosと同じ脆弱性を検出できたとの実験報告
+・大型クラウドモデルに頼らずともセキュリティ解析が可能になりつつある
+・オンデバイスLLMでのセキュリティスキャンの現実性が高まっている
+・コスト面でのアドバンテージ：APIコストなしで脆弱性検出
+・プライバシー面でも有利（コードをクラウドに送らなくて済む）
+・SREやセキュリティエンジニアが手軽に試せる段階に近づいている
+・モデルの「規模」と「能力」の相関が想定より低い可能性を示唆" data-url="https://www.reddit.com/r/LocalLLaMA/comments/1sgrfp1/local_small_llms_found_the_same_vulnerabilities/" data-title="小型ローカルLLMがMythosと同じ脆弱性を発見" data-summary="小規模なローカルLLMが、大型モデルMythosと同等のセキュリティ脆弱性発見能力を示したという報告。SREとしてセキュリティに関心を持つユーザーにとって、AIを使った脆弱性スキャンの民主化という観点で注目に値する。オープンモデルの実用的なセキュリティ用途が広がっている。">
+  <div class="card-row">
+    <button class="read-btn" aria-label="既読にする"></button>
+    <button class="skip-btn" aria-label="スキップ">✕</button>
+    <div class="card-body">
+      <h3 class="card-title"><a href="https://www.reddit.com/r/LocalLLaMA/comments/1sgrfp1/local_small_llms_found_the_same_vulnerabilities/" target="_blank" rel="noopener noreferrer">小型ローカルLLMがMythosと同じ脆弱性を発見</a></h3>
+      <p class="card-summary">小規模なローカルLLMが、大型モデルMythosと同等のセキュリティ脆弱性発見能力を示したという報告。SREとしてセキュリティに関心を持つユーザーにとって、AIを使った脆弱性スキャンの民主化という観点で注目に値する。オープンモデルの実用的なセキュリティ用途が広がっている。</p>
+      <div class="card-meta">
+        <span class="feed-name">reddit_localllama</span>
+        <span class="sep">·</span>
+        <span class="date">4/9</span>
         <span class="tag">AIツール</span>
       </div>
     </div>
@@ -3138,6 +3400,34 @@ footer a:hover { color: var(--accent-light); }
     </div>
   </div>
 </article>
+<article class="card has-detail" data-id="1769" data-category="ai_research" data-tier="recommended" data-date="2026-04-09T11:41:12.000Z" data-detail="・H100の帯域幅（約3TB/s）を活かせるストレージが必要という実用的問題
+・AWSのエグレス課金（$0.09/GB程度）が大規模ML訓練で大きなボトルネックに
+・候補: Cloudflare R2, Backblaze B2, Wasabi, MinIOなど
+・Cloudflare R2はエグレス無料でS3互換、H100との組み合わせで実績報告あり
+・データセンターのコロケーション戦略（ストレージとGPUを同一DC）も議論
+・同一クラウド内帯域は無料/安価なため、クラウド集約戦略も有効
+・ML訓練コスト構造において、データI/Oが軽視されがちな要因として浮上
+・SREとしてのコスト最適化設計に直接応用可能な知見" data-url="https://www.reddit.com/r/MachineLearning/comments/1sgn6vu/anyone_have_an_s3compatible_store_that_actually/" data-title="H100を飽和させられるS3互換ストレージ（AWSのエグレス課金なし）はあるか" data-summary="H100 GPUのスループットを飽和させられるS3互換オブジェクトストレージで、AWSのエグレス課金を回避できるものを探すスレッド。クラウドコスト最適化はSREの主要関心事であり、AWSエグレス税問題はAI学習・推論インフラにおいて顕在化しているコスト構造の問題。">
+  <div class="card-row">
+    <button class="read-btn" aria-label="既読にする"></button>
+    <button class="skip-btn" aria-label="スキップ">✕</button>
+    <div class="card-body">
+      <h3 class="card-title"><a href="https://www.reddit.com/r/MachineLearning/comments/1sgn6vu/anyone_have_an_s3compatible_store_that_actually/" target="_blank" rel="noopener noreferrer">H100を飽和させられるS3互換ストレージ（AWSのエグレス課金なし）はあるか</a></h3>
+      <p class="card-summary">H100 GPUのスループットを飽和させられるS3互換オブジェクトストレージで、AWSのエグレス課金を回避できるものを探すスレッド。クラウドコスト最適化はSREの主要関心事であり、AWSエグレス税問題はAI学習・推論インフラにおいて顕在化しているコスト構造の問題。</p>
+      <div class="card-meta">
+        <span class="feed-name">reddit_ml</span>
+        <span class="sep">·</span>
+        <span class="date">4/9</span>
+        <span class="tag">AI研究</span>
+      </div>
+    </div>
+    <div class="card-score">
+      <div class="score-ring" style="--pct:77;--color:#3b82f6">
+        <span>77</span>
+      </div>
+    </div>
+  </div>
+</article>
 <article class="card" data-id="1495" data-category="ai_tools" data-tier="recommended" data-date="2026-04-08T19:02:41.000Z">
   <div class="card-row">
     <button class="read-btn" aria-label="既読にする"></button>
@@ -3233,6 +3523,33 @@ footer a:hover { color: var(--accent-light); }
         <span class="feed-name">hacker_news</span>
         <span class="sep">·</span>
         <span class="date">4/7</span>
+        <span class="tag">コミュニティ</span>
+      </div>
+    </div>
+    <div class="card-score">
+      <div class="score-ring" style="--pct:75;--color:#3b82f6">
+        <span>75</span>
+      </div>
+    </div>
+  </div>
+</article>
+<article class="card has-detail" data-id="1726" data-category="community" data-tier="recommended" data-date="2026-04-09T04:11:55.000Z" data-detail="・TrivyとLiteLLMのサプライチェーン攻撃を契機に対策を強化
+・インストーラスクリプトへのチェックサム埋め込みを実施
+・チェックサムはベンダリング・自社CI/CDへの組み込みに有効
+・ビルド・テスト・リリースの各フェーズでセキュリティポスチャを評価
+・開発者が依存するツールの信頼性維持がテーマ
+・AstralはRuff、uv、tyなど広く使われるPythonツールを開発
+・オープンソースプロジェクトにおけるサプライチェーンリスクの高まりを示す" data-url="https://astral.sh/blog/open-source-security-at-astral" data-title="Astralのオープンソースセキュリティ対策" data-summary="uv/ruffを開発するAstralが、サプライチェーン攻撃への対策としてとっているセキュリティ実践をまとめた記事。TrivyやLiteLLMのハッキング事例を踏まえ、ビルド・テスト・リリースパイプラインのセキュリティ強化策を解説している。SREとしてCI/CDパイプラインのセキュリティを検討する際に参考になる。">
+  <div class="card-row">
+    <button class="read-btn" aria-label="既読にする"></button>
+    <button class="skip-btn" aria-label="スキップ">✕</button>
+    <div class="card-body">
+      <h3 class="card-title"><a href="https://astral.sh/blog/open-source-security-at-astral" target="_blank" rel="noopener noreferrer">Astralのオープンソースセキュリティ対策</a></h3>
+      <p class="card-summary">uv/ruffを開発するAstralが、サプライチェーン攻撃への対策としてとっているセキュリティ実践をまとめた記事。TrivyやLiteLLMのハッキング事例を踏まえ、ビルド・テスト・リリースパイプラインのセキュリティ強化策を解説している。SREとしてCI/CDパイプラインのセキュリティを検討する際に参考になる。</p>
+      <div class="card-meta">
+        <span class="feed-name">hacker_news</span>
+        <span class="sep">·</span>
+        <span class="date">4/9</span>
         <span class="tag">コミュニティ</span>
       </div>
     </div>
@@ -3453,6 +3770,94 @@ footer a:hover { color: var(--accent-light); }
     </div>
   </div>
 </article>
+<article class="card has-detail" data-id="1686" data-category="community" data-tier="recommended" data-date="2026-04-09T06:01:53.000Z" data-detail="・MicrosoftがOSSの新埋め込みモデル「Harrier」を発表
+・Google「Gemini Embedding 2」を性能ベンチマークで上回ると主張
+・次世代Bing検索エンジンのバックエンドとして採用予定
+・AIエージェントのグラウンディング（情報の根拠付け）基盤として設計
+・オープンソース公開により商用・個人利用が可能
+・RAGパイプラインの検索精度向上に活用できる可能性
+・エージェント開発者にとってEmbeddingモデル選定の新たな選択肢
+・Microsoftのエンタープライズ向けAIインフラ強化戦略の一環
+・Apache/MITなどのライセンス詳細は記事本文要確認" data-url="https://forest.watch.impress.co.jp/docs/news/2100348.html" data-title="Microsoft、OSS埋め込みモデル「Harrier」発表 — Gemini Embedding 2を凌駕" data-summary="MicrosoftがオープンソースのEmbeddingモデル「Harrier」を発表。次世代Bing検索やAIエージェントのグラウンディング基盤として設計され、Gemini Embedding 2を性能面で上回ると主張。RAGやエージェントのグラウンディング改善を検討するユーザーに参照価値がある。">
+  <div class="card-row">
+    <button class="read-btn" aria-label="既読にする"></button>
+    <button class="skip-btn" aria-label="スキップ">✕</button>
+    <div class="card-body">
+      <h3 class="card-title"><a href="https://forest.watch.impress.co.jp/docs/news/2100348.html" target="_blank" rel="noopener noreferrer">Microsoft、OSS埋め込みモデル「Harrier」発表 — Gemini Embedding 2を凌駕</a></h3>
+      <p class="card-summary">MicrosoftがオープンソースのEmbeddingモデル「Harrier」を発表。次世代Bing検索やAIエージェントのグラウンディング基盤として設計され、Gemini Embedding 2を性能面で上回ると主張。RAGやエージェントのグラウンディング改善を検討するユーザーに参照価値がある。</p>
+      <div class="card-meta">
+        <span class="feed-name">hatena</span>
+        <span class="sep">·</span>
+        <span class="date">4/9</span>
+        <span class="tag">コミュニティ</span>
+      </div>
+    </div>
+    <div class="card-score">
+      <div class="score-ring" style="--pct:73;--color:#3b82f6">
+        <span>73</span>
+      </div>
+    </div>
+  </div>
+</article>
+<article class="card has-detail" data-id="1679" data-category="community" data-tier="recommended" data-date="2026-04-09T12:14:04.000Z" data-detail="・GoogleがGemma 4シリーズをApache 2.0ライセンスで公開
+・完全オープンソースのため商用利用・改変・再配布が自由
+・軽量モデルとしてオンデバイス・エッジ推論向けに設計
+・ファインチューニングによる特定用途への特化が可能
+・Geminiファミリーの知識を蒸留・継承した最新世代
+・ローカル推論や自前LLMインフラ構築のコスト削減に寄与
+・MCP・Claude Code以外のエージェント基盤選択肢として検討対象
+・Google DeepMindのオープンモデル戦略の継続
+・Ollamaやvllmなどのローカル実行フレームワークでの利用が想定される
+・Claude API中心の現在のワークフローを補完するローカルモデルとして参考になる" data-url="https://japan.zdnet.com/article/35246120/" data-title="Google、最新OSSモデル「Gemma 4」をApache 2.0で公開" data-summary="GoogleがGemma 4をApache 2.0ライセンスで完全オープンソース公開した。商用利用・ファインチューニングが自由にできる軽量モデルとして、オンデバイスAIや自前推論環境の構築に関心があるユーザーに注目価値がある。">
+  <div class="card-row">
+    <button class="read-btn" aria-label="既読にする"></button>
+    <button class="skip-btn" aria-label="スキップ">✕</button>
+    <div class="card-body">
+      <h3 class="card-title"><a href="https://japan.zdnet.com/article/35246120/" target="_blank" rel="noopener noreferrer">Google、最新OSSモデル「Gemma 4」をApache 2.0で公開</a></h3>
+      <p class="card-summary">GoogleがGemma 4をApache 2.0ライセンスで完全オープンソース公開した。商用利用・ファインチューニングが自由にできる軽量モデルとして、オンデバイスAIや自前推論環境の構築に関心があるユーザーに注目価値がある。</p>
+      <div class="card-meta">
+        <span class="feed-name">hatena</span>
+        <span class="sep">·</span>
+        <span class="date">4/9</span>
+        <span class="tag">コミュニティ</span>
+      </div>
+    </div>
+    <div class="card-score">
+      <div class="score-ring" style="--pct:73;--color:#3b82f6">
+        <span>73</span>
+      </div>
+    </div>
+  </div>
+</article>
+<article class="card has-detail" data-id="1738" data-category="community" data-tier="recommended" data-date="2026-04-08T12:19:00.000Z" data-detail="・シングルGPU（H100想定）で100B超のLLMをフル精度訓練できるアーキテクチャ
+・メモリ効率化の核心：勾配チェックポインティング・オフロードの組み合わせ
+・フル精度（FP32）維持により量子化誤差のないファインチューニングが可能
+・従来のモデル並列・データ並列を不要にするアプローチ
+・個人・スタートアップにとってLLM訓練のアクセシビリティを大幅向上
+・推論だけでなく学習フェーズのコスト構造を根本から変える可能性
+・論文はarXiv:2604.05091、2026年4月公開
+・AIエージェント用の特化型モデルをオンプレで訓練するユースケースに直結
+・GPUクラウドコスト依存からの脱却という観点でSRE的にも興味深い" data-url="https://arxiv.org/abs/2604.05091" data-title="MegaTrain：シングルGPUで1000億パラメータ以上のLLMをフル精度で学習" data-summary="シングルGPU上で100B+パラメータのLLMをフル精度（FP32）で学習可能にするMegaTrainフレームワークの論文。メモリ効率の革新であり、AI研究・推論インフラのコスト構造を変える可能性がある。個人開発者がLLMの学習・ファインチューニングを手元で行える未来に近づく技術。">
+  <div class="card-row">
+    <button class="read-btn" aria-label="既読にする"></button>
+    <button class="skip-btn" aria-label="スキップ">✕</button>
+    <div class="card-body">
+      <h3 class="card-title"><a href="https://arxiv.org/abs/2604.05091" target="_blank" rel="noopener noreferrer">MegaTrain：シングルGPUで1000億パラメータ以上のLLMをフル精度で学習</a></h3>
+      <p class="card-summary">シングルGPU上で100B+パラメータのLLMをフル精度（FP32）で学習可能にするMegaTrainフレームワークの論文。メモリ効率の革新であり、AI研究・推論インフラのコスト構造を変える可能性がある。個人開発者がLLMの学習・ファインチューニングを手元で行える未来に近づく技術。</p>
+      <div class="card-meta">
+        <span class="feed-name">hacker_news</span>
+        <span class="sep">·</span>
+        <span class="date">4/8</span>
+        <span class="tag">コミュニティ</span>
+      </div>
+    </div>
+    <div class="card-score">
+      <div class="score-ring" style="--pct:73;--color:#3b82f6">
+        <span>73</span>
+      </div>
+    </div>
+  </div>
+</article>
 <article class="card" data-id="421" data-category="community" data-tier="recommended" data-date="2026-04-06T22:09:51.000Z">
   <div class="card-row">
     <button class="read-btn" aria-label="既読にする"></button>
@@ -3537,6 +3942,34 @@ footer a:hover { color: var(--accent-light); }
     </div>
   </div>
 </article>
+<article class="card has-detail" data-id="1774" data-category="ai_tools" data-tier="recommended" data-date="2026-04-09T13:00:17.000Z" data-detail="・AnthropicがMythosのプレビューを「安全性」を名目に制限しているとの批判
+・実態はp100規模の推論コストが商業的に展開困難なためとの説
+・ローカルオープンモデルが同様の能力を達成済みとの反論が多数
+・安全性ナラティブがPRとして機能しているという見方
+・OpenSourceコミュニティは同等結果を低コストで再現中
+・Anthropicの競争上のポジショニングへの疑念が高まっている
+・compute コスト透明性の欠如がユーザーの信頼に影響
+・Claude利用者・開発者にとってベンダー依存リスク再評価の契機" data-url="https://www.reddit.com/r/LocalLLaMA/comments/1sgoy17/the_mythos_preview_safety_gaslight_anthropic_is/" data-title="Anthropic「Mythos」安全性プレビューはコスト隠蔽のガスライティング？オープンモデルで既に再現可能" data-summary="AnthropicのMythosモデルのプレビュー公開が「安全性評価」を理由に制限されているが、実態は巨大な推論コストを隠すためだという議論がredditで展開されている。オープンモデルがすでに同等の能力を示しているとの主張も含まれる。Claudeを実務で活用するユーザーにとって、Anthropicのモデルリリース戦略の背景を理解する一助となる。">
+  <div class="card-row">
+    <button class="read-btn" aria-label="既読にする"></button>
+    <button class="skip-btn" aria-label="スキップ">✕</button>
+    <div class="card-body">
+      <h3 class="card-title"><a href="https://www.reddit.com/r/LocalLLaMA/comments/1sgoy17/the_mythos_preview_safety_gaslight_anthropic_is/" target="_blank" rel="noopener noreferrer">Anthropic「Mythos」安全性プレビューはコスト隠蔽のガスライティング？オープンモデルで既に再現可能</a></h3>
+      <p class="card-summary">AnthropicのMythosモデルのプレビュー公開が「安全性評価」を理由に制限されているが、実態は巨大な推論コストを隠すためだという議論がredditで展開されている。オープンモデルがすでに同等の能力を示しているとの主張も含まれる。Claudeを実務で活用するユーザーにとって、Anthropicのモデルリリース戦略の背景を理解する一助となる。</p>
+      <div class="card-meta">
+        <span class="feed-name">reddit_localllama</span>
+        <span class="sep">·</span>
+        <span class="date">4/9</span>
+        <span class="tag">AIツール</span>
+      </div>
+    </div>
+    <div class="card-score">
+      <div class="score-ring" style="--pct:72;--color:#3b82f6">
+        <span>72</span>
+      </div>
+    </div>
+  </div>
+</article>
 <article class="card" data-id="1494" data-category="ai_tools" data-tier="recommended" data-date="2026-04-09T09:48:52.000Z">
   <div class="card-row">
     <button class="read-btn" aria-label="既読にする"></button>
@@ -3612,6 +4045,36 @@ footer a:hover { color: var(--accent-light); }
         <span class="sep">·</span>
         <span class="date">4/7</span>
         <span class="tag">AIツール</span>
+      </div>
+    </div>
+    <div class="card-score">
+      <div class="score-ring" style="--pct:72;--color:#3b82f6">
+        <span>72</span>
+      </div>
+    </div>
+  </div>
+</article>
+<article class="card has-detail" data-id="1673" data-category="community" data-tier="recommended" data-date="2026-04-09T08:28:55.000Z" data-detail="・日本発の研究チームによるLLM推論効率化アーキテクチャ「PHOTON」の論文紹介
+・Transformerの注意機構（Attention）に起因する計算コストを根本から削減する設計
+・推論時の計算量を「桁違い」に削減するとされるが、具体的なベンチマーク数値は論文参照
+・記事本文の詳細が取得できていないため技術詳細は限定的
+・LLMアーキテクチャ革新の流れ（Mamba、RWKV等）の文脈に位置する研究
+・推論コスト削減はAPIコスト・レイテンシ改善に直結し、エージェント開発者に実用的意義がある
+・オンデバイスAIや低リソース環境へのLLM展開可能性を広げる方向性
+・日本発の研究として国内AI研究動向を把握する観点でも注目
+・論文の独自性・再現性は今後の追試待ちの段階
+・実用化・採用タイムラインは不明、研究段階の提案として評価" data-url="https://qiita.com/yuji-arakawa/items/2ad0240c56eb7507b261" data-title="日本発LLM新アーキテクチャ「PHOTON」— 推論を桁違いに効率化" data-summary="日本の研究チームが提案したLLM推論効率化アーキテクチャ「PHOTON」の論文まとめ。従来のTransformerと比較して推論コストを大幅削減するとされる新設計。LLMの実務活用やClaudeなどのAPI利用コスト最適化に関心があるAIエージェント開発者に把握する価値がある。">
+  <div class="card-row">
+    <button class="read-btn" aria-label="既読にする"></button>
+    <button class="skip-btn" aria-label="スキップ">✕</button>
+    <div class="card-body">
+      <h3 class="card-title"><a href="https://qiita.com/yuji-arakawa/items/2ad0240c56eb7507b261" target="_blank" rel="noopener noreferrer">日本発LLM新アーキテクチャ「PHOTON」— 推論を桁違いに効率化</a></h3>
+      <p class="card-summary">日本の研究チームが提案したLLM推論効率化アーキテクチャ「PHOTON」の論文まとめ。従来のTransformerと比較して推論コストを大幅削減するとされる新設計。LLMの実務活用やClaudeなどのAPI利用コスト最適化に関心があるAIエージェント開発者に把握する価値がある。</p>
+      <div class="card-meta">
+        <span class="feed-name">hatena</span>
+        <span class="sep">·</span>
+        <span class="date">4/9</span>
+        <span class="tag">コミュニティ</span>
       </div>
     </div>
     <div class="card-score">
@@ -3726,6 +4189,35 @@ footer a:hover { color: var(--accent-light); }
     </div>
   </div>
 </article>
+<article class="card has-detail" data-id="1704" data-category="security" data-tier="recommended" data-date="2026-04-09T10:49:58.000Z" data-detail="・フィリピン子会社Coral Bay Nickelのサーバ2台が暗号化
+・2026年4月2日に暗号化を検知
+・ランサムウェアの可能性を想定し対象サーバを即時隔離
+・生産プラントの制御系（OT）への影響なし・操業継続
+・フィリピン内グループ会社間のネットワーク接続を遮断
+・外部協力のもと影響範囲調査・復旧作業を進行中
+・他地域への影響は確認されていない
+・IT/OTセグメンテーションが被害局限化に機能した事例
+・大企業海外子会社へのランサム攻撃という典型パターン" data-url="https://www.security-next.com/183226" data-title="住友金属鉱山フィリピン子会社がランサムウェア被害（生産プラントは操業継続）" data-summary="住友金属鉱山のフィリピン子会社Coral Bay Nickelでランサムウェアによりサーバ2台が暗号化された事案。制御系への影響は否定され生産は継続。SREとして注目すべき隔離・復旧手順とOT/ITセグメンテーションの対応が含まれる。">
+  <div class="card-row">
+    <button class="read-btn" aria-label="既読にする"></button>
+    <button class="skip-btn" aria-label="スキップ">✕</button>
+    <div class="card-body">
+      <h3 class="card-title"><a href="https://www.security-next.com/183226" target="_blank" rel="noopener noreferrer">住友金属鉱山フィリピン子会社がランサムウェア被害（生産プラントは操業継続）</a></h3>
+      <p class="card-summary">住友金属鉱山のフィリピン子会社Coral Bay Nickelでランサムウェアによりサーバ2台が暗号化された事案。制御系への影響は否定され生産は継続。SREとして注目すべき隔離・復旧手順とOT/ITセグメンテーションの対応が含まれる。</p>
+      <div class="card-meta">
+        <span class="feed-name">security_next</span>
+        <span class="sep">·</span>
+        <span class="date">4/9</span>
+        <span class="tag">セキュリティ</span>
+      </div>
+    </div>
+    <div class="card-score">
+      <div class="score-ring" style="--pct:70;--color:#3b82f6">
+        <span>70</span>
+      </div>
+    </div>
+  </div>
+</article>
 <article class="card" data-id="1497" data-category="ai_tools" data-tier="recommended" data-date="2026-04-09T03:55:27.000Z">
   <div class="card-row">
     <button class="read-btn" aria-label="既読にする"></button>
@@ -3753,7 +4245,7 @@ footer a:hover { color: var(--accent-light); }
   <div class="tier-header">
     <span class="tier-bar" style="background:#f59e0b"></span>
     <h2>Worth a Look</h2>
-    <span class="tier-count">101</span>
+    <span class="tier-count">106</span>
     <button class="mark-section-read">全て既読</button>
     <button class="skip-section-btn">スキップ</button>
   </div>
@@ -4084,6 +4576,32 @@ footer a:hover { color: var(--accent-light); }
         <span class="sep">·</span>
         <span class="date">4/8</span>
         <span class="tag">クラウド</span>
+      </div>
+    </div>
+    <div class="card-score">
+      <div class="score-ring" style="--pct:67;--color:#f59e0b">
+        <span>67</span>
+      </div>
+    </div>
+  </div>
+</article>
+<article class="card has-detail" data-id="1765" data-category="ai_research" data-tier="worth-a-look" data-date="2026-04-09T12:35:30.000Z" data-detail="・著者Chris FreglyはAWSのAI/MLスペシャリストで「Data Science on AWS」の著者
+・内容：LLM推論最適化、バッチ処理、スループット最大化などが想定範囲
+・GPUメモリ管理、量子化、バッチングなどの実践的トピックを扱う可能性
+・SREがAI推論基盤を運用する際の知識体系として有用
+・コミュニティでは内容の深さと最新性に懐疑的な声もあり
+・2024〜2025年のLLMエコシステム変化のキャッチアップ度が評価のポイント" data-url="https://www.reddit.com/r/MachineLearning/comments/1sgodjl/ai_systems_performance_engineering_by_chris/" data-title="「AI Systems Performance Engineering」（Chris Fregly著）は読む価値があるか" data-summary="AWS AI/MLのChris Freglyによる「AI Systems Performance Engineering」という書籍の評価スレッド。AIシステムのパフォーマンス最適化に焦点を当てた内容であり、推論インフラやMLOpsに関心を持つSRE・AI開発者にとって参考になりうる。">
+  <div class="card-row">
+    <button class="read-btn" aria-label="既読にする"></button>
+    <button class="skip-btn" aria-label="スキップ">✕</button>
+    <div class="card-body">
+      <h3 class="card-title"><a href="https://www.reddit.com/r/MachineLearning/comments/1sgodjl/ai_systems_performance_engineering_by_chris/" target="_blank" rel="noopener noreferrer">「AI Systems Performance Engineering」（Chris Fregly著）は読む価値があるか</a></h3>
+      <p class="card-summary">AWS AI/MLのChris Freglyによる「AI Systems Performance Engineering」という書籍の評価スレッド。AIシステムのパフォーマンス最適化に焦点を当てた内容であり、推論インフラやMLOpsに関心を持つSRE・AI開発者にとって参考になりうる。</p>
+      <div class="card-meta">
+        <span class="feed-name">reddit_ml</span>
+        <span class="sep">·</span>
+        <span class="date">4/9</span>
+        <span class="tag">AI研究</span>
       </div>
     </div>
     <div class="card-score">
@@ -4651,6 +5169,63 @@ footer a:hover { color: var(--accent-light); }
         <span class="sep">·</span>
         <span class="date">4/6</span>
         <span class="tag">セキュリティ</span>
+      </div>
+    </div>
+    <div class="card-score">
+      <div class="score-ring" style="--pct:62;--color:#f59e0b">
+        <span>62</span>
+      </div>
+    </div>
+  </div>
+</article>
+<article class="card has-detail" data-id="1678" data-category="community" data-tier="worth-a-look" data-date="2026-04-09T00:09:45.000Z" data-detail="・米Workdayの人事AIが11億件超の採用応募を自動却下し、集団訴訟に発展
+・問題の本質は「悪意のある差別」ではなく、訓練データ由来の「意図しない差別（Disparate Impact）」
+・Amazonが2018年に廃棄した採用AIも、過去10年分の男性優位なデータを学習し女性を低評価していた
+・モデルが「優秀な候補者の特徴」として学習したのは、過去の採用者（偏りのある集団）の属性
+・訴訟では「誰が責任を負うか（ベンダー vs 企業）」が主要な争点
+・AIの判断が不透明であるほど差別の検出・証明が困難になる
+・EUのAI Act、米国のEEOC ガイドラインなど規制強化の動きが加速
+・プロダクト倫理の観点から「AIの決定に対する説明責任の仕組み」が設計要件になりつつある
+・採用・与信・医療など高リスク領域ではモデル監査（Algorithmic Auditing）が義務化される方向
+・AIエージェントを組み込むプロダクト開発者はバイアス検査とログ保全を設計段階で考慮すべき" data-url="https://takoratta.hatenablog.com/entry/2026/04/09/085051" data-title="11億件の応募を却下したAI — Workday訴訟が突きつける「意図のない差別」の正体" data-summary="米WorkdayのAI採用ソフトが11億件の応募を差別的に却下したとして大規模訴訟に発展。Amazonの採用AIが女性候補者を体系的に低評価した前例と同様の「意図しない差別」の問題を掘り下げる。AIシステムを本番に組み込む際のバイアスリスクと責任の所在は、AIエージェント開発者にとっても他人事ではない。">
+  <div class="card-row">
+    <button class="read-btn" aria-label="既読にする"></button>
+    <button class="skip-btn" aria-label="スキップ">✕</button>
+    <div class="card-body">
+      <h3 class="card-title"><a href="https://takoratta.hatenablog.com/entry/2026/04/09/085051" target="_blank" rel="noopener noreferrer">11億件の応募を却下したAI — Workday訴訟が突きつける「意図のない差別」の正体</a></h3>
+      <p class="card-summary">米WorkdayのAI採用ソフトが11億件の応募を差別的に却下したとして大規模訴訟に発展。Amazonの採用AIが女性候補者を体系的に低評価した前例と同様の「意図しない差別」の問題を掘り下げる。AIシステムを本番に組み込む際のバイアスリスクと責任の所在は、AIエージェント開発者にとっても他人事ではない。</p>
+      <div class="card-meta">
+        <span class="feed-name">hatena</span>
+        <span class="sep">·</span>
+        <span class="date">4/9</span>
+        <span class="tag">コミュニティ</span>
+      </div>
+    </div>
+    <div class="card-score">
+      <div class="score-ring" style="--pct:62;--color:#f59e0b">
+        <span>62</span>
+      </div>
+    </div>
+  </div>
+</article>
+<article class="card has-detail" data-id="1763" data-category="ai_research" data-tier="worth-a-look" data-date="2026-04-09T15:40:29.000Z" data-detail="・Matryoshka Representation Learning（MRL）なしのモデルでもPCA圧縮が有効
+・BGE-M3（多言語対応埋め込みモデル）で実験・検証済み
+・次元削減後も検索精度の劣化が許容範囲内に収まることを確認
+・ベクトルDB（Qdrant, Weaviateなど）のストレージ・速度コスト削減に直結
+・PCAの変換行列を事前計算し推論時に適用する実装パターン
+・MRLモデルへの移行が難しいケースでの現実的な代替手段
+・RAGパイプラインのコスト最適化として実装コストが低い" data-url="https://www.reddit.com/r/MachineLearning/comments/1sgt7ol/p_pca_before_truncation_makes_nonmatryoshka/" data-title="PCA前処理でMatryoshkaなし埋め込みを圧縮可能に：BGE-M3での検証結果" data-summary="Matryoshka表現学習を使わない通常の埋め込みモデルでも、PCAで次元削減することで実用的に圧縮できるという実験結果。BGE-M3で検証済み。RAGやベクトル検索を活用するAIエージェント開発者にとって、インフラコスト削減の観点で参考になる。">
+  <div class="card-row">
+    <button class="read-btn" aria-label="既読にする"></button>
+    <button class="skip-btn" aria-label="スキップ">✕</button>
+    <div class="card-body">
+      <h3 class="card-title"><a href="https://www.reddit.com/r/MachineLearning/comments/1sgt7ol/p_pca_before_truncation_makes_nonmatryoshka/" target="_blank" rel="noopener noreferrer">PCA前処理でMatryoshkaなし埋め込みを圧縮可能に：BGE-M3での検証結果</a></h3>
+      <p class="card-summary">Matryoshka表現学習を使わない通常の埋め込みモデルでも、PCAで次元削減することで実用的に圧縮できるという実験結果。BGE-M3で検証済み。RAGやベクトル検索を活用するAIエージェント開発者にとって、インフラコスト削減の観点で参考になる。</p>
+      <div class="card-meta">
+        <span class="feed-name">reddit_ml</span>
+        <span class="sep">·</span>
+        <span class="date">4/10</span>
+        <span class="tag">AI研究</span>
       </div>
     </div>
     <div class="card-score">
@@ -5416,6 +5991,36 @@ footer a:hover { color: var(--accent-light); }
     </div>
   </div>
 </article>
+<article class="card has-detail" data-id="1682" data-category="community" data-tier="worth-a-look" data-date="2026-04-09T07:18:10.000Z" data-detail="・GeminiアプリにNotebooks機能が新設、NotebookLMとデータ同期
+・プロジェクト単位でコンテキストや情報を整理・保持できる
+・Gemini・NotebookLM間での一貫した情報管理が目的
+・Google Workspaceとの統合を意識した機能設計
+・AIアシスタントへの長期記憶・コンテキスト保持のアプローチとして注目
+・競合（Claude・ChatGPT）のメモリ機能との差別化を図る動き
+・個人開発者の情報管理ツールとして検討対象になりうる
+・NotebookLM自体はすでに研究・学習用途で評価されているツール
+・Googleのエコシステム統合戦略の一環
+・実務での即時活用可能性は限定的" data-url="https://blog.google/innovation-and-ai/products/gemini-app/notebooks-gemini-notebooklm/" data-title="GeminiにNotebooks機能追加 — NotebookLMと連携したプロジェクト管理" data-summary="GoogleがGeminiアプリにNotebooks機能を追加し、NotebookLMと同期したプロジェクト管理が可能になった。AI生産性ツールの動向として把握しておく価値があるが、ユーザーの主要関心（Claude・MCP・SRE）との直接の接点は限定的。">
+  <div class="card-row">
+    <button class="read-btn" aria-label="既読にする"></button>
+    <button class="skip-btn" aria-label="スキップ">✕</button>
+    <div class="card-body">
+      <h3 class="card-title"><a href="https://blog.google/innovation-and-ai/products/gemini-app/notebooks-gemini-notebooklm/" target="_blank" rel="noopener noreferrer">GeminiにNotebooks機能追加 — NotebookLMと連携したプロジェクト管理</a></h3>
+      <p class="card-summary">GoogleがGeminiアプリにNotebooks機能を追加し、NotebookLMと同期したプロジェクト管理が可能になった。AI生産性ツールの動向として把握しておく価値があるが、ユーザーの主要関心（Claude・MCP・SRE）との直接の接点は限定的。</p>
+      <div class="card-meta">
+        <span class="feed-name">hatena</span>
+        <span class="sep">·</span>
+        <span class="date">4/9</span>
+        <span class="tag">コミュニティ</span>
+      </div>
+    </div>
+    <div class="card-score">
+      <div class="score-ring" style="--pct:55;--color:#f59e0b">
+        <span>55</span>
+      </div>
+    </div>
+  </div>
+</article>
 <article class="card" data-id="99" data-category="ai_research" data-tier="worth-a-look" data-date="2026-04-06T20:35:20.000Z">
   <div class="card-row">
     <button class="read-btn" aria-label="既読にする"></button>
@@ -5617,6 +6222,33 @@ footer a:hover { color: var(--accent-light); }
         <span class="sep">·</span>
         <span class="date">4/8</span>
         <span class="tag">コミュニティ</span>
+      </div>
+    </div>
+    <div class="card-score">
+      <div class="score-ring" style="--pct:52;--color:#f59e0b">
+        <span>52</span>
+      </div>
+    </div>
+  </div>
+</article>
+<article class="card has-detail" data-id="1707" data-category="security" data-tier="worth-a-look" data-date="2026-04-09T13:27:03.000Z" data-detail="・従業員メールアカウントへの海外からの不正アクセス
+・フィッシングメール223件が社外に送信
+・外部ファイル共有サービスを装った偽認証画面が手口
+・2026年3月23日午前に検知・対象アカウントを即時停止
+・社内調査の結果、海外IPからのアクセスと判明
+・MFA未設定または迂回された可能性
+・サプライチェーン型フィッシング（取引先への波及）のリスクを示す" data-url="https://www.security-next.com/182964" data-title="JEMSの従業員メールアカウントが不正アクセス・フィッシングメール223件送信" data-summary="廃棄物管理システム会社JEMSの従業員メールアカウントが海外からの不正アクセスを受け、取引先などにフィッシングメールが223件送信された事案。外部ファイル共有サービスを装った偽認証画面への誘導が手口。クレデンシャル管理と多要素認証の重要性を示すインシデント。">
+  <div class="card-row">
+    <button class="read-btn" aria-label="既読にする"></button>
+    <button class="skip-btn" aria-label="スキップ">✕</button>
+    <div class="card-body">
+      <h3 class="card-title"><a href="https://www.security-next.com/182964" target="_blank" rel="noopener noreferrer">JEMSの従業員メールアカウントが不正アクセス・フィッシングメール223件送信</a></h3>
+      <p class="card-summary">廃棄物管理システム会社JEMSの従業員メールアカウントが海外からの不正アクセスを受け、取引先などにフィッシングメールが223件送信された事案。外部ファイル共有サービスを装った偽認証画面への誘導が手口。クレデンシャル管理と多要素認証の重要性を示すインシデント。</p>
+      <div class="card-meta">
+        <span class="feed-name">security_next</span>
+        <span class="sep">·</span>
+        <span class="date">4/9</span>
+        <span class="tag">セキュリティ</span>
       </div>
     </div>
     <div class="card-score">
@@ -5884,7 +6516,7 @@ footer a:hover { color: var(--accent-light); }
   <div class="tier-header">
     <span class="tier-bar" style="background:#6b7280"></span>
     <h2>Low Priority</h2>
-    <span class="tier-count">138</span>
+    <span class="tier-count">150</span>
     <button class="mark-section-read">全て既読</button>
     <button class="skip-section-btn">スキップ</button>
   </div>
@@ -6073,6 +6705,32 @@ footer a:hover { color: var(--accent-light); }
     <div class="card-score">
       <div class="score-ring" style="--pct:47;--color:#6b7280">
         <span>47</span>
+      </div>
+    </div>
+  </div>
+</article>
+<article class="card has-detail" data-id="1768" data-category="ai_research" data-tier="low-priority" data-date="2026-04-09T18:53:59.000Z" data-detail="・セルフィー画像の左右反転（ミラー）を自動検出するタスク
+・OCRでテキスト（Tシャツのロゴ等）を読み反転判定するアプローチが提案
+・顔の非対称性（ほくろ、髪分け）を使うCV的アプローチも候補
+・深層学習モデルによる直接分類も選択肢
+・実用ケース：ソーシャルメディアのコンテンツ品質管理など
+・OCRベースは精度が文字の有無に依存するという限界あり" data-url="https://www.reddit.com/r/MachineLearning/comments/1sgyoof/detecting_mirrored_selfie_images_ocr_the_best_way/" data-title="ミラー反転セルフィー画像の検出：OCRが最善手か" data-summary="左右反転したセルフィー画像を自動検出する方法についての議論。OCRでテキストの向きを判定するアプローチを中心に議論されている。このユーザーの主要関心領域（SRE、AI開発）との関連は薄く、特定のコンピュータビジョンユースケースに限定される。">
+  <div class="card-row">
+    <button class="read-btn" aria-label="既読にする"></button>
+    <button class="skip-btn" aria-label="スキップ">✕</button>
+    <div class="card-body">
+      <h3 class="card-title"><a href="https://www.reddit.com/r/MachineLearning/comments/1sgyoof/detecting_mirrored_selfie_images_ocr_the_best_way/" target="_blank" rel="noopener noreferrer">ミラー反転セルフィー画像の検出：OCRが最善手か</a></h3>
+      <p class="card-summary">左右反転したセルフィー画像を自動検出する方法についての議論。OCRでテキストの向きを判定するアプローチを中心に議論されている。このユーザーの主要関心領域（SRE、AI開発）との関連は薄く、特定のコンピュータビジョンユースケースに限定される。</p>
+      <div class="card-meta">
+        <span class="feed-name">reddit_ml</span>
+        <span class="sep">·</span>
+        <span class="date">4/10</span>
+        <span class="tag">AI研究</span>
+      </div>
+    </div>
+    <div class="card-score">
+      <div class="score-ring" style="--pct:46;--color:#6b7280">
+        <span>46</span>
       </div>
     </div>
   </div>
@@ -6392,6 +7050,32 @@ footer a:hover { color: var(--accent-light); }
     </div>
   </div>
 </article>
+<article class="card has-detail" data-id="1708" data-category="security" data-tier="low-priority" data-date="2026-04-09T10:10:44.000Z" data-detail="・公開された表計算ファイルの非表示シートに個人情報が混入
+・対象は過去申込者366名の住所・電話番号・生年月日・性別・メールアドレス等
+・氏名は含まれないが障害の有無なども含まれる
+・検索エンジン経由で外部から閲覧可能だった
+・2026年3月23日に過去申込者からの問い合わせで発覚
+・非表示シートのリスクは組織の情報公開フローに見落とされがち" data-url="https://www.security-next.com/183160" data-title="公開ファイルの非表示シートに個人情報が残存（東京都障害者スポーツ協会）" data-summary="東京都障害者スポーツ協会がWebサイトに公開した表計算ファイルの非表示シートに、過去の研修会申込者366名の個人情報が残存していた事案。検索エンジン経由で閲覧可能だったことが発覚。データ公開時の確認プロセスの重要性を示す事例。">
+  <div class="card-row">
+    <button class="read-btn" aria-label="既読にする"></button>
+    <button class="skip-btn" aria-label="スキップ">✕</button>
+    <div class="card-body">
+      <h3 class="card-title"><a href="https://www.security-next.com/183160" target="_blank" rel="noopener noreferrer">公開ファイルの非表示シートに個人情報が残存（東京都障害者スポーツ協会）</a></h3>
+      <p class="card-summary">東京都障害者スポーツ協会がWebサイトに公開した表計算ファイルの非表示シートに、過去の研修会申込者366名の個人情報が残存していた事案。検索エンジン経由で閲覧可能だったことが発覚。データ公開時の確認プロセスの重要性を示す事例。</p>
+      <div class="card-meta">
+        <span class="feed-name">security_next</span>
+        <span class="sep">·</span>
+        <span class="date">4/9</span>
+        <span class="tag">セキュリティ</span>
+      </div>
+    </div>
+    <div class="card-score">
+      <div class="score-ring" style="--pct:42;--color:#6b7280">
+        <span>42</span>
+      </div>
+    </div>
+  </div>
+</article>
 <article class="card" data-id="850" data-category="community" data-tier="low-priority" data-date="2026-04-07T02:54:42.000Z">
   <div class="card-row">
     <button class="read-btn" aria-label="既読にする"></button>
@@ -6403,6 +7087,30 @@ footer a:hover { color: var(--accent-light); }
         <span class="feed-name">hatena</span>
         <span class="sep">·</span>
         <span class="date">4/7</span>
+        <span class="tag">コミュニティ</span>
+      </div>
+    </div>
+    <div class="card-score">
+      <div class="score-ring" style="--pct:42;--color:#6b7280">
+        <span>42</span>
+      </div>
+    </div>
+  </div>
+</article>
+<article class="card has-detail" data-id="1721" data-category="community" data-tier="low-priority" data-date="2026-04-09T17:08:04.000Z" data-detail="・EFFがXプラットフォームからの撤退を表明
+・EFFはデジタル権利・プライバシー・セキュリティ分野の代表的NGO
+・Privacy Badger、Certbotなど開発者に馴染みのあるツールも提供
+・Xのポリシー変化への対応とみられるが本文詳細は限定的" data-url="https://www.eff.org/deeplinks/2026/04/eff-leaving-x" data-title="EFFがXから撤退" data-summary="電子フロンティア財団（EFF）がXのアカウントを削除・撤退することを発表した記事。デジタル権利・プライバシー分野の団体の動向として把握しておく価値はあるが、直接的な技術的示唆は少ない。">
+  <div class="card-row">
+    <button class="read-btn" aria-label="既読にする"></button>
+    <button class="skip-btn" aria-label="スキップ">✕</button>
+    <div class="card-body">
+      <h3 class="card-title"><a href="https://www.eff.org/deeplinks/2026/04/eff-leaving-x" target="_blank" rel="noopener noreferrer">EFFがXから撤退</a></h3>
+      <p class="card-summary">電子フロンティア財団（EFF）がXのアカウントを削除・撤退することを発表した記事。デジタル権利・プライバシー分野の団体の動向として把握しておく価値はあるが、直接的な技術的示唆は少ない。</p>
+      <div class="card-meta">
+        <span class="feed-name">hacker_news</span>
+        <span class="sep">·</span>
+        <span class="date">4/10</span>
         <span class="tag">コミュニティ</span>
       </div>
     </div>
@@ -6572,6 +7280,31 @@ footer a:hover { color: var(--accent-light); }
         <span class="sep">·</span>
         <span class="date">4/6</span>
         <span class="tag">セキュリティ</span>
+      </div>
+    </div>
+    <div class="card-score">
+      <div class="score-ring" style="--pct:41;--color:#6b7280">
+        <span>41</span>
+      </div>
+    </div>
+  </div>
+</article>
+<article class="card has-detail" data-id="1767" data-category="ai_research" data-tier="low-priority" data-date="2026-04-09T18:58:56.000Z" data-detail="・CoFinaは財務データの自動分析・レポート生成を行うAIツール
+・投資家向けレポートという高精度要求ユースケースでの評価議論
+・誤差許容度・ハルシネーションリスクが金融用途では致命的
+・人間レビュープロセスの必要性が指摘されている
+・エンタープライズ導入時のコンプライアンスリスクも課題" data-url="https://www.reddit.com/r/MachineLearning/comments/1sgytsm/is_cofina_accurate_enough_for_investor_reportingr/" data-title="CoFinaは投資家向けレポートに使えるほど正確か" data-summary="財務分析AIツール「CoFina」の精度を投資家向けレポート用途で評価するスレッド。金融・投資分野のAI活用の話題であり、SREやAIエージェント開発を主軸とするこのユーザーには関連性が低い。">
+  <div class="card-row">
+    <button class="read-btn" aria-label="既読にする"></button>
+    <button class="skip-btn" aria-label="スキップ">✕</button>
+    <div class="card-body">
+      <h3 class="card-title"><a href="https://www.reddit.com/r/MachineLearning/comments/1sgytsm/is_cofina_accurate_enough_for_investor_reportingr/" target="_blank" rel="noopener noreferrer">CoFinaは投資家向けレポートに使えるほど正確か</a></h3>
+      <p class="card-summary">財務分析AIツール「CoFina」の精度を投資家向けレポート用途で評価するスレッド。金融・投資分野のAI活用の話題であり、SREやAIエージェント開発を主軸とするこのユーザーには関連性が低い。</p>
+      <div class="card-meta">
+        <span class="feed-name">reddit_ml</span>
+        <span class="sep">·</span>
+        <span class="date">4/10</span>
+        <span class="tag">AI研究</span>
       </div>
     </div>
     <div class="card-score">
@@ -6833,6 +7566,36 @@ footer a:hover { color: var(--accent-light); }
     </div>
   </div>
 </article>
+<article class="card has-detail" data-id="1683" data-category="community" data-tier="low-priority" data-date="2026-04-07T03:08:08.000Z" data-detail="・レイヤードアーキテクチャ（Presentation/Application/Domain/Infrastructure層）を前提とした設計
+・Golang + GORMの実装を題材にした実践的な記事
+・口座送金処理（原子性・ロールバック保証が必要なユースケース）を例に使用
+・4つのトランザクション管理パターンを比較・評価
+・パターンごとのメリット・デメリットを整理
+・Unit of WorkパターンやRepositoryパターンとの組み合わせも紹介
+・GREEテックブログの2025年記事
+・Go言語でのバックエンド実装の標準的な設計指針
+・SREとしてのアプリ理解・レビュー視点の参考にはなる
+・AIエージェント・クラウドインフラとの直接の関連は低い" data-url="https://tech.gree-x.com/golang-transaction-pattern/" data-title="GolangレイヤードアーキテクチャでのDB トランザクション管理パターン4選" data-summary="Golang + GORMを用いたレイヤードアーキテクチャでのトランザクション管理手法を、口座送金処理を題材に4パターン紹介。バックエンド開発の実装パターンとして参考になるが、SRE・AIエージェント業務への直接の関連は薄い。">
+  <div class="card-row">
+    <button class="read-btn" aria-label="既読にする"></button>
+    <button class="skip-btn" aria-label="スキップ">✕</button>
+    <div class="card-body">
+      <h3 class="card-title"><a href="https://tech.gree-x.com/golang-transaction-pattern/" target="_blank" rel="noopener noreferrer">GolangレイヤードアーキテクチャでのDB トランザクション管理パターン4選</a></h3>
+      <p class="card-summary">Golang + GORMを用いたレイヤードアーキテクチャでのトランザクション管理手法を、口座送金処理を題材に4パターン紹介。バックエンド開発の実装パターンとして参考になるが、SRE・AIエージェント業務への直接の関連は薄い。</p>
+      <div class="card-meta">
+        <span class="feed-name">hatena</span>
+        <span class="sep">·</span>
+        <span class="date">4/7</span>
+        <span class="tag">コミュニティ</span>
+      </div>
+    </div>
+    <div class="card-score">
+      <div class="score-ring" style="--pct:38;--color:#6b7280">
+        <span>38</span>
+      </div>
+    </div>
+  </div>
+</article>
 <article class="card" data-id="1402" data-category="community" data-tier="low-priority" data-date="2026-04-09T03:04:22.000Z">
   <div class="card-row">
     <button class="read-btn" aria-label="既読にする"></button>
@@ -7043,6 +7806,59 @@ footer a:hover { color: var(--accent-light); }
     </div>
   </div>
 </article>
+<article class="card has-detail" data-id="1687" data-category="community" data-tier="low-priority" data-date="2026-04-09T07:17:50.000Z" data-detail="・デイリーポータルZライターによる書籍「謎のチェス指し人形ターク（ハヤカワ文庫NF）」の紹介
+・タークは18〜19世紀に存在したチェスを指す機械仕掛けの人形
+・実際には内部に人間が隠れているトリックだったとされる
+・「機械が知能を持つ」という錯覚の原点としてAI史の文脈で語られることがある
+・産業革命期の自動化・機械化への社会的関心と結びついた歴史的背景
+・現代AIブームの文化的・思想的ルーツを考える読み物として位置づけられる
+・技術的な実践知は含まれない
+・雑学・教養寄りのコンテンツ" data-url="https://dailyportalz.jp/kiji/book-review-ishii01" data-title="産業革命期のチェス自動人形「ターク」— AIの祖先の謎を追う書評" data-summary="18世紀に作られたチェス指しオートマトン「ターク」を題材にした書籍の紹介記事。AI・コンピュータの歴史的ルーツとして興味深いが、ユーザーの実務・技術関心との接点は薄い。">
+  <div class="card-row">
+    <button class="read-btn" aria-label="既読にする"></button>
+    <button class="skip-btn" aria-label="スキップ">✕</button>
+    <div class="card-body">
+      <h3 class="card-title"><a href="https://dailyportalz.jp/kiji/book-review-ishii01" target="_blank" rel="noopener noreferrer">産業革命期のチェス自動人形「ターク」— AIの祖先の謎を追う書評</a></h3>
+      <p class="card-summary">18世紀に作られたチェス指しオートマトン「ターク」を題材にした書籍の紹介記事。AI・コンピュータの歴史的ルーツとして興味深いが、ユーザーの実務・技術関心との接点は薄い。</p>
+      <div class="card-meta">
+        <span class="feed-name">hatena</span>
+        <span class="sep">·</span>
+        <span class="date">4/9</span>
+        <span class="tag">コミュニティ</span>
+      </div>
+    </div>
+    <div class="card-score">
+      <div class="score-ring" style="--pct:36;--color:#6b7280">
+        <span>36</span>
+      </div>
+    </div>
+  </div>
+</article>
+<article class="card has-detail" data-id="1709" data-category="security" data-tier="low-priority" data-date="2026-04-09T12:55:04.000Z" data-detail="・東淀川区選挙管理委員会で出勤簿31名分が所在不明
+・氏名・印影を含む個人情報が対象
+・報酬支払い事務の際に不在が発覚（2026年2月18日）
+・庁舎内捜索・職員聞き取りを実施したが発見できず
+・物理的な文書管理ミスの典型事例" data-url="https://www.security-next.com/183155" data-title="大阪市でトリプル選挙関係文書が所在不明" data-summary="大阪市東淀川区で2026年2月実施のトリプル選挙に関する投票管理者の出勤簿31名分が所在不明になった事案。氏名・印影を含む個人情報が対象。情報管理の観点で参考になるが、技術的示唆は低い。">
+  <div class="card-row">
+    <button class="read-btn" aria-label="既読にする"></button>
+    <button class="skip-btn" aria-label="スキップ">✕</button>
+    <div class="card-body">
+      <h3 class="card-title"><a href="https://www.security-next.com/183155" target="_blank" rel="noopener noreferrer">大阪市でトリプル選挙関係文書が所在不明</a></h3>
+      <p class="card-summary">大阪市東淀川区で2026年2月実施のトリプル選挙に関する投票管理者の出勤簿31名分が所在不明になった事案。氏名・印影を含む個人情報が対象。情報管理の観点で参考になるが、技術的示唆は低い。</p>
+      <div class="card-meta">
+        <span class="feed-name">security_next</span>
+        <span class="sep">·</span>
+        <span class="date">4/9</span>
+        <span class="tag">セキュリティ</span>
+      </div>
+    </div>
+    <div class="card-score">
+      <div class="score-ring" style="--pct:36;--color:#6b7280">
+        <span>36</span>
+      </div>
+    </div>
+  </div>
+</article>
 <article class="card" data-id="1343" data-category="ai_research" data-tier="low-priority" data-date="2026-04-08T13:45:56.000Z">
   <div class="card-row">
     <button class="read-btn" aria-label="既読にする"></button>
@@ -7075,6 +7891,33 @@ footer a:hover { color: var(--accent-light); }
         <span class="feed-name">hatena</span>
         <span class="sep">·</span>
         <span class="date">4/6</span>
+        <span class="tag">コミュニティ</span>
+      </div>
+    </div>
+    <div class="card-score">
+      <div class="score-ring" style="--pct:35;--color:#6b7280">
+        <span>35</span>
+      </div>
+    </div>
+  </div>
+</article>
+<article class="card has-detail" data-id="1680" data-category="community" data-tier="low-priority" data-date="2026-04-09T09:18:09.000Z" data-detail="・朝日新聞社が2025年9月にAIに関する考え方を公式サイトで公表
+・日英両言語での公開
+・メディア企業によるAIガバナンス・倫理方針の明文化
+・著作権・生成AI利用ポリシーへの対応と見られる
+・業界横断的なAIポリシー策定トレンドの一例
+・技術的な実装・SRE・エージェント開発への直接の示唆はなし
+・企業のAI倫理・コンプライアンス動向として参照価値のみ" data-url="https://www.asahi.com/corporate/info/16272689" data-title="朝日新聞社、「AIに関する考え方」を公表" data-summary="朝日新聞社がAI活用に関する自社の方針を公式文書として公表。メディア企業のAIガバナンス事例として把握しておく価値はあるが、SRE・エージェント開発への技術的示唆はほぼない。">
+  <div class="card-row">
+    <button class="read-btn" aria-label="既読にする"></button>
+    <button class="skip-btn" aria-label="スキップ">✕</button>
+    <div class="card-body">
+      <h3 class="card-title"><a href="https://www.asahi.com/corporate/info/16272689" target="_blank" rel="noopener noreferrer">朝日新聞社、「AIに関する考え方」を公表</a></h3>
+      <p class="card-summary">朝日新聞社がAI活用に関する自社の方針を公式文書として公表。メディア企業のAIガバナンス事例として把握しておく価値はあるが、SRE・エージェント開発への技術的示唆はほぼない。</p>
+      <div class="card-meta">
+        <span class="feed-name">hatena</span>
+        <span class="sep">·</span>
+        <span class="date">4/9</span>
         <span class="tag">コミュニティ</span>
       </div>
     </div>
@@ -7421,6 +8264,30 @@ footer a:hover { color: var(--accent-light); }
     </div>
   </div>
 </article>
+<article class="card has-detail" data-id="1723" data-category="community" data-tier="low-priority" data-date="2026-04-09T13:23:50.000Z" data-detail="・Metaがソーシャルメディア依存症訴訟に関連する広告を削除
+・訴訟対応の戦略的措置とみられる
+・広告削除の詳細・規模は本文では確認できない
+・Axiosのスクープ報道" data-url="https://www.axios.com/2026/04/09/meta-social-media-addiction-ads" data-title="Metaがソーシャルメディア依存症訴訟関連の広告を削除" data-summary="Metaが、ソーシャルメディア依存症に関する集団訴訟に関連する広告をプラットフォームから削除したとするスクープ記事。法的対応の一環とみられる。ユーザーの関心領域との関連はほぼない。">
+  <div class="card-row">
+    <button class="read-btn" aria-label="既読にする"></button>
+    <button class="skip-btn" aria-label="スキップ">✕</button>
+    <div class="card-body">
+      <h3 class="card-title"><a href="https://www.axios.com/2026/04/09/meta-social-media-addiction-ads" target="_blank" rel="noopener noreferrer">Metaがソーシャルメディア依存症訴訟関連の広告を削除</a></h3>
+      <p class="card-summary">Metaが、ソーシャルメディア依存症に関する集団訴訟に関連する広告をプラットフォームから削除したとするスクープ記事。法的対応の一環とみられる。ユーザーの関心領域との関連はほぼない。</p>
+      <div class="card-meta">
+        <span class="feed-name">hacker_news</span>
+        <span class="sep">·</span>
+        <span class="date">4/9</span>
+        <span class="tag">コミュニティ</span>
+      </div>
+    </div>
+    <div class="card-score">
+      <div class="score-ring" style="--pct:31;--color:#6b7280">
+        <span>31</span>
+      </div>
+    </div>
+  </div>
+</article>
 <article class="card" data-id="37" data-category="security" data-tier="low-priority" data-date="2026-04-06T13:35:15.000Z">
   <div class="card-row">
     <button class="read-btn" aria-label="既読にする"></button>
@@ -7459,6 +8326,30 @@ footer a:hover { color: var(--accent-light); }
     <div class="card-score">
       <div class="score-ring" style="--pct:31;--color:#6b7280">
         <span>31</span>
+      </div>
+    </div>
+  </div>
+</article>
+<article class="card has-detail" data-id="1722" data-category="community" data-tier="low-priority" data-date="2026-04-09T16:46:11.000Z" data-detail="・ペンタゴンの閉鎖会議でトランプ政権高官が教皇大使に圧力をかけた
+・アヴィニョン教皇庁の話題を引き合いに出したとされる
+・有料記事のため詳細は限定的
+・政治・外交分野のニュース" data-url="https://www.thelettersfromleo.com/p/the-pentagon-threatened-pope-leo" data-title="ペンタゴンが教皇レオ14世の大使に米軍優位を主張" data-summary="トランプ政権高官が教皇レオ14世の大使に対し閉鎖的な会議で米軍力を誇示したとする報道。政治・外交分野の記事でユーザーの関心領域との関連はほぼない。">
+  <div class="card-row">
+    <button class="read-btn" aria-label="既読にする"></button>
+    <button class="skip-btn" aria-label="スキップ">✕</button>
+    <div class="card-body">
+      <h3 class="card-title"><a href="https://www.thelettersfromleo.com/p/the-pentagon-threatened-pope-leo" target="_blank" rel="noopener noreferrer">ペンタゴンが教皇レオ14世の大使に米軍優位を主張</a></h3>
+      <p class="card-summary">トランプ政権高官が教皇レオ14世の大使に対し閉鎖的な会議で米軍力を誇示したとする報道。政治・外交分野の記事でユーザーの関心領域との関連はほぼない。</p>
+      <div class="card-meta">
+        <span class="feed-name">hacker_news</span>
+        <span class="sep">·</span>
+        <span class="date">4/10</span>
+        <span class="tag">コミュニティ</span>
+      </div>
+    </div>
+    <div class="card-score">
+      <div class="score-ring" style="--pct:30;--color:#6b7280">
+        <span>30</span>
       </div>
     </div>
   </div>
@@ -7745,6 +8636,57 @@ footer a:hover { color: var(--accent-light); }
       <p class="card-summary">アイ・オー・データがVerbatim Japanとの協業によりBlu-rayドライブの提供継続を発表。ハードウェア製品の事業継続に関するニュース。SRE・AIエージェント開発のいずれの関心領域とも無関係。</p>
       <div class="card-meta">
         <span class="feed-name">hatena</span>
+        <span class="sep">·</span>
+        <span class="date">4/9</span>
+        <span class="tag">コミュニティ</span>
+      </div>
+    </div>
+    <div class="card-score">
+      <div class="score-ring" style="--pct:29;--color:#6b7280">
+        <span>29</span>
+      </div>
+    </div>
+  </div>
+</article>
+<article class="card has-detail" data-id="1725" data-category="community" data-tier="low-priority" data-date="2026-04-09T07:27:25.000Z" data-detail="・Thunderbirdは広告・データ販売なしのオープンソースメールクライアント
+・資金源はユーザーの寄付のみ（3%未満のユーザーが支援）
+・プライバシー重視・カスタマイズ性の高いメール体験を提供
+・継続的なサーバ維持・開発コストを賄うための支援呼びかけ" data-url="https://updates.thunderbird.net/en-US/thunderbird/140.0/apr26-1e/donate/" data-title="Thunderbirdへの寄付呼びかけ" data-summary="オープンソースのメールクライアントThunderbirdが、ユーザーへの寄付を呼びかけている記事。広告なし・データ販売なし・企業スポンサーなしで運営されており、資金の大部分はユーザーの寄付に依存している。ユーザーの関心領域との関連は低い。">
+  <div class="card-row">
+    <button class="read-btn" aria-label="既読にする"></button>
+    <button class="skip-btn" aria-label="スキップ">✕</button>
+    <div class="card-body">
+      <h3 class="card-title"><a href="https://updates.thunderbird.net/en-US/thunderbird/140.0/apr26-1e/donate/" target="_blank" rel="noopener noreferrer">Thunderbirdへの寄付呼びかけ</a></h3>
+      <p class="card-summary">オープンソースのメールクライアントThunderbirdが、ユーザーへの寄付を呼びかけている記事。広告なし・データ販売なし・企業スポンサーなしで運営されており、資金の大部分はユーザーの寄付に依存している。ユーザーの関心領域との関連は低い。</p>
+      <div class="card-meta">
+        <span class="feed-name">hacker_news</span>
+        <span class="sep">·</span>
+        <span class="date">4/9</span>
+        <span class="tag">コミュニティ</span>
+      </div>
+    </div>
+    <div class="card-score">
+      <div class="score-ring" style="--pct:29;--color:#6b7280">
+        <span>29</span>
+      </div>
+    </div>
+  </div>
+</article>
+<article class="card has-detail" data-id="1730" data-category="community" data-tier="low-priority" data-date="2026-04-08T19:23:34.000Z" data-detail="・libusb を使ってユーザースペースからUSBデバイスを操作する方法を解説
+・USB列挙（Enumeration）プロセスを手動・libusb経由の両方で説明
+・転送タイプ：Control / Bulk / Interrupt / Isochronousの解説
+・In/Outエンドポイントの概念と実装方法
+・FastbootプロトコルをUSBで実装する具体例
+・Descriptorの読み取りとClass/Driver情報の解析方法
+・組み込みデバイスやAndroid開発者向けの実用コンテンツ" data-url="https://werwolv.net/posts/usb_for_sw_devs/" data-title="ソフトウェア開発者向けUSB入門：ユーザースペースUSBドライバの書き方" data-summary="libusbを使ったユーザースペースUSBドライバの実装方法を解説したチュートリアル。FastbootプロトコルやUSB転送タイプを丁寧に説明している。SRE・AIエージェント開発という主要関心領域とは無関係な低レイヤーハードウェア記事。">
+  <div class="card-row">
+    <button class="read-btn" aria-label="既読にする"></button>
+    <button class="skip-btn" aria-label="スキップ">✕</button>
+    <div class="card-body">
+      <h3 class="card-title"><a href="https://werwolv.net/posts/usb_for_sw_devs/" target="_blank" rel="noopener noreferrer">ソフトウェア開発者向けUSB入門：ユーザースペースUSBドライバの書き方</a></h3>
+      <p class="card-summary">libusbを使ったユーザースペースUSBドライバの実装方法を解説したチュートリアル。FastbootプロトコルやUSB転送タイプを丁寧に説明している。SRE・AIエージェント開発という主要関心領域とは無関係な低レイヤーハードウェア記事。</p>
+      <div class="card-meta">
+        <span class="feed-name">hacker_news</span>
         <span class="sep">·</span>
         <span class="date">4/9</span>
         <span class="tag">コミュニティ</span>
@@ -8793,7 +9735,7 @@ footer a:hover { color: var(--accent-light); }
     <p>フィルターを変更するか、検索キーワードを変えてみてください。</p>
   </div>
 
-  <footer>更新: 4/9 20:26</footer>
+  <footer>更新: 4/10 04:29</footer>
 </main>
 
 </div>
