@@ -212,10 +212,9 @@ export function makeQueries(db: Database) {
            COALESCE(s.personal_score, s.ai_score) AS personal_score
     FROM articles a
     JOIN summaries s ON s.article_id = a.id
-    WHERE a.expires_at > datetime('now')
+    WHERE a.published_at > datetime('now', '-7 days')
       AND s.title_ja IS NOT NULL
     ORDER BY personal_score DESC
-    LIMIT 200
   `);
 
   const updateOgImage = db.prepare<void, { $id: number; $og_image: string | null }>(`
