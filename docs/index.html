@@ -339,6 +339,13 @@ footer a:hover { color: var(--accent-light); }
       </div>
     </div>
 
+    <div class="sidebar-section">
+      <div class="sidebar-heading">ソース</div>
+      <div class="filter-list" id="source-filters">
+        <button class="filter-btn active" data-value="all">すべて</button>
+      </div>
+    </div>
+
     <div class="sidebar-section toc">
       <div class="sidebar-heading">セクション</div>
       <a class="toc-link" href="#must-read">
@@ -4755,6 +4762,7 @@ var params = new URLSearchParams(location.search);
 var currentReadFilter = params.get('read') || 'all';
 var currentCategoryFilter = params.get('category') || 'all';
 var currentDateFilter = params.get('date') || 'all';
+var currentSourceFilter = params.get('source') || 'all';
 var currentSearch = '';
 
 function updateURL() {
@@ -4762,6 +4770,7 @@ function updateURL() {
   currentReadFilter === 'all' ? p.delete('read') : p.set('read', currentReadFilter);
   currentCategoryFilter === 'all' ? p.delete('category') : p.set('category', currentCategoryFilter);
   currentDateFilter === 'all' ? p.delete('date') : p.set('date', currentDateFilter);
+  currentSourceFilter === 'all' ? p.delete('source') : p.set('source', currentSourceFilter);
   var qs = p.toString();
   history.replaceState(null, '', qs ? '?' + qs : location.pathname);
 }
@@ -4777,6 +4786,11 @@ function applyFilters() {
     if (currentReadFilter === 'unread' && isRead) show = false;
     if (currentReadFilter === 'read' && !isRead) show = false;
     if (currentCategoryFilter !== 'all' && cat !== currentCategoryFilter) show = false;
+    if (currentSourceFilter !== 'all') {
+      var feedEl = card.querySelector('.feed-name');
+      var src = feedEl ? feedEl.textContent.trim() : '';
+      if (src !== currentSourceFilter) show = false;
+    }
     if (currentDateFilter !== 'all') {
       var dateStr = card.dataset.date;
       if (dateStr) {
@@ -4833,6 +4847,31 @@ function filterByDate(period) {
   applyFilters();
 }
 
+function filterBySource(source) {
+  currentSourceFilter = source;
+  setActiveBtn('source-filters', source);
+  applyFilters();
+}
+
+function buildSourceFilters() {
+  var container = document.getElementById('source-filters');
+  if (!container) return;
+  var sources = [];
+  var seen = new Set();
+  document.querySelectorAll('.card .feed-name').forEach(function(el) {
+    var s = el.textContent.trim();
+    if (s && !seen.has(s)) { seen.add(s); sources.push(s); }
+  });
+  sources.sort();
+  sources.forEach(function(source) {
+    var btn = document.createElement('button');
+    btn.className = 'filter-btn';
+    btn.dataset.value = source;
+    btn.textContent = source;
+    container.appendChild(btn);
+  });
+}
+
 // ── イベント委譲 ──────────────────────────────────────
 document.querySelector('.main').addEventListener('click', function(e) {
   var readBtn = e.target.closest('.read-btn');
@@ -4867,6 +4906,11 @@ document.getElementById('read-filters').addEventListener('click', function(e) {
 document.getElementById('date-filters').addEventListener('click', function(e) {
   var btn = e.target.closest('.filter-btn');
   if (btn) filterByDate(btn.dataset.value || 'all');
+});
+
+document.getElementById('source-filters').addEventListener('click', function(e) {
+  var btn = e.target.closest('.filter-btn');
+  if (btn) filterBySource(btn.dataset.value || 'all');
 });
 
 var searchEl = document.getElementById('search');
@@ -4921,9 +4965,11 @@ function shareArticle(btn) {
 
 // ── 初期化 ────────────────────────────────────────────
 restoreState();
+buildSourceFilters();
 setActiveBtn('read-filters', currentReadFilter);
 setActiveBtn('category-filters', currentCategoryFilter);
 setActiveBtn('date-filters', currentDateFilter);
+setActiveBtn('source-filters', currentSourceFilter);
 applyFilters();
 initShareButtons();
 </script>
