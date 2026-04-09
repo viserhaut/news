@@ -51,7 +51,15 @@ body {
   width: var(--sidebar-w); flex-shrink: 0; padding: 2rem 1.25rem;
   position: sticky; top: 0; height: 100vh; overflow-y: auto;
   border-right: 1px solid var(--border);
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
 }
+.sidebar::-webkit-scrollbar { width: 4px; }
+.sidebar::-webkit-scrollbar-track { background: transparent; }
+.sidebar::-webkit-scrollbar-thumb { background: var(--border-light); border-radius: 4px; }
+.sidebar::-webkit-scrollbar-thumb:hover { background: var(--text-dim); }
+[data-theme="dark"] .sidebar::-webkit-scrollbar-thumb { background: #3f3f46; }
+[data-theme="dark"] .sidebar::-webkit-scrollbar-thumb:hover { background: #52525b; }
 
 .main { flex: 1; min-width: 0; padding: 2rem 2rem 4rem; }
 
@@ -171,6 +179,14 @@ body {
 }
 .skip-btn:hover { border-color: #ef4444; color: #ef4444; background: rgba(239,68,68,0.1); }
 
+.share-btn {
+  background: none; border: 1px solid var(--border-light); border-radius: 4px;
+  padding: 0.0625rem 0.375rem; color: var(--text-dim); font-size: 0.6875rem;
+  cursor: pointer; transition: all 0.12s ease; white-space: nowrap; margin-left: auto;
+}
+.share-btn:hover { border-color: var(--accent-light); color: var(--accent-light); }
+.share-btn.copied { border-color: #10b981; color: #10b981; }
+
 .card-body { flex: 1; min-width: 0; }
 
 .card-title { font-size: 0.9375rem; font-weight: 600; line-height: 1.4; margin-bottom: 0.25rem; }
@@ -211,6 +227,18 @@ body {
   position: relative; font-size: 0.75rem; font-weight: 700;
   font-variant-numeric: tabular-nums; color: var(--text-muted);
 }
+
+.score-ring[data-tooltip] { cursor: help; }
+.score-ring[data-tooltip]::after {
+  content: attr(data-tooltip);
+  position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%);
+  background: var(--surface); border: 1px solid var(--border); border-radius: 6px;
+  padding: 0.4rem 0.6rem; font-size: 0.7rem; font-weight: 400; color: var(--text);
+  white-space: pre; line-height: 1.5; z-index: 100;
+  pointer-events: none; opacity: 0; transition: opacity 0.12s ease;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+.score-ring[data-tooltip]:hover::after { opacity: 1; }
 
 .search-wrap { margin-bottom: 1.5rem; }
 .search-input {
@@ -377,6 +405,23 @@ kbd {
       </div>
     </div>
 
+    <div class="sidebar-section" id="date-filters">
+      <div class="sidebar-heading">期間</div>
+      <div class="filter-list">
+        <button class="filter-btn active" data-value="all">すべて</button>
+        <button class="filter-btn" data-value="today">今日</button>
+        <button class="filter-btn" data-value="3days">3日</button>
+        <button class="filter-btn" data-value="week">1週間</button>
+      </div>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-heading">ソース</div>
+      <div class="filter-list" id="source-filters">
+        <button class="filter-btn active" data-value="all">すべて</button>
+      </div>
+    </div>
+
     <div class="sidebar-section toc">
       <div class="sidebar-heading">セクション</div>
       <a class="toc-link" href="#must-read">
@@ -413,7 +458,7 @@ kbd {
     <span class="tier-bar" style="background:#10b981"></span>
     <h2>Must Read</h2>
     <span class="tier-count">59</span>
-    <button class="mark-section-read">既読</button>
+    <button class="mark-section-read">全て既読</button>
     <button class="skip-section-btn">スキップ</button>
   </div>
   <article class="card" data-id="131" data-category="ai_tools" data-tier="must-read" data-date="2026-04-06T20:15:01.000Z">
@@ -1662,7 +1707,7 @@ kbd {
     <span class="tier-bar" style="background:#3b82f6"></span>
     <h2>Recommended</h2>
     <span class="tier-count">76</span>
-    <button class="mark-section-read">既読</button>
+    <button class="mark-section-read">全て既読</button>
     <button class="skip-section-btn">スキップ</button>
   </div>
   <article class="card" data-id="16" data-category="community" data-tier="recommended" data-date="2026-04-06T01:24:55.000Z">
@@ -3268,7 +3313,7 @@ kbd {
     <span class="tier-bar" style="background:#f59e0b"></span>
     <h2>Worth a Look</h2>
     <span class="tier-count">65</span>
-    <button class="mark-section-read">既読</button>
+    <button class="mark-section-read">全て既読</button>
     <button class="skip-section-btn">スキップ</button>
   </div>
   <article class="card" data-id="519" data-category="ai_research" data-tier="worth-a-look" data-date="2026-04-06T22:28:14.000Z">
@@ -4769,6 +4814,7 @@ function updateUnreadCount() {
   var unread = document.querySelectorAll('.card:not(.read):not([style*="display: none"])').length;
   var el = document.getElementById('unread-count');
   if (el) el.textContent = String(unread);
+  document.title = unread > 0 ? '(' + unread + ') News Digest' : 'News Digest';
 }
 
 function updateTocCounts() {
@@ -4796,6 +4842,8 @@ function updateSectionVisibility(section) {
 var params = new URLSearchParams(location.search);
 var currentReadFilter = params.get('read') || 'all';
 var currentCategoryFilter = params.get('category') || 'all';
+var currentDateFilter = params.get('date') || 'all';
+var currentSourceFilter = params.get('source') || 'all';
 var currentBookmarkFilter = false;
 var currentSearch = '';
 
@@ -4803,6 +4851,8 @@ function updateURL() {
   var p = new URLSearchParams(location.search);
   currentReadFilter === 'all' ? p.delete('read') : p.set('read', currentReadFilter);
   currentCategoryFilter === 'all' ? p.delete('category') : p.set('category', currentCategoryFilter);
+  currentDateFilter === 'all' ? p.delete('date') : p.set('date', currentDateFilter);
+  currentSourceFilter === 'all' ? p.delete('source') : p.set('source', currentSourceFilter);
   var qs = p.toString();
   history.replaceState(null, '', qs ? '?' + qs : location.pathname);
 }
@@ -4818,6 +4868,27 @@ function applyFilters() {
     if (currentReadFilter === 'unread' && isRead) show = false;
     if (currentReadFilter === 'read' && !isRead) show = false;
     if (currentCategoryFilter !== 'all' && cat !== currentCategoryFilter) show = false;
+    if (currentSourceFilter !== 'all') {
+      var feedEl = card.querySelector('.feed-name');
+      var src = feedEl ? feedEl.textContent.trim() : '';
+      if (src !== currentSourceFilter) show = false;
+    }
+    if (currentDateFilter !== 'all') {
+      var dateStr = card.dataset.date;
+      if (dateStr) {
+        var cardDate = new Date(dateStr);
+        var now = new Date();
+        var cutoff;
+        if (currentDateFilter === 'today') {
+          cutoff = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        } else if (currentDateFilter === '3days') {
+          cutoff = new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000);
+        } else if (currentDateFilter === 'week') {
+          cutoff = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+        }
+        if (cutoff && cardDate < cutoff) show = false;
+      }
+    }
     if (currentBookmarkFilter) {
       var cardLink = card.querySelector('.card-title a');
       if (!cardLink || !isBookmarked(cardLink.href)) show = false;
@@ -4856,12 +4927,44 @@ function filterByCategory(cat) {
   applyFilters();
 }
 
+function filterByDate(period) {
+  currentDateFilter = period;
+  setActiveBtn('date-filters', period);
+  applyFilters();
+}
+
+function filterBySource(source) {
+  currentSourceFilter = source;
+  setActiveBtn('source-filters', source);
+  applyFilters();
+}
+
+function buildSourceFilters() {
+  var container = document.getElementById('source-filters');
+  if (!container) return;
+  var sources = [];
+  var seen = new Set();
+  document.querySelectorAll('.card .feed-name').forEach(function(el) {
+    var s = el.textContent.trim();
+    if (s && !seen.has(s)) { seen.add(s); sources.push(s); }
+  });
+  sources.sort();
+  sources.forEach(function(source) {
+    var btn = document.createElement('button');
+    btn.className = 'filter-btn';
+    btn.dataset.value = source;
+    btn.textContent = source;
+    container.appendChild(btn);
+  });
+}
+
 function toggleBookmarkFilter() {
   currentBookmarkFilter = !currentBookmarkFilter;
   var btn = document.getElementById('bookmark-filter-btn');
   if (btn) btn.classList.toggle('active', currentBookmarkFilter);
   applyFilters();
 }
+
 
 // ── イベント委譲 ──────────────────────────────────────
 document.querySelector('.main').addEventListener('click', function(e) {
@@ -4877,6 +4980,9 @@ document.querySelector('.main').addEventListener('click', function(e) {
   var skipSecBtn = e.target.closest('.skip-section-btn');
   if (skipSecBtn) { skipSectionAll(skipSecBtn); return; }
 
+  var shareBtn = e.target.closest('.share-btn');
+  if (shareBtn) { shareArticle(shareBtn); return; }
+
   var articleLink = e.target.closest('.card-title a');
   if (articleLink) { markRead(articleLink.closest('.card')); }
 });
@@ -4889,6 +4995,16 @@ document.getElementById('category-filters').addEventListener('click', function(e
 document.getElementById('read-filters').addEventListener('click', function(e) {
   var btn = e.target.closest('.filter-btn');
   if (btn) filterArticles(btn.dataset.value || 'all');
+});
+
+document.getElementById('date-filters').addEventListener('click', function(e) {
+  var btn = e.target.closest('.filter-btn');
+  if (btn) filterByDate(btn.dataset.value || 'all');
+});
+
+document.getElementById('source-filters').addEventListener('click', function(e) {
+  var btn = e.target.closest('.filter-btn');
+  if (btn) filterBySource(btn.dataset.value || 'all');
 });
 
 document.getElementById('bookmark-filter-btn').addEventListener('click', toggleBookmarkFilter);
@@ -4913,11 +5029,64 @@ if (mobileToggle && sidebarCollapsible) {
   });
 }
 
+// ── SNS シェアボタン ──────────────────────────────────
+function initShareButtons() {
+  document.querySelectorAll('.card').forEach(function(card) {
+    var link = card.querySelector('.card-title a');
+    var meta = card.querySelector('.card-meta');
+    if (!link || !meta) return;
+    var btn = document.createElement('button');
+    btn.className = 'share-btn';
+    btn.textContent = 'Share';
+    btn.dataset.shareUrl = link.href;
+    btn.dataset.shareTitle = link.textContent.trim();
+    btn.setAttribute('aria-label', 'SNSシェア');
+    meta.appendChild(btn);
+  });
+}
+
+function shareArticle(btn) {
+  var url = btn.dataset.shareUrl || '';
+  var title = btn.dataset.shareTitle || '';
+  var text = title + ' ' + url + ' #NewsDigest';
+  navigator.clipboard.writeText(text).then(function() {
+    btn.textContent = '\u2713 Copied for X';
+    btn.classList.add('copied');
+    setTimeout(function() {
+      btn.textContent = 'Share';
+      btn.classList.remove('copied');
+    }, 1000);
+  });
+}
+
 // ── 初期化 ────────────────────────────────────────────
 restoreState();
+buildSourceFilters();
 setActiveBtn('read-filters', currentReadFilter);
 setActiveBtn('category-filters', currentCategoryFilter);
+setActiveBtn('date-filters', currentDateFilter);
+setActiveBtn('source-filters', currentSourceFilter);
 applyFilters();
+initShareButtons();
+
+// ── スコアリングツールチップ ────────────────────────────
+var TIER_LABELS = {
+  'must-read':    { label: 'Must Read',    threshold: '0.85以上' },
+  'recommended':  { label: 'Recommended', threshold: '0.70〜0.84' },
+  'worth-a-look': { label: 'Worth a Look', threshold: '0.50〜0.69' },
+  'low-priority': { label: 'Low Priority', threshold: '0.50未満' }
+};
+document.querySelectorAll('.card').forEach(function(card) {
+  var ring = card.querySelector('.score-ring');
+  if (!ring) return;
+  var tier = card.dataset.tier || '';
+  var score = (ring.querySelector('span') || {}).textContent || '';
+  var info = TIER_LABELS[tier];
+  if (!info) return;
+  ring.setAttribute('data-tooltip',
+    'スコア: ' + score + '\nTier: ' + info.label + '\n基準: ' + info.threshold
+  );
+});
 
 // ── ブックマーク機能 ──────────────────────────────────
 var BOOKMARK_KEY = 'bookmarks';
