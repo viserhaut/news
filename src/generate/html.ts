@@ -1032,9 +1032,9 @@ function exportBookmarks() {
     document.querySelectorAll('.card-title a').forEach(function(a) {
       if (a.href === url) title = a.textContent.trim();
     });
-    lines.push('- [' + title.replace(/\[/g, '\\[').replace(/\]/g, '\\]') + '](' + url.replace(/\(/g, '%28').replace(/\)/g, '%29') + ')');
+    lines.push('- [' + title.replace(/\\[/g, '\\\\[').replace(/\\]/g, '\\\\]') + '](' + url.replace(/\\(/g, '%28').replace(/\\)/g, '%29') + ')');
   });
-  var blob = new Blob([lines.join('\n') + '\n'], { type: 'text/markdown; charset=utf-8' });
+  var blob = new Blob([lines.join('\\n') + '\\n'], { type: 'text/markdown; charset=utf-8' });
   var a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
   a.download = 'bookmarks-' + today + '.md';
@@ -1083,7 +1083,7 @@ document.querySelectorAll('.card').forEach(function(card) {
   var score = (ring.querySelector('span') || {}).textContent || '';
   var info = TIER_LABELS[tier];
   if (!info) return;
-  ring.setAttribute('data-tooltip', 'スコア: ' + score + '\nTier: ' + info.label + '\n基準: ' + info.threshold);
+  ring.setAttribute('data-tooltip', 'スコア: ' + score + '\\nTier: ' + info.label + '\\n基準: ' + info.threshold);
 });
 
 // ── キーボードショートカット ──────────────────────────
