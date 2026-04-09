@@ -107,7 +107,7 @@ function tierSectionHtml(tier: Tier, cards: DigestArticleRow[]): string {
     <span class="tier-bar" style="background:${tier.color}"></span>
     <h2>${tier.label}</h2>
     <span class="tier-count">${cards.length}</span>
-    <button class="mark-section-read">既読</button>
+    <button class="mark-section-read">全て既読</button>
     <button class="skip-section-btn">スキップ</button>
   </div>
   ${cardsHtml}
