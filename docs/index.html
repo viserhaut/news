@@ -220,6 +220,18 @@ body {
   font-variant-numeric: tabular-nums; color: var(--text-muted);
 }
 
+.score-ring[data-tooltip] { cursor: help; }
+.score-ring[data-tooltip]::after {
+  content: attr(data-tooltip);
+  position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%);
+  background: var(--surface); border: 1px solid var(--border); border-radius: 6px;
+  padding: 0.4rem 0.6rem; font-size: 0.7rem; font-weight: 400; color: var(--text);
+  white-space: pre; line-height: 1.5; z-index: 100;
+  pointer-events: none; opacity: 0; transition: opacity 0.12s ease;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+.score-ring[data-tooltip]:hover::after { opacity: 1; }
+
 .search-wrap { margin-bottom: 1.5rem; }
 .search-input {
   width: 100%; padding: 0.5rem 0.875rem; border: 1px solid var(--border);
@@ -377,7 +389,7 @@ footer a:hover { color: var(--accent-light); }
     <span class="tier-bar" style="background:#10b981"></span>
     <h2>Must Read</h2>
     <span class="tier-count">59</span>
-    <button class="mark-section-read">既読</button>
+    <button class="mark-section-read">全て既読</button>
     <button class="skip-section-btn">スキップ</button>
   </div>
   <article class="card" data-id="131" data-category="ai_tools" data-tier="must-read" data-date="2026-04-06T20:15:01.000Z">
@@ -1626,7 +1638,7 @@ footer a:hover { color: var(--accent-light); }
     <span class="tier-bar" style="background:#3b82f6"></span>
     <h2>Recommended</h2>
     <span class="tier-count">76</span>
-    <button class="mark-section-read">既読</button>
+    <button class="mark-section-read">全て既読</button>
     <button class="skip-section-btn">スキップ</button>
   </div>
   <article class="card" data-id="16" data-category="community" data-tier="recommended" data-date="2026-04-06T01:24:55.000Z">
@@ -3232,7 +3244,7 @@ footer a:hover { color: var(--accent-light); }
     <span class="tier-bar" style="background:#f59e0b"></span>
     <h2>Worth a Look</h2>
     <span class="tier-count">65</span>
-    <button class="mark-section-read">既読</button>
+    <button class="mark-section-read">全て既読</button>
     <button class="skip-section-btn">スキップ</button>
   </div>
   <article class="card" data-id="519" data-category="ai_research" data-tier="worth-a-look" data-date="2026-04-06T22:28:14.000Z">
@@ -4972,6 +4984,25 @@ setActiveBtn('date-filters', currentDateFilter);
 setActiveBtn('source-filters', currentSourceFilter);
 applyFilters();
 initShareButtons();
+
+// ── スコアリングツールチップ ────────────────────────────
+var TIER_LABELS = {
+  'must-read':    { label: 'Must Read',    threshold: '0.85以上' },
+  'recommended':  { label: 'Recommended', threshold: '0.70〜0.84' },
+  'worth-a-look': { label: 'Worth a Look', threshold: '0.50〜0.69' },
+  'low-priority': { label: 'Low Priority', threshold: '0.50未満' }
+};
+document.querySelectorAll('.card').forEach(function(card) {
+  var ring = card.querySelector('.score-ring');
+  if (!ring) return;
+  var tier = card.dataset.tier || '';
+  var score = (ring.querySelector('span') || {}).textContent || '';
+  var info = TIER_LABELS[tier];
+  if (!info) return;
+  ring.setAttribute('data-tooltip',
+    'スコア: ' + score + '\nTier: ' + info.label + '\n基準: ' + info.threshold
+  );
+});
 </script>
 </body>
 </html>
