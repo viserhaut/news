@@ -40,6 +40,7 @@ export interface SummaryInsert {
   $title_ja: string;
   $summary_ja: string;
   $ai_score: number;
+  $detail_summary_ja: string | null;
 }
 
 export interface UnsummarizedRow {
@@ -78,6 +79,7 @@ export interface DigestArticleRow {
   url: string;
   title_ja: string | null;
   summary_ja: string | null;
+  detail_summary_ja: string | null;
   category: string;
   source_id: string;
   published_at: string | null;
@@ -126,8 +128,8 @@ export function makeQueries(db: Database) {
   `);
 
   const insertSummary = db.prepare<void, SummaryInsert>(`
-    INSERT OR REPLACE INTO summaries (article_id, title_ja, summary_ja, ai_score)
-    VALUES ($article_id, $title_ja, $summary_ja, $ai_score)
+    INSERT OR REPLACE INTO summaries (article_id, title_ja, summary_ja, ai_score, detail_summary_ja)
+    VALUES ($article_id, $title_ja, $summary_ja, $ai_score, $detail_summary_ja)
   `);
 
   // ── 読了履歴 ──────────────────────────────────────────
@@ -206,7 +208,7 @@ export function makeQueries(db: Database) {
   // ── Web UI 向け ────────────────────────────────────────
   const selectDigestArticles = db.prepare<DigestArticleRow, []>(`
     SELECT a.id, a.url, a.category, a.source_id, a.published_at, a.og_image,
-           s.title_ja, s.summary_ja,
+           s.title_ja, s.summary_ja, s.detail_summary_ja,
            COALESCE(s.personal_score, s.ai_score) AS personal_score
     FROM articles a
     JOIN summaries s ON s.article_id = a.id

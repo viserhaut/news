@@ -76,7 +76,7 @@ function cardHtml(a: DigestArticleRow): string {
   const scorePct = Math.round(score * 100);
   const tier = getTier(score);
 
-  return `<article class="card" data-id="${a.id}" data-category="${esc(a.category)}" data-tier="${tier.id}" data-date="${esc(a.published_at ?? "")}">
+  return `<article class="card${a.detail_summary_ja ? " has-detail" : ""}" data-id="${a.id}" data-category="${esc(a.category)}" data-tier="${tier.id}" data-date="${esc(a.published_at ?? "")}"${a.detail_summary_ja ? ` data-detail="${esc(a.detail_summary_ja)}" data-url="${safeUrl(a.url)}" data-title="${esc(a.title_ja ?? a.url)}" data-summary="${esc(a.summary_ja ?? "")}"` : ""}>
   <div class="card-row">
     <button class="read-btn" aria-label="既読にする"></button>
     <button class="skip-btn" aria-label="スキップ">✕</button>
@@ -107,7 +107,7 @@ function tierSectionHtml(tier: Tier, cards: DigestArticleRow[]): string {
     <span class="tier-bar" style="background:${tier.color}"></span>
     <h2>${tier.label}</h2>
     <span class="tier-count">${cards.length}</span>
-    <button class="mark-section-read">既読</button>
+    <button class="mark-section-read">全て既読</button>
     <button class="skip-section-btn">スキップ</button>
   </div>
   ${cardsHtml}
@@ -320,6 +320,82 @@ body {
   position: relative; font-size: 0.75rem; font-weight: 700;
   font-variant-numeric: tabular-nums; color: var(--text-muted);
 }
+
+.has-detail { cursor: pointer; }
+.has-detail:hover .card-title a { text-decoration: underline; }
+
+/* 詳細パネル */
+.detail-overlay {
+  display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+  z-index: 200; backdrop-filter: blur(4px);
+  opacity: 0; transition: opacity 0.2s ease;
+}
+.detail-overlay.open { display: flex; opacity: 1; }
+
+.detail-panel {
+  position: fixed; top: 50%; left: 50%; z-index: 201;
+  width: 760px; max-width: calc(100vw - 2rem); max-height: calc(100vh - 4rem);
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 14px; display: flex; flex-direction: column;
+  box-shadow: 0 24px 64px rgba(0,0,0,0.3), 0 4px 16px rgba(0,0,0,0.15);
+  transform: translate(-50%, -48%) scale(0.95);
+  opacity: 0; transition: transform 0.22s cubic-bezier(0.34,1.56,0.64,1), opacity 0.18s ease;
+  pointer-events: none;
+}
+.detail-panel.open {
+  transform: translate(-50%, -50%) scale(1);
+  opacity: 1; pointer-events: auto;
+}
+
+.detail-panel-header {
+  display: flex; align-items: flex-start; gap: 0.75rem;
+  padding: 1rem 1rem 0.75rem; border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.detail-panel-header h2 {
+  flex: 1; font-size: 0.9375rem; font-weight: 600; line-height: 1.5;
+  color: var(--text); margin: 0;
+}
+.detail-panel-close {
+  flex-shrink: 0; background: none; border: none; color: var(--text-dim);
+  font-size: 1.125rem; cursor: pointer; padding: 0.125rem 0.25rem; line-height: 1;
+  transition: color 0.12s ease;
+}
+.detail-panel-close:hover { color: var(--text); }
+
+.detail-panel-body {
+  flex: 1; overflow-y: auto; padding: 1rem;
+  scrollbar-width: thin; scrollbar-color: var(--border) transparent;
+}
+.detail-panel-body::-webkit-scrollbar { width: 4px; }
+.detail-panel-body::-webkit-scrollbar-thumb { background: var(--border-light); border-radius: 4px; }
+
+.detail-panel-summary {
+  font-size: 0.875rem; color: var(--text-muted); line-height: 1.75;
+  margin: 0 0 1.25rem; padding: 0.75rem 1rem;
+  background: var(--bg); border-radius: 8px;
+  border-left: 3px solid var(--border-light);
+}
+.detail-panel-detail-heading {
+  font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.06em;
+  text-transform: uppercase; color: var(--text-dim);
+  margin: 0 0 0.5rem;
+}
+.detail-panel-detail {
+  font-size: 0.9375rem; color: var(--text); line-height: 2;
+  white-space: pre-wrap;
+}
+
+.detail-panel-footer {
+  padding: 0.875rem 1rem; border-top: 1px solid var(--border); flex-shrink: 0;
+}
+.detail-panel-link {
+  display: block; text-align: center; padding: 0.625rem 1rem;
+  background: var(--accent-light); color: #fff; border-radius: 8px;
+  font-size: 0.875rem; font-weight: 600; text-decoration: none;
+  transition: opacity 0.12s ease;
+}
+.detail-panel-link:hover { opacity: 0.85; }
 
 .search-wrap { margin-bottom: 1.5rem; }
 .search-input {
@@ -591,7 +667,39 @@ document.querySelector('.main').addEventListener('click', function(e) {
   if (skipSecBtn) { skipSectionAll(skipSecBtn); return; }
 
   var articleLink = e.target.closest('.card-title a');
-  if (articleLink) { markRead(articleLink.closest('.card')); }
+  if (articleLink) { markRead(articleLink.closest('.card')); return; }
+
+  var card = e.target.closest('.card.has-detail');
+  if (card && !e.target.closest('.read-btn, .skip-btn')) {
+    openDetailPanel(card);
+  }
+});
+
+// ── 詳細パネル ────────────────────────────────────────
+var detailPanel = document.getElementById('detail-panel');
+var detailOverlay = document.getElementById('detail-overlay');
+
+function openDetailPanel(card) {
+  document.getElementById('detail-panel-title').textContent = card.dataset.title || '';
+  document.getElementById('detail-panel-summary').textContent = card.dataset.summary || '';
+  document.getElementById('detail-panel-detail').textContent = card.dataset.detail || '';
+  var link = document.getElementById('detail-panel-link');
+  link.href = card.dataset.url || '#';
+  detailPanel.classList.add('open');
+  detailOverlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeDetailPanel() {
+  detailPanel.classList.remove('open');
+  detailOverlay.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+document.getElementById('detail-panel-close').addEventListener('click', closeDetailPanel);
+detailOverlay.addEventListener('click', closeDetailPanel);
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape' && detailPanel.classList.contains('open')) closeDetailPanel();
 });
 
 document.getElementById('category-filters').addEventListener('click', function(e) {
@@ -779,6 +887,24 @@ export async function generateHtml(
 </main>
 
 </div>
+
+<!-- 詳細パネル -->
+<div class="detail-overlay" id="detail-overlay"></div>
+<div class="detail-panel" id="detail-panel" role="dialog" aria-modal="true" aria-labelledby="detail-panel-title">
+  <div class="detail-panel-header">
+    <h2 id="detail-panel-title"></h2>
+    <button class="detail-panel-close" id="detail-panel-close" aria-label="閉じる">✕</button>
+  </div>
+  <div class="detail-panel-body">
+    <p class="detail-panel-summary" id="detail-panel-summary"></p>
+    <p class="detail-panel-detail-heading">詳細サマリー</p>
+    <div class="detail-panel-detail" id="detail-panel-detail"></div>
+  </div>
+  <div class="detail-panel-footer">
+    <a class="detail-panel-link" id="detail-panel-link" href="#" target="_blank" rel="noopener noreferrer">元記事を読む →</a>
+  </div>
+</div>
+
 <script>
 ${JS}
 </script>

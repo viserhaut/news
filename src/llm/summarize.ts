@@ -35,6 +35,7 @@ interface SummaryOutput {
   id: number;
   title_ja: string;
   summary_ja: string;
+  detail_summary_ja: string;
   ai_score: number;
 }
 
@@ -69,6 +70,7 @@ ${personalSection}
     "id": <元のid>,
     "title_ja": "日本語タイトル（簡潔に）",
     "summary_ja": "3〜5文の日本語要約。なぜこのユーザーに関係するかを1文含める。",
+    "detail_summary_ja": "箇条書き10点以内の詳細サマリー。各点は「・」で始める。重要な技術的詳細・背景・影響を含める。",
     "ai_score": 0.85
   }
 ]
@@ -89,6 +91,7 @@ function parseResponse(raw: string): SummaryOutput[] {
     id: Number(item.id),
     title_ja: String(item.title_ja ?? ""),
     summary_ja: String(item.summary_ja ?? ""),
+    detail_summary_ja: String(item.detail_summary_ja ?? ""),
     ai_score: Math.max(0, Math.min(1, Number(item.ai_score ?? 0))),
   }));
 }
@@ -153,6 +156,7 @@ export async function summarizeBatch(
           $article_id: article.id,
           $title_ja: out.title_ja,
           $summary_ja: out.summary_ja,
+          $detail_summary_ja: out.detail_summary_ja || null,
           $ai_score: score,
         });
         saved++;
