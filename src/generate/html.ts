@@ -83,6 +83,8 @@ function cardHtml(a: DigestArticleRow): string {
     <div class="card-body">
       <h3 class="card-title"><a href="${safeUrl(a.url)}" target="_blank" rel="noopener noreferrer">${esc(a.title_ja ?? a.url)}</a></h3>
       <p class="card-summary">${esc(a.summary_ja ?? "")}</p>
+      ${a.detail_summary_ja ? `<button class="detail-toggle-btn" aria-expanded="false">詳細を見る ▾</button>
+      <div class="detail-content">${esc(a.detail_summary_ja)}</div>` : ""}
       <div class="card-meta">
         <span class="feed-name">${esc(a.source_id)}</span>
         <span class="sep">·</span>
@@ -320,6 +322,21 @@ body {
   position: relative; font-size: 0.75rem; font-weight: 700;
   font-variant-numeric: tabular-nums; color: var(--text-muted);
 }
+
+.detail-toggle-btn {
+  background: none; border: 1px solid var(--border); border-radius: 5px;
+  padding: 0.1875rem 0.5rem; color: var(--text-dim); font-size: 0.6875rem;
+  cursor: pointer; transition: all 0.12s ease; margin-top: 0.375rem;
+}
+.detail-toggle-btn:hover { border-color: var(--accent-light); color: var(--accent-light); }
+
+.detail-content {
+  display: none; margin-top: 0.5rem; max-height: 300px; overflow-y: auto;
+  font-size: 0.8125rem; color: var(--text-muted); line-height: 1.7;
+  border-left: 2px solid var(--border-light); padding-left: 0.75rem;
+  white-space: pre-wrap;
+}
+.detail-content.open { display: block; }
 
 .search-wrap { margin-bottom: 1.5rem; }
 .search-input {
@@ -591,7 +608,17 @@ document.querySelector('.main').addEventListener('click', function(e) {
   if (skipSecBtn) { skipSectionAll(skipSecBtn); return; }
 
   var articleLink = e.target.closest('.card-title a');
-  if (articleLink) { markRead(articleLink.closest('.card')); }
+  if (articleLink) { markRead(articleLink.closest('.card')); return; }
+
+  var detailBtn = e.target.closest('.detail-toggle-btn');
+  if (detailBtn) {
+    var detail = detailBtn.nextElementSibling;
+    if (detail && detail.classList.contains('detail-content')) {
+      var isOpen = detail.classList.toggle('open');
+      detailBtn.setAttribute('aria-expanded', String(isOpen));
+      detailBtn.textContent = isOpen ? '詳細を閉じる ▴' : '詳細を見る ▾';
+    }
+  }
 });
 
 document.getElementById('category-filters').addEventListener('click', function(e) {

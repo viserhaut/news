@@ -39,6 +39,9 @@ export function initDb(dbPath: string): Database {
   // 既存 DB への og_image カラム追加（存在しなければ）
   try { db.run(`ALTER TABLE articles ADD COLUMN og_image TEXT`); } catch {}
 
+  // 既存 DB への detail_summary_ja カラム追加（存在しなければ）
+  try { db.run(`ALTER TABLE summaries ADD COLUMN detail_summary_ja TEXT`); } catch {}
+
 
   db.run(`
     CREATE TABLE IF NOT EXISTS fetch_logs (
