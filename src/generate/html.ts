@@ -77,9 +77,9 @@ function cardHtml(a: DigestArticleRow): string {
   const tier = getTier(score);
 
   return `<article class="card${a.detail_summary_ja ? " has-detail" : ""}" data-id="${a.id}" data-category="${esc(a.category)}" data-tier="${tier.id}" data-date="${esc(a.published_at ?? "")}"${a.detail_summary_ja ? ` data-detail="${esc(a.detail_summary_ja)}" data-url="${safeUrl(a.url)}" data-title="${esc(a.title_ja ?? a.url)}" data-summary="${esc(a.summary_ja ?? "")}"` : ""}>
+  <button class="skip-btn" aria-label="スキップ">✕</button>
   <div class="card-row">
     <button class="read-btn" aria-label="既読にする"></button>
-    <button class="skip-btn" aria-label="スキップ">✕</button>
     <div class="card-body">
       <h3 class="card-title"><a href="${safeUrl(a.url)}" target="_blank" rel="noopener noreferrer">${esc(a.title_ja ?? a.url)}</a></h3>
       <p class="card-summary">${esc(a.summary_ja ?? "")}</p>
@@ -254,6 +254,7 @@ body {
 .card {
   background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
   padding: 1rem 1.25rem; margin-bottom: 0.5rem; transition: all 0.15s ease;
+  position: relative;
 }
 .card:hover { background: var(--surface-hover); border-color: var(--border-light); }
 .card.read { opacity: 0.45; }
@@ -272,12 +273,15 @@ body {
 .read-btn.is-read { background: var(--accent); border-color: var(--accent); color: #fff; }
 
 .skip-btn {
-  flex-shrink: 0; width: 1.375rem; height: 1.375rem; margin-top: 0.125rem;
-  background: none; border: 1.5px solid var(--border-light); border-radius: 50%;
-  cursor: pointer; color: var(--text-dim); font-size: 0.6875rem;
+  position: absolute; top: 0.5rem; right: 0.5rem;
+  width: 1.25rem; height: 1.25rem;
+  background: var(--surface); border: 1px solid var(--border-light); border-radius: 50%;
+  cursor: pointer; color: var(--text-dim); font-size: 0.625rem;
   display: flex; align-items: center; justify-content: center;
-  transition: all 0.12s ease; padding: 0;
+  opacity: 0; transition: opacity 0.12s ease, border-color 0.12s ease, color 0.12s ease, background 0.12s ease;
+  padding: 0; z-index: 1;
 }
+.card:hover .skip-btn { opacity: 1; }
 .skip-btn:hover { border-color: #ef4444; color: #ef4444; background: rgba(239,68,68,0.1); }
 
 .card-body { flex: 1; min-width: 0; }
@@ -323,6 +327,87 @@ body {
 
 .has-detail { cursor: pointer; }
 .has-detail:hover .card-title a { text-decoration: underline; }
+
+/* サイドバー スクロールバー */
+.sidebar { scrollbar-width: thin; scrollbar-color: var(--border) transparent; }
+.sidebar::-webkit-scrollbar { width: 4px; }
+.sidebar::-webkit-scrollbar-track { background: transparent; }
+.sidebar::-webkit-scrollbar-thumb { background: var(--border-light); border-radius: 4px; }
+.sidebar::-webkit-scrollbar-thumb:hover { background: var(--text-dim); }
+[data-theme="dark"] .sidebar::-webkit-scrollbar-thumb { background: #3f3f46; }
+[data-theme="dark"] .sidebar::-webkit-scrollbar-thumb:hover { background: #52525b; }
+
+/* スコアツールチップ */
+.score-ring[data-tooltip] { cursor: help; }
+.score-ring[data-tooltip]::after {
+  content: attr(data-tooltip);
+  position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%);
+  background: var(--surface); border: 1px solid var(--border); border-radius: 6px;
+  padding: 0.4rem 0.6rem; font-size: 0.7rem; font-weight: 400; color: var(--text);
+  white-space: pre; line-height: 1.5; z-index: 100;
+  pointer-events: none; opacity: 0; transition: opacity 0.12s ease;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+.score-ring[data-tooltip]:hover::after { opacity: 1; }
+
+/* ブックマーク / コピー / エクスポート */
+.bookmark-btn {
+  background: none; border: none; padding: 0 0.125rem; cursor: pointer;
+  color: var(--text-dim); font-size: 0.875rem; line-height: 1;
+  transition: color 0.12s ease; flex-shrink: 0;
+}
+.bookmark-btn:hover { color: #f59e0b; }
+.bookmark-btn.is-bookmarked { color: #f59e0b; }
+
+.copy-btn {
+  background: none; border: none; padding: 0 0.125rem; cursor: pointer;
+  color: var(--text-dim); font-size: 0.75rem; line-height: 1;
+  transition: color 0.12s ease; white-space: nowrap; flex-shrink: 0;
+}
+.copy-btn:hover { color: var(--accent-light); }
+.copy-btn.copied { color: #10b981; font-size: 0.6875rem; }
+
+.export-btn {
+  display: block; width: 100%; padding: 0.4rem 0.625rem; margin-top: 0.25rem;
+  background: none; border: 1px solid var(--border); border-radius: 6px;
+  color: var(--text-muted); font-size: 0.8125rem; cursor: pointer;
+  text-align: left; transition: all 0.12s ease;
+}
+.export-btn:hover { border-color: var(--accent-light); color: var(--accent-light); }
+
+/* SNSシェア */
+.share-btn {
+  background: none; border: 1px solid var(--border-light); border-radius: 4px;
+  padding: 0.0625rem 0.375rem; color: var(--text-dim); font-size: 0.6875rem;
+  cursor: pointer; transition: all 0.12s ease; white-space: nowrap; margin-left: auto;
+}
+.share-btn:hover { border-color: var(--accent-light); color: var(--accent-light); }
+.share-btn.copied { border-color: #10b981; color: #10b981; }
+
+/* キーボードショートカット */
+.card.focused { outline: 2px solid var(--accent-light); outline-offset: 1px; }
+
+.kbd-modal-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.55);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 1000; backdrop-filter: blur(2px);
+}
+.kbd-modal {
+  background: var(--surface); border: 1px solid var(--border-light);
+  border-radius: 12px; padding: 1.5rem 2rem; max-width: 400px; width: 90%;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+}
+.kbd-modal h3 { font-size: 1rem; font-weight: 600; margin-bottom: 1rem; }
+.kbd-table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
+.kbd-table td { padding: 0.5rem 0.5rem; color: var(--text-muted); vertical-align: middle; }
+.kbd-table td:first-child { width: 110px; white-space: nowrap; }
+.kbd-table tr + tr td { border-top: 1px solid var(--border); }
+kbd {
+  display: inline-block; padding: 0.125rem 0.375rem;
+  border: 1px solid var(--border-light); border-radius: 4px;
+  background: var(--bg); font-size: 0.75rem; font-family: monospace;
+  color: var(--text); line-height: 1.4;
+}
 
 /* 詳細パネル */
 .detail-overlay {
@@ -597,12 +682,17 @@ function updateSectionVisibility(section) {
 var params = new URLSearchParams(location.search);
 var currentReadFilter = params.get('read') || 'all';
 var currentCategoryFilter = params.get('category') || 'all';
+var currentDateFilter = params.get('date') || 'all';
+var currentSourceFilter = params.get('source') || 'all';
+var currentBookmarkFilter = false;
 var currentSearch = '';
 
 function updateURL() {
   var p = new URLSearchParams(location.search);
   currentReadFilter === 'all' ? p.delete('read') : p.set('read', currentReadFilter);
   currentCategoryFilter === 'all' ? p.delete('category') : p.set('category', currentCategoryFilter);
+  currentDateFilter === 'all' ? p.delete('date') : p.set('date', currentDateFilter);
+  currentSourceFilter === 'all' ? p.delete('source') : p.set('source', currentSourceFilter);
   var qs = p.toString();
   history.replaceState(null, '', qs ? '?' + qs : location.pathname);
 }
@@ -618,6 +708,31 @@ function applyFilters() {
     if (currentReadFilter === 'unread' && isRead) show = false;
     if (currentReadFilter === 'read' && !isRead) show = false;
     if (currentCategoryFilter !== 'all' && cat !== currentCategoryFilter) show = false;
+    if (currentSourceFilter !== 'all') {
+      var feedEl = card.querySelector('.feed-name');
+      var src = feedEl ? feedEl.textContent.trim() : '';
+      if (src !== currentSourceFilter) show = false;
+    }
+    if (currentDateFilter !== 'all') {
+      var dateStr = card.dataset.date;
+      if (dateStr) {
+        var cardDate = new Date(dateStr);
+        var now = new Date();
+        var cutoff;
+        if (currentDateFilter === 'today') {
+          cutoff = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        } else if (currentDateFilter === '3days') {
+          cutoff = new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000);
+        } else if (currentDateFilter === 'week') {
+          cutoff = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+        }
+        if (cutoff && cardDate < cutoff) show = false;
+      }
+    }
+    if (currentBookmarkFilter) {
+      var cardLink = card.querySelector('.card-title a');
+      if (!cardLink || !isBookmarked(cardLink.href)) show = false;
+    }
     if (q && !title.toLowerCase().includes(q) && !summary.toLowerCase().includes(q)) show = false;
     if (show && card.style.display === 'none' && getSet(SKIP_KEY).has(Number(card.dataset.id))) show = false;
     if (show) card.style.display = '';
@@ -652,6 +767,37 @@ function filterByCategory(cat) {
   applyFilters();
 }
 
+function filterByDate(period) {
+  currentDateFilter = period;
+  setActiveBtn('date-filters', period);
+  applyFilters();
+}
+
+function filterBySource(source) {
+  currentSourceFilter = source;
+  setActiveBtn('source-filters', source);
+  applyFilters();
+}
+
+function buildSourceFilters() {
+  var container = document.getElementById('source-filters');
+  if (!container) return;
+  var sources = [];
+  var seen = new Set();
+  document.querySelectorAll('.card .feed-name').forEach(function(el) {
+    var s = el.textContent.trim();
+    if (s && !seen.has(s)) { seen.add(s); sources.push(s); }
+  });
+  sources.sort();
+  sources.forEach(function(source) {
+    var btn = document.createElement('button');
+    btn.className = 'filter-btn';
+    btn.dataset.value = source;
+    btn.textContent = source;
+    container.appendChild(btn);
+  });
+}
+
 // ── イベント委譲 ──────────────────────────────────────
 document.querySelector('.main').addEventListener('click', function(e) {
   var readBtn = e.target.closest('.read-btn');
@@ -665,6 +811,9 @@ document.querySelector('.main').addEventListener('click', function(e) {
 
   var skipSecBtn = e.target.closest('.skip-section-btn');
   if (skipSecBtn) { skipSectionAll(skipSecBtn); return; }
+
+  var shareBtn = e.target.closest('.share-btn');
+  if (shareBtn) { shareArticle(shareBtn); return; }
 
   var articleLink = e.target.closest('.card-title a');
   if (articleLink) { markRead(articleLink.closest('.card')); return; }
@@ -712,6 +861,22 @@ document.getElementById('read-filters').addEventListener('click', function(e) {
   if (btn) filterArticles(btn.dataset.value || 'all');
 });
 
+document.getElementById('date-filters').addEventListener('click', function(e) {
+  var btn = e.target.closest('.filter-btn');
+  if (btn) filterByDate(btn.dataset.value || 'all');
+});
+
+document.getElementById('source-filters').addEventListener('click', function(e) {
+  var btn = e.target.closest('.filter-btn');
+  if (btn) filterBySource(btn.dataset.value || 'all');
+});
+
+document.getElementById('bookmark-filter-btn').addEventListener('click', function() {
+  currentBookmarkFilter = !currentBookmarkFilter;
+  this.classList.toggle('active', currentBookmarkFilter);
+  applyFilters();
+});
+
 var searchEl = document.getElementById('search');
 var searchTimer = null;
 searchEl.addEventListener('input', function() {
@@ -732,11 +897,199 @@ if (mobileToggle && sidebarCollapsible) {
   });
 }
 
+// ── ブックマーク機能 ──────────────────────────────────
+var BOOKMARK_KEY = 'bookmarks';
+
+function getBookmarks() {
+  try { return JSON.parse(localStorage.getItem(BOOKMARK_KEY) || '[]'); } catch (e) { return []; }
+}
+function saveBookmarks(arr) { localStorage.setItem(BOOKMARK_KEY, JSON.stringify(arr)); }
+function isBookmarked(url) { return getBookmarks().indexOf(url) !== -1; }
+function toggleBookmark(url) {
+  var bms = getBookmarks();
+  var idx = bms.indexOf(url);
+  if (idx === -1) bms.push(url); else bms.splice(idx, 1);
+  saveBookmarks(bms);
+  return idx === -1;
+}
+
+document.querySelectorAll('.card').forEach(function(card) {
+  var link = card.querySelector('.card-title a');
+  if (!link) return;
+  var meta = card.querySelector('.card-meta');
+  if (!meta) return;
+  var bookmarked = isBookmarked(link.href);
+  var bBtn = document.createElement('button');
+  bBtn.className = 'bookmark-btn' + (bookmarked ? ' is-bookmarked' : '');
+  bBtn.setAttribute('aria-label', bookmarked ? 'ブックマーク解除' : 'ブックマークに追加');
+  bBtn.textContent = bookmarked ? '\u2605' : '\u2606';
+  meta.appendChild(bBtn);
+  var cBtn = document.createElement('button');
+  cBtn.className = 'copy-btn';
+  cBtn.setAttribute('aria-label', 'URLをコピー');
+  cBtn.textContent = '\uD83D\uDD17';
+  meta.appendChild(cBtn);
+});
+
+document.querySelector('.main').addEventListener('click', function(e) {
+  var bBtn = e.target.closest('.bookmark-btn');
+  if (bBtn) {
+    var bCard = bBtn.closest('.card');
+    if (!bCard) return;
+    var bLink = bCard.querySelector('.card-title a');
+    if (!bLink) return;
+    var nowBm = toggleBookmark(bLink.href);
+    bBtn.textContent = nowBm ? '\u2605' : '\u2606';
+    bBtn.classList.toggle('is-bookmarked', nowBm);
+    bBtn.setAttribute('aria-label', nowBm ? 'ブックマーク解除' : 'ブックマークに追加');
+    return;
+  }
+  var cBtn = e.target.closest('.copy-btn');
+  if (cBtn) {
+    var cCard = cBtn.closest('.card');
+    if (!cCard) return;
+    var cLink = cCard.querySelector('.card-title a');
+    if (!cLink) return;
+    navigator.clipboard.writeText(cLink.href).then(function() {
+      cBtn.textContent = '\u2713 Copied';
+      cBtn.classList.add('copied');
+      setTimeout(function() { cBtn.textContent = '\uD83D\uDD17'; cBtn.classList.remove('copied'); }, 1000);
+    });
+    return;
+  }
+});
+
+function exportBookmarks() {
+  var bms = getBookmarks();
+  if (bms.length === 0) { alert('ブックマークがありません'); return; }
+  var today = new Date().toISOString().slice(0, 10);
+  var lines = ['# Bookmarks - ' + today, ''];
+  bms.forEach(function(url) {
+    var title = url;
+    document.querySelectorAll('.card-title a').forEach(function(a) {
+      if (a.href === url) title = a.textContent.trim();
+    });
+    lines.push('- [' + title.replace(/\[/g, '\\[').replace(/\]/g, '\\]') + '](' + url.replace(/\(/g, '%28').replace(/\)/g, '%29') + ')');
+  });
+  var blob = new Blob([lines.join('\n') + '\n'], { type: 'text/markdown; charset=utf-8' });
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'bookmarks-' + today + '.md';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(a.href);
+}
+var exportBtnEl = document.getElementById('export-bookmarks-btn');
+if (exportBtnEl) exportBtnEl.addEventListener('click', exportBookmarks);
+
+// ── SNSシェア ─────────────────────────────────────────
+function initShareButtons() {
+  document.querySelectorAll('.card').forEach(function(card) {
+    var link = card.querySelector('.card-title a');
+    var meta = card.querySelector('.card-meta');
+    if (!link || !meta) return;
+    var btn = document.createElement('button');
+    btn.className = 'share-btn';
+    btn.textContent = 'Share';
+    btn.dataset.shareUrl = link.href;
+    btn.dataset.shareTitle = link.textContent.trim();
+    btn.setAttribute('aria-label', 'SNSシェア');
+    meta.insertBefore(btn, meta.firstChild);
+  });
+}
+
+function shareArticle(btn) {
+  var text = (btn.dataset.shareTitle || '') + ' ' + (btn.dataset.shareUrl || '') + ' #NewsDigest';
+  navigator.clipboard.writeText(text).then(function() {
+    btn.textContent = '\u2713 Copied for X';
+    btn.classList.add('copied');
+    setTimeout(function() { btn.textContent = 'Share'; btn.classList.remove('copied'); }, 1000);
+  });
+}
+
+// ── スコアツールチップ ────────────────────────────────
+var TIER_LABELS = {
+  'must-read':    { label: 'Must Read',    threshold: '0.85以上' },
+  'recommended':  { label: 'Recommended', threshold: '0.70〜0.84' },
+  'worth-a-look': { label: 'Worth a Look', threshold: '0.50〜0.69' },
+  'low-priority': { label: 'Low Priority', threshold: '0.50未満' }
+};
+document.querySelectorAll('.card').forEach(function(card) {
+  var ring = card.querySelector('.score-ring');
+  if (!ring) return;
+  var tier = card.dataset.tier || '';
+  var score = (ring.querySelector('span') || {}).textContent || '';
+  var info = TIER_LABELS[tier];
+  if (!info) return;
+  ring.setAttribute('data-tooltip', 'スコア: ' + score + '\nTier: ' + info.label + '\n基準: ' + info.threshold);
+});
+
+// ── キーボードショートカット ──────────────────────────
+var focusedCard = null;
+var kbdModal = null;
+
+function getVisibleCards() {
+  return Array.from(document.querySelectorAll('.card:not([style*="display: none"])'));
+}
+function setFocus(card) {
+  if (focusedCard) focusedCard.classList.remove('focused');
+  focusedCard = card;
+  if (card) { card.classList.add('focused'); card.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); }
+}
+function moveFocus(dir) {
+  var cards = getVisibleCards();
+  if (!cards.length) return;
+  var idx = focusedCard ? cards.indexOf(focusedCard) : -1;
+  var next = idx === -1 ? (dir === 1 ? 0 : cards.length - 1) : (dir === 1 ? Math.min(idx + 1, cards.length - 1) : Math.max(idx - 1, 0));
+  setFocus(cards[next]);
+}
+function showKbdModal() {
+  if (kbdModal) { kbdModal.remove(); kbdModal = null; return; }
+  var overlay = document.createElement('div');
+  overlay.className = 'kbd-modal-overlay';
+  overlay.innerHTML = '<div class="kbd-modal"><h3>キーボードショートカット</h3><table class="kbd-table">' +
+    '<tr><td><kbd>j</kbd> / <kbd>k</kbd></td><td>次/前の記事へ移動</td></tr>' +
+    '<tr><td><kbd>r</kbd></td><td>既読トグル</td></tr>' +
+    '<tr><td><kbd>b</kbd></td><td>ブックマークトグル</td></tr>' +
+    '<tr><td><kbd>?</kbd></td><td>このヘルプを表示</td></tr>' +
+    '<tr><td><kbd>Esc</kbd></td><td>モーダルを閉じる</td></tr>' +
+    '</table></div>';
+  overlay.addEventListener('click', function(e) { if (e.target === overlay) { overlay.remove(); kbdModal = null; } });
+  document.body.appendChild(overlay);
+  kbdModal = overlay;
+}
+document.addEventListener('keydown', function(e) {
+  var tag = document.activeElement ? document.activeElement.tagName : '';
+  if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+  if (detailPanel && detailPanel.classList.contains('open')) return;
+  switch (e.key) {
+    case 'j': moveFocus(1); e.preventDefault(); break;
+    case 'k': moveFocus(-1); e.preventDefault(); break;
+    case 'r': if (focusedCard) toggleRead(focusedCard); break;
+    case 'b':
+      if (focusedCard) {
+        var bLink = focusedCard.querySelector('.card-title a');
+        var bBtn = focusedCard.querySelector('.bookmark-btn');
+        if (bLink && bBtn) {
+          var nowBm = toggleBookmark(bLink.href);
+          bBtn.textContent = nowBm ? '\u2605' : '\u2606';
+          bBtn.classList.toggle('is-bookmarked', nowBm);
+        }
+      }
+      break;
+    case '?': showKbdModal(); e.preventDefault(); break;
+    case 'Escape': if (kbdModal) { kbdModal.remove(); kbdModal = null; } break;
+  }
+});
+
 // ── 初期化 ────────────────────────────────────────────
 restoreState();
+buildSourceFilters();
 setActiveBtn('read-filters', currentReadFilter);
 setActiveBtn('category-filters', currentCategoryFilter);
+setActiveBtn('date-filters', currentDateFilter);
+setActiveBtn('source-filters', currentSourceFilter);
 applyFilters();
+initShareButtons();
 `.trim();
 
 // ── メイン生成関数 ────────────────────────────────────
@@ -862,6 +1215,31 @@ export async function generateHtml(
       <div class="filter-list" id="category-filters">
         ${catButtons}
       </div>
+    </div>
+
+    <div class="sidebar-section" id="date-filters">
+      <div class="sidebar-heading">期間</div>
+      <div class="filter-list">
+        <button class="filter-btn active" data-value="all">すべて</button>
+        <button class="filter-btn" data-value="today">今日</button>
+        <button class="filter-btn" data-value="3days">3日</button>
+        <button class="filter-btn" data-value="week">1週間</button>
+      </div>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-heading">ソース</div>
+      <div class="filter-list" id="source-filters">
+        <button class="filter-btn active" data-value="all">すべて</button>
+      </div>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-heading">ブックマーク</div>
+      <div class="filter-list">
+        <button class="filter-btn" id="bookmark-filter-btn" data-value="bookmarked">★ ブックマーク</button>
+      </div>
+      <button class="export-btn" id="export-bookmarks-btn">📥 書き出す</button>
     </div>
 
     <div class="sidebar-section toc">
