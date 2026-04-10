@@ -28,6 +28,10 @@ echo "=== $(date '+%Y-%m-%d %H:%M:%S') pipeline start ==="
 
 cd "$PROJECT_DIR"
 
+# 必ず main ブランチで実行（作業ブランチに切り替わったまま実行されると push が失敗する）
+git checkout main
+git pull --ff-only origin main || echo "[warn] git pull skipped (diverged or no network)"
+
 # パイプライン実行（RSS fetch → 要約 → HTML 生成 → Slack 通知）
 bun run src/index.ts
 
