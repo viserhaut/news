@@ -20,6 +20,12 @@ RSS を収集・AI要約・スコアリングして GitHub Pages に静的 HTML 
 - OGP 画像 URL は `safeUrl()` 関数を通す（SSRF 防止）
 - RSS 本文はプロンプトに渡す前に `JSON.stringify` でエスケープ（プロンプトインジェクション対策）
 
+## Input Files（直接編集可）
+- `pending/tweets.json` は **入力ファイル**（生成物でない）
+  - iOS Shortcut が GitHub Contents API 経由でツイート URL を追記する
+  - パイプライン実行後に自動クリアされる（`{"urls": []}` に戻る）
+  - `.gitignore` に追加しない
+
 ## Generated Files（絶対に直接編集しないこと）
 - `docs/index.html` は **生成物** であり直接編集禁止
   - 機能追加・修正はすべて `src/generate/html.ts` に実装し `bun run generate` で再生成する

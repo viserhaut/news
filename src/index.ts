@@ -1,10 +1,11 @@
 import { join } from "path";
-import { mkdirSync } from "fs";
+import { mkdirSync, readFileSync, writeFileSync } from "fs";
 import { initDb } from "./db/schema";
 import { makeQueries } from "./db/queries";
 import { loadSources } from "./config/sources";
 import { fetchSource } from "./fetch/rss";
 import { fetchBody } from "./fetch/body";
+import { fetchTweetThread } from "./fetch/xtweet";
 import { fetchOgImage } from "./fetch/og";
 import { summarizeBatch } from "./llm/summarize";
 import { ClaudeAuthError } from "./llm/claude";
@@ -26,13 +27,77 @@ async function main() {
 
   q.deleteExpired.run();
 
+  let totalNew = 0;
+
+  // ── Step 0: X ブックマーク取込 ──────────────────────────
+  const xApiKey = process.env.XAI_API_KEY;
+  const pendingPath = join(ROOT_DIR, "pending", "tweets.json");
+  if (xApiKey) {
+    let pending: { urls: string[] } = { urls: [] };
+    try {
+      pending = JSON.parse(readFileSync(pendingPath, "utf-8")) as { urls: string[] };
+    } catch {
+      // ファイル不在またはパースエラーは無視
+    }
+
+    if (pending.urls.length > 0) {
+      console.log(`[info] X bookmark import: ${pending.urls.length} URLs`);
+      let xNew = 0;
+      for (const tweetUrl of pending.urls) {
+        const result = await fetchTweetThread(tweetUrl, xApiKey);
+        if (!result) continue;
+
+        // linked_urls を fetchBody() で取得してツイート本文に結合
+        const linkedBodies: string[] = [];
+        for (const linkedUrl of result.linked_urls) {
+          const body = await fetchBody(linkedUrl);
+          if (body) linkedBodies.push(`--- ${linkedUrl} ---\n${body}`);
+        }
+        const bodyRaw =
+          linkedBodies.length > 0
+            ? `${result.text}\n\n${linkedBodies.join("\n\n")}`
+            : result.text;
+
+        // 言語判定（日本語文字が含まれるか）
+        const language: "ja" | "en" = /[\u3040-\u30FF\u4E00-\u9FFF]/.test(result.text)
+          ? "ja"
+          : "en";
+
+        const title = result.text.replace(/\n/g, " ").slice(0, 50);
+
+        const before =
+          (q.countArticlesBySource.get({ $source_id: "x_bookmark" }) as { count: number })
+            ?.count ?? 0;
+        q.insertArticle.run({
+          $url_hash: result.url_hash,
+          $url: result.url,
+          $title: title,
+          $source_id: "x_bookmark",
+          $language: language,
+          $category: "ai_tools",
+          $published_at: null,
+          $body_raw: bodyRaw,
+        });
+        const after =
+          (q.countArticlesBySource.get({ $source_id: "x_bookmark" }) as { count: number })
+            ?.count ?? 0;
+        if (after > before) xNew++;
+      }
+      console.log(`[ok]    x_bookmark: ${pending.urls.length} fetched, ${xNew} new`);
+      totalNew += xNew;
+
+      // 処理済み URLs を pending/tweets.json から削除
+      writeFileSync(pendingPath, JSON.stringify({ urls: [] }), "utf-8");
+    }
+  } else {
+    console.log("[info] XAI_API_KEY not set, skipping X bookmark import");
+  }
+
   // ── Step 1: RSS フェッチ ──────────────────────────────
   const sources = loadSources(ROOT_DIR);
   console.log(`[info] ${sources.length} sources loaded`);
 
   const results = await Promise.all(sources.map(fetchSource));
-
-  let totalNew = 0;
   for (const result of results) {
     q.insertFetchLog.run({
       $source_id: result.source_id,
