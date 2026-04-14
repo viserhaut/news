@@ -40,10 +40,13 @@ async function main() {
       // ファイル不在またはパースエラーは無視
     }
 
-    if (pending.urls.length > 0) {
-      console.log(`[info] X bookmark import: ${pending.urls.length} URLs`);
+    // iOS Shortcut が改行結合で保存した場合に備えてフラット化
+    const urlList = pending.urls.flatMap((u) => u.split("\n").map((s) => s.trim()).filter(Boolean));
+
+    if (urlList.length > 0) {
+      console.log(`[info] X bookmark import: ${urlList.length} URLs`);
       let xNew = 0;
-      for (const tweetUrl of pending.urls) {
+      for (const tweetUrl of urlList) {
         const result = await fetchTweetThread(tweetUrl, xApiKey);
         if (!result) continue;
 
