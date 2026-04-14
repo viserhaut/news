@@ -1237,6 +1237,7 @@ export async function generateHtml(
 <meta http-equiv="Content-Security-Policy"
       content="default-src 'self'; img-src https: data:; script-src 'unsafe-inline'; style-src 'unsafe-inline'">
 <meta name="robots" content="noindex,nofollow">
+<link rel="icon" href="https://github.com/viserhaut.png">
 <title>News Digest</title>
 <style>${CSS}</style>
 <script>
