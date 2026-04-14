@@ -89,7 +89,8 @@ function summaryHtml(summary: string | null | undefined): string {
 function cardHtml(a: DigestArticleRow): string {
   const score = typeof a.personal_score === "number" ? a.personal_score : 0;
   const scorePct = Math.round(score * 100);
-  const tier = getTier(score);
+  // X ブックマークは手動選択のため常に Must Read
+  const tier = a.source_id === "x" ? TIERS[0]! : getTier(score);
 
   return `<article class="card${a.detail_summary_ja ? " has-detail" : ""}" data-id="${a.id}" data-category="${esc(a.category)}" data-tier="${tier.id}" data-date="${esc(a.published_at ?? "")}"${a.detail_summary_ja ? ` data-detail="${esc(a.detail_summary_ja)}" data-url="${safeUrl(a.url)}" data-title="${esc(a.title_ja ?? a.url)}" data-summary="${esc(a.summary_ja ?? "")}"` : ""}>
   <button type="button" class="skip-btn" aria-label="スキップ">✕</button>

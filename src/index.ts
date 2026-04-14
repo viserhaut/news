@@ -69,20 +69,20 @@ async function main() {
         const title = result.text.replace(/\n/g, " ").slice(0, 50);
 
         const before =
-          (q.countArticlesBySource.get({ $source_id: "x_bookmark" }) as { count: number })
+          (q.countArticlesBySource.get({ $source_id: "x" }) as { count: number })
             ?.count ?? 0;
         q.insertArticle.run({
           $url_hash: result.url_hash,
           $url: result.url,
           $title: title,
-          $source_id: "x_bookmark",
+          $source_id: "x",
           $language: language,
-          $category: "ai_tools",
+          $category: "x",
           $published_at: null,
           $body_raw: bodyRaw,
         });
         const after =
-          (q.countArticlesBySource.get({ $source_id: "x_bookmark" }) as { count: number })
+          (q.countArticlesBySource.get({ $source_id: "x" }) as { count: number })
             ?.count ?? 0;
         if (after > before) xNew++;
       }
