@@ -212,7 +212,7 @@ export function makeQueries(db: Database) {
            COALESCE(s.personal_score, s.ai_score) AS personal_score
     FROM articles a
     JOIN summaries s ON s.article_id = a.id
-    WHERE a.published_at > datetime('now', '-7 days')
+    WHERE (a.published_at > datetime('now', '-7 days') OR a.source_id = 'x')
       AND s.title_ja IS NOT NULL
     ORDER BY personal_score DESC
   `);

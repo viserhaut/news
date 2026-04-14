@@ -499,11 +499,11 @@ footer a:hover { color: var(--accent-light); }
 
   <div class="stats-grid">
     <div class="stat-box">
-      <div class="stat-val">655</div>
+      <div class="stat-val">675</div>
       <div class="stat-lbl">記事</div>
     </div>
     <div class="stat-box">
-      <div class="stat-val" id="unread-count">655</div>
+      <div class="stat-val" id="unread-count">675</div>
       <div class="stat-lbl">未読</div>
     </div>
   </div>
@@ -529,6 +529,7 @@ footer a:hover { color: var(--accent-light); }
 <button type="button" class="filter-btn" data-value="community">コミュニティ</button>
 <button type="button" class="filter-btn" data-value="ai_research">AI研究</button>
 <button type="button" class="filter-btn" data-value="security">セキュリティ</button>
+<button type="button" class="filter-btn" data-value="x">x</button>
       </div>
     </div>
 
@@ -562,22 +563,22 @@ footer a:hover { color: var(--accent-light); }
       <a class="toc-link" href="#must-read">
         <span class="toc-dot" style="background:#10b981"></span>
         Must Read
-        <span class="toc-count">110</span>
+        <span class="toc-count">114</span>
       </a>
 <a class="toc-link" href="#recommended">
         <span class="toc-dot" style="background:#3b82f6"></span>
         Recommended
-        <span class="toc-count">142</span>
+        <span class="toc-count">146</span>
       </a>
 <a class="toc-link" href="#worth-a-look">
         <span class="toc-dot" style="background:#f59e0b"></span>
         Worth a Look
-        <span class="toc-count">168</span>
+        <span class="toc-count">174</span>
       </a>
 <a class="toc-link" href="#low-priority">
         <span class="toc-dot" style="background:#6b7280"></span>
         Low Priority
-        <span class="toc-count">235</span>
+        <span class="toc-count">241</span>
       </a>
     </div>
   </div>
@@ -592,7 +593,7 @@ footer a:hover { color: var(--accent-light); }
   <div class="tier-header">
     <span class="tier-bar" style="background:#10b981"></span>
     <h2>Must Read</h2>
-    <span class="tier-count">110</span>
+    <span class="tier-count">114</span>
     <button type="button" class="mark-section-read">全て既読</button>
     <button type="button" class="skip-section-btn">スキップ</button>
   </div>
@@ -835,6 +836,36 @@ footer a:hover { color: var(--accent-light); }
         <span class="feed-name">reddit_kubernetes</span>
         <span class="sep">·</span>
         <span class="date">4/8</span>
+        <span class="tag">クラウド</span>
+      </div>
+    </div>
+    <div class="card-score">
+      <div class="score-ring" style="--pct:98;--color:#10b981">
+        <span>98</span>
+      </div>
+    </div>
+  </div>
+</article>
+<article class="card has-detail" data-id="2473" data-category="cloud" data-tier="must-read" data-date="2026-04-14T13:16:43.000Z" data-detail="・awesome-prometheus-alerts は Prometheus 向けアラートルールのキュレーション OSS コレクション
+・今回追加: Cilium / Jaeger / cert-manager / Envoy / Grafana Tempo / Grafana Mimir
+・Cilium は eBPF ベースの CNI で、ネットワークポリシー違反や BPF マップ枯渇などを検知できるルールが追加された可能性
+・Jaeger はトレースパイプラインの遅延・キュー詰まりを検知するルールが対象
+・cert-manager は証明書有効期限切れ近づきを Prometheus アラートで検知可能
+・Envoy は upstream 接続失敗やリクエストタイムアウトの監視に有用
+・Grafana Tempo・Mimir は比較的新しいコンポーネントで公式推奨アラートの参照先として重要
+・既存 Kube クラスタにそのまま適用可能な YAML 形式で提供されると想定
+・awesome-prometheus-alerts は GitHub でスター数が多く実績のあるリポジトリ
+・SRE 現場で即使えるルール群として Pull して適用するのが最も効率的" data-url="https://www.reddit.com/r/kubernetes/comments/1sl8fs5/added_cilium_jaeger_certmanager_envoy_grafana/" data-title="awesome-prometheus-alerts に Cilium/Jaeger/cert-manager/Envoy/Grafana Tempo/Mimir のアラートルールを追加" data-summary="Kubernetes エコシステムで広く使われる Cilium（eBPF ネットワーク）、Jaeger（分散トレーシング）、cert-manager、Envoy プロキシ、Grafana Tempo・Mimir に対応した Prometheus アラートルールが awesome-prometheus-alerts へ追加された。SRE がよく使うオブザーバビリティスタックをカバーする実用的なルール集であり、ゼロから書く手間を省けることが最大のメリット。特に Mimir/Tempo の公式アラートは設定例が少ないため参照価値が高い。">
+  <button type="button" class="skip-btn" aria-label="スキップ">✕</button>
+  <div class="card-row">
+    <button type="button" class="read-btn" aria-label="既読にする"></button>
+    <div class="card-body">
+      <h3 class="card-title"><a href="https://www.reddit.com/r/kubernetes/comments/1sl8fs5/added_cilium_jaeger_certmanager_envoy_grafana/" target="_blank" rel="noopener noreferrer">awesome-prometheus-alerts に Cilium/Jaeger/cert-manager/Envoy/Grafana Tempo/Mimir のアラートルールを追加</a></h3>
+      <ul class="card-summary-list"><li>Kubernetes エコシステムで広く使われる Cilium（eBPF ネットワーク）、Jaeger（分散トレーシング）、cert-manager、Envoy プロキシ、Grafana Tempo・Mimir に対応した Prometheus アラートルールが awesome-prometheus-alerts へ追加された。</li><li>SRE がよく使うオブザーバビリティスタックをカバーする実用的なルール集であり、ゼロから書く手間を省けることが最大のメリット。</li><li>特に Mimir/Tempo の公式アラートは設定例が少ないため参照価値が高い。。</li></ul>
+      <div class="card-meta">
+        <span class="feed-name">reddit_kubernetes</span>
+        <span class="sep">·</span>
+        <span class="date">4/14</span>
         <span class="tag">クラウド</span>
       </div>
     </div>
@@ -2076,6 +2107,34 @@ footer a:hover { color: var(--accent-light); }
     </div>
   </div>
 </article>
+<article class="card has-detail" data-id="2467" data-category="ai_research" data-tier="must-read" data-date="2026-04-14T18:30:44.000Z" data-detail="・繰り返し参照するファイルを13トークンの短縮IDに変換する仕組み
+・ファイル重視タスクでトークン使用量86%削減を実測
+・数学的根拠（圧縮理論・情報理論）に基づく設計と主張
+・AI コーディングセッション（Claude Code, Cursor 等）での利用を想定
+・コスト削減と長コンテキストの効率化が主目的
+・個人開発者が自作・公開した OSS ツール
+・大規模コードベースでのエージェント活用時に特に効果的
+・トークン節約はコスト・速度の両面でメリット" data-url="https://www.reddit.com/r/MachineLearning/comments/1slh7qz/i_built_a_tool_that_turns_repeated_file_reads/" data-title="AIコーディングセッションでファイル参照を13トークンに圧縮し、トークン使用量86%削減するツール" data-summary="繰り返し読み込まれるファイルを13トークンの参照IDに変換することで、ファイル重視タスクにおけるトークン消費を86%削減するツールが公開された。数学的・研究的根拠に基づくアプローチとされており、Claude Code など AI コーディングエージェントのセッションで特にコスト削減効果が期待できる。長いコードベースを扱うエージェントワークフローへの実用的な応用価値が高い。">
+  <button type="button" class="skip-btn" aria-label="スキップ">✕</button>
+  <div class="card-row">
+    <button type="button" class="read-btn" aria-label="既読にする"></button>
+    <div class="card-body">
+      <h3 class="card-title"><a href="https://www.reddit.com/r/MachineLearning/comments/1slh7qz/i_built_a_tool_that_turns_repeated_file_reads/" target="_blank" rel="noopener noreferrer">AIコーディングセッションでファイル参照を13トークンに圧縮し、トークン使用量86%削減するツール</a></h3>
+      <ul class="card-summary-list"><li>繰り返し読み込まれるファイルを13トークンの参照IDに変換することで、ファイル重視タスクにおけるトークン消費を86%削減するツールが公開された。</li><li>数学的・研究的根拠に基づくアプローチとされており、Claude Code など AI コーディングエージェントのセッションで特にコスト削減効果が期待できる。</li><li>長いコードベースを扱うエージェントワークフローへの実用的な応用価値が高い。。</li></ul>
+      <div class="card-meta">
+        <span class="feed-name">reddit_ml</span>
+        <span class="sep">·</span>
+        <span class="date">4/15</span>
+        <span class="tag">AI研究</span>
+      </div>
+    </div>
+    <div class="card-score">
+      <div class="score-ring" style="--pct:91;--color:#10b981">
+        <span>91</span>
+      </div>
+    </div>
+  </div>
+</article>
 <article class="card has-detail" data-id="2267" data-category="security" data-tier="must-read" data-date="2026-04-13T06:44:07.000Z" data-detail="・対象：AIアシスタントからAWS CLIを実行できるMCPサーバ「aws-mcp-server」
 ・脆弱性タイプ：コマンドインジェクション（許可リストのバイパスが可能）
 ・CVE番号：CVE-2026-5058
@@ -2548,6 +2607,36 @@ footer a:hover { color: var(--accent-light); }
     </div>
   </div>
 </article>
+<article class="card has-detail" data-id="2501" data-category="x" data-tier="must-read" data-date="" data-detail="・ハーネス = モデル周囲の構造（UX・コスト・セキュリティを強制する足場）
+・設計哲学: 「足す」より「剥がす」─モデルが賢くなるたびに不要な制約を除去
+・パターン①: bash+text editorの汎用ツールを信じて渡す（Claude 3.5 SonnetでSWE-bench 49%達成）
+・パターン②-A: ツール結果フィルタリングをClaude自身にコード実行させる（BrowseComp: 45.3%→61.6%）
+・パターン②-B: Skills/Context editing/Subagentsで「必要時に取りに行く」設計（サブエージェントで+2.8%）
+・パターン②-C: Compactionと自己メモリでの長期タスク継続（Opus 4.6でCompaction成功率84%）
+・パターン③-キャッシュ: 静的→動的順序で並べ、モデル固定・system-reminderで更新
+・パターン③-セキュリティ: 高リスク操作は宣言的ツールで型付き引数+UIゲート
+・Claude Codeのauto-modeは「第二のClaude」がbashコマンド安全性を判定
+・キャッシュトークン最適化だけで実際にコスト3割削減の事例あり" data-url="https://x.com/masahirochaen/status/2043819057661784279?s=12&amp;t=f3WPjTmNClEEGPQatkVlhg" data-title="Anthropic公式：Claudeのハーネス設計3パターンと性能向上の実践知識" data-summary="AnthropicがClaude Codeで実践しているハーネス設計術を解説した公式ブログの詳細な要約スレッド。核心哲学は「何をやめられるか（What can I stop doing?）」で、モデルが賢くなるほどハーネスの制約を剥がすことで性能を解放する。具体的な数値として、Opus 4.6でコンテキストフィルタリングを追加するとBrowseCompが45.3%→61.6%に向上し、Compaction（自己要約）の成功率はSonnet 4.5の43%からOpus 4.6では84%まで改善している。bash+text editorの汎用ツールでSWE-benchを49%達成した事実や、キャッシュ最適化（静的→動的順序）でコストを3割削減できる実績も示されている。">
+  <button type="button" class="skip-btn" aria-label="スキップ">✕</button>
+  <div class="card-row">
+    <button type="button" class="read-btn" aria-label="既読にする"></button>
+    <div class="card-body">
+      <h3 class="card-title"><a href="https://x.com/masahirochaen/status/2043819057661784279?s=12&amp;t=f3WPjTmNClEEGPQatkVlhg" target="_blank" rel="noopener noreferrer">Anthropic公式：Claudeのハーネス設計3パターンと性能向上の実践知識</a></h3>
+      <ul class="card-summary-list"><li>AnthropicがClaude Codeで実践しているハーネス設計術を解説した公式ブログの詳細な要約スレッド。</li><li>核心哲学は「何をやめられるか（What can I stop doing?）」で、モデルが賢くなるほどハーネスの制約を剥がすことで性能を解放する。</li><li>具体的な数値として、Opus 4.6でコンテキストフィルタリングを追加するとBrowseCompが45.3%→61.6%に向上し、Compaction（自己要約）の成功率はSonnet 4.5の43%からOpus 4.6では84%まで改善している。</li><li>bash+text editorの汎用ツールでSWE-benchを49%達成した事実や、キャッシュ最適化（静的→動的順序）でコストを3割削減できる実績も示されている。。</li></ul>
+      <div class="card-meta">
+        <span class="feed-name">x</span>
+        <span class="sep">·</span>
+        <span class="date"></span>
+        <span class="tag">x</span>
+      </div>
+    </div>
+    <div class="card-score">
+      <div class="score-ring" style="--pct:89;--color:#10b981">
+        <span>89</span>
+      </div>
+    </div>
+  </div>
+</article>
 <article class="card" data-id="948" data-category="ai_tools" data-tier="must-read" data-date="2026-04-07T14:50:28.000Z">
   <button type="button" class="skip-btn" aria-label="スキップ">✕</button>
   <div class="card-row">
@@ -2805,6 +2894,34 @@ footer a:hover { color: var(--accent-light); }
         <span class="sep">·</span>
         <span class="date">4/10</span>
         <span class="tag">AIツール</span>
+      </div>
+    </div>
+    <div class="card-score">
+      <div class="score-ring" style="--pct:88;--color:#10b981">
+        <span>88</span>
+      </div>
+    </div>
+  </div>
+</article>
+<article class="card has-detail" data-id="2465" data-category="ai_research" data-tier="must-read" data-date="2026-04-14T17:21:13.000Z" data-detail="・ClawBench は 153 タスク・144 ライブウェブサイトを使う AI エージェント評価ベンチマーク
+・最高スコアのモデルでも 33.3% の達成率にとどまる
+・「日常オンラインタスク」（フォーム入力、検索、予約等）を対象
+・ライブサイトを使うため動的コンテンツや認証など現実的な困難が反映される
+・現状の LLM エージェントのウェブ操作能力の限界を定量的に示す
+・エージェント開発者が現実的な目標設定をする上での重要なベンチマーク
+・タスク分類・失敗パターンの分析から改善ポイントが得られる
+・MCP や Browser Use 等のツールを使うエージェント設計への示唆あり" data-url="https://www.reddit.com/r/MachineLearning/comments/1slf7pg/clawbench_can_ai_agents_complete_everyday_online/" data-title="ClawBench: AIエージェントは日常オンラインタスクをこなせるか？ 153タスク・144サイト、最高精度33.3%" data-summary="実際の144ウェブサイト上で153の日常タスクを実行するベンチマーク ClawBench が発表された。最高性能モデルでも達成率33.3%にとどまり、現状の AI エージェントが実世界のウェブ操作タスクでいかに苦戦しているかを示している。AIエージェント開発者にとって現実的な性能上限の把握と改善方向性の検討に重要な参照データ。">
+  <button type="button" class="skip-btn" aria-label="スキップ">✕</button>
+  <div class="card-row">
+    <button type="button" class="read-btn" aria-label="既読にする"></button>
+    <div class="card-body">
+      <h3 class="card-title"><a href="https://www.reddit.com/r/MachineLearning/comments/1slf7pg/clawbench_can_ai_agents_complete_everyday_online/" target="_blank" rel="noopener noreferrer">ClawBench: AIエージェントは日常オンラインタスクをこなせるか？ 153タスク・144サイト、最高精度33.3%</a></h3>
+      <ul class="card-summary-list"><li>実際の144ウェブサイト上で153の日常タスクを実行するベンチマーク ClawBench が発表された。</li><li>最高性能モデルでも達成率33.3%にとどまり、現状の AI エージェントが実世界のウェブ操作タスクでいかに苦戦しているかを示している。</li><li>AIエージェント開発者にとって現実的な性能上限の把握と改善方向性の検討に重要な参照データ。。</li></ul>
+      <div class="card-meta">
+        <span class="feed-name">reddit_ml</span>
+        <span class="sep">·</span>
+        <span class="date">4/15</span>
+        <span class="tag">AI研究</span>
       </div>
     </div>
     <div class="card-score">
@@ -3340,7 +3457,7 @@ footer a:hover { color: var(--accent-light); }
   <div class="tier-header">
     <span class="tier-bar" style="background:#3b82f6"></span>
     <h2>Recommended</h2>
-    <span class="tier-count">142</span>
+    <span class="tier-count">146</span>
     <button type="button" class="mark-section-read">全て既読</button>
     <button type="button" class="skip-section-btn">スキップ</button>
   </div>
@@ -3429,6 +3546,32 @@ footer a:hover { color: var(--accent-light); }
     </div>
   </div>
 </article>
+<article class="card has-detail" data-id="2587" data-category="ai_research" data-tier="recommended" data-date="2026-04-14T19:41:48.000Z" data-detail="・英国AI安全研究所（AISI）がClaude Mythos Previewを独自評価
+・AnthropicのMythosはサイバー攻撃能力で現存する最高水準と評価される
+・「サイバーセキュリティのプルーフ・オブ・ワーク化」という概念：攻撃側はAIで工数削減、防御側は依然として人間の手間がかかる
+・AIによって低スキルの攻撃者でも高度な攻撃が可能になるリスク
+・SREやセキュリティエンジニアは防御コストの増大を想定すべき
+・AISIの独立評価はAnthropicの自己申告を第三者が検証したもので信頼性が高い" data-url="https://simonwillison.net/2026/Apr/14/cybersecurity-proof-of-work/#atom-everything" data-title="サイバーセキュリティはプルーフ・オブ・ワーク化している" data-summary="英国AI安全研究所（AISI）がClaude Mythos Previewのサイバー能力を独自評価し、Anthropicの主張を裏付けた。AISIは同モデルが既存AIの中で最も高度なサイバー攻撃能力を持つと評価。Simon Willisonは「セキュリティがプルーフ・オブ・ワーク化している」と指摘し、AIによってサイバー攻撃のコストが急激に下がりつつある現状を論じている。セキュリティ実務者にとって重要な動向で、防御コストと攻撃コストの非対称性がさらに拡大する可能性がある。">
+  <button type="button" class="skip-btn" aria-label="スキップ">✕</button>
+  <div class="card-row">
+    <button type="button" class="read-btn" aria-label="既読にする"></button>
+    <div class="card-body">
+      <h3 class="card-title"><a href="https://simonwillison.net/2026/Apr/14/cybersecurity-proof-of-work/#atom-everything" target="_blank" rel="noopener noreferrer">サイバーセキュリティはプルーフ・オブ・ワーク化している</a></h3>
+      <ul class="card-summary-list"><li>英国AI安全研究所（AISI）がClaude Mythos Previewのサイバー能力を独自評価し、Anthropicの主張を裏付けた。</li><li>AISIは同モデルが既存AIの中で最も高度なサイバー攻撃能力を持つと評価。</li><li>Simon Willisonは「セキュリティがプルーフ・オブ・ワーク化している」と指摘し、AIによってサイバー攻撃のコストが急激に下がりつつある現状を論じている。</li><li>セキュリティ実務者にとって重要な動向で、防御コストと攻撃コストの非対称性がさらに拡大する可能性がある。。</li></ul>
+      <div class="card-meta">
+        <span class="feed-name">simon_willison</span>
+        <span class="sep">·</span>
+        <span class="date">4/15</span>
+        <span class="tag">AI研究</span>
+      </div>
+    </div>
+    <div class="card-score">
+      <div class="score-ring" style="--pct:84;--color:#3b82f6">
+        <span>84</span>
+      </div>
+    </div>
+  </div>
+</article>
 <article class="card has-detail" data-id="1675" data-category="community" data-tier="recommended" data-date="2026-04-09T10:24:14.000Z" data-detail="・2026年4月7日、Amazon S3 FilesがGA（一般提供）開始
 ・S3バケットをNFS v4.1/v4.2ファイルシステムとしてマウント可能になった
 ・対応コンピューティング環境：EC2、EKS、ECS、Lambda
@@ -3475,6 +3618,36 @@ footer a:hover { color: var(--accent-light); }
     </div>
     <div class="card-score">
       <div class="score-ring" style="--pct:84;--color:#3b82f6">
+        <span>84</span>
+      </div>
+    </div>
+  </div>
+</article>
+<article class="card has-detail" data-id="2505" data-category="x" data-tier="must-read" data-date="" data-detail="・有効化コマンド: `CLAUDE_CODE_NO_FLICKER=1 claude`
+・技術基盤：Reactの仮想DOMと同原理でターミナル画面を仮想化し差分レンダリング
+・フリッカー（画面ちらつき）が完全消滅
+・入力欄が画面下部に固定（チャットアプリUIに近い体験）
+・マウスクリック・ドラッグ選択・ホイールスクロールに対応
+・メモリ使用量が会話長に依存しなくなり定量化
+・長い会話でのCPUファン騒音問題が解消
+・制約：Cmd+Fが無効（代替: Ctrl+O→/で検索）
+・まだ実験的機能のためエッジケースの可能性あり
+・Claude Codeヘビーユーザー（長時間セッション）に特に効果的" data-url="https://x.com/0x__tom/status/2043890738690216437?s=12&amp;t=f3WPjTmNClEEGPQatkVlhg" data-title="Claude Code新レンダラー（CLAUDE_CODE_NO_FLICKER）の詳細レポート" data-summary="Claude Codeに実験的な新ターミナルレンダラーが追加され、`CLAUDE_CODE_NO_FLICKER=1 claude`で有効化できる。Reactの仮想DOMと同じ差分レンダリング方式でターミナル画面を仮想化し、フリッカー消滅・入力欄の画面下部固定・マウス操作対応・メモリ使用量の定量化（会話長に非依存）を実現した。長時間セッションでのファン騒音やメモリ膨張が解消され、毎日10時間以上使う重度ユーザーに特に恩恵が大きい。制約としてCmd+Fが使えなくなる（Ctrl+O→/で代替）。">
+  <button type="button" class="skip-btn" aria-label="スキップ">✕</button>
+  <div class="card-row">
+    <button type="button" class="read-btn" aria-label="既読にする"></button>
+    <div class="card-body">
+      <h3 class="card-title"><a href="https://x.com/0x__tom/status/2043890738690216437?s=12&amp;t=f3WPjTmNClEEGPQatkVlhg" target="_blank" rel="noopener noreferrer">Claude Code新レンダラー（CLAUDE_CODE_NO_FLICKER）の詳細レポート</a></h3>
+      <ul class="card-summary-list"><li>Claude Codeに実験的な新ターミナルレンダラーが追加され、`CLAUDE_CODE_NO_FLICKER=1 claude`で有効化できる。</li><li>Reactの仮想DOMと同じ差分レンダリング方式でターミナル画面を仮想化し、フリッカー消滅・入力欄の画面下部固定・マウス操作対応・メモリ使用量の定量化（会話長に非依存）を実現した。</li><li>長時間セッションでのファン騒音やメモリ膨張が解消され、毎日10時間以上使う重度ユーザーに特に恩恵が大きい。</li><li>制約としてCmd+Fが使えなくなる（Ctrl+O→/で代替）。。</li></ul>
+      <div class="card-meta">
+        <span class="feed-name">x</span>
+        <span class="sep">·</span>
+        <span class="date"></span>
+        <span class="tag">x</span>
+      </div>
+    </div>
+    <div class="card-score">
+      <div class="score-ring" style="--pct:84;--color:#10b981">
         <span>84</span>
       </div>
     </div>
@@ -5411,6 +5584,34 @@ footer a:hover { color: var(--accent-light); }
     </div>
   </div>
 </article>
+<article class="card has-detail" data-id="2451" data-category="ai_research" data-tier="recommended" data-date="2026-04-13T20:59:00.000Z" data-detail="・Steve Yegge（元 Google/Amazon エンジニア、著名ブロガー）の投稿
+・Google の技術ディレクター（在籍約20年）との会話から得た情報
+・Google エンジニアリングの AI 活用度が農機具会社・ジョン・ディア並みという辛辣な評価
+・大企業の AI 導入は組織的惰性・レガシー・承認プロセスで遅れがちという示唆
+・個人開発者やスタートアップが組織の重さなく AI を最大活用できる時代
+・Simon Willison のブログ経由で紹介された注目度の高い投稿
+・AI コーディングを既に実践しているエンジニアには「やっていて正解」という確信を与える内容
+・大企業 vs 個人の AI 活用格差が広がっていることを示す事例" data-url="https://simonwillison.net/2026/Apr/13/steve-yegge/#atom-everything" data-title="Steve Yegge: Googleのエンジニアリング組織はAI活用でジョン・ディア（農機具メーカー）レベル" data-summary="元 Google エンジニアの Steve Yegge が、Googleの技術ディレクターとの会話から、Google エンジニアリング組織の AI 活用度がジョン・ディア（農機具メーカー）程度と酷評される実態を共有した。大企業における AI 導入の遅さと、個人開発者・スタートアップが組織の重さなく AI を活用できる時代の優位性を示唆する内容。AI コーディングを実践しているエンジニアにとって示唆に富む観察。">
+  <button type="button" class="skip-btn" aria-label="スキップ">✕</button>
+  <div class="card-row">
+    <button type="button" class="read-btn" aria-label="既読にする"></button>
+    <div class="card-body">
+      <h3 class="card-title"><a href="https://simonwillison.net/2026/Apr/13/steve-yegge/#atom-everything" target="_blank" rel="noopener noreferrer">Steve Yegge: Googleのエンジニアリング組織はAI活用でジョン・ディア（農機具メーカー）レベル</a></h3>
+      <ul class="card-summary-list"><li>元 Google エンジニアの Steve Yegge が、Googleの技術ディレクターとの会話から、Google エンジニアリング組織の AI 活用度がジョン・ディア（農機具メーカー）程度と酷評される実態を共有した。</li><li>大企業における AI 導入の遅さと、個人開発者・スタートアップが組織の重さなく AI を活用できる時代の優位性を示唆する内容。</li><li>AI コーディングを実践しているエンジニアにとって示唆に富む観察。。</li></ul>
+      <div class="card-meta">
+        <span class="feed-name">simon_willison</span>
+        <span class="sep">·</span>
+        <span class="date">4/14</span>
+        <span class="tag">AI研究</span>
+      </div>
+    </div>
+    <div class="card-score">
+      <div class="score-ring" style="--pct:77;--color:#3b82f6">
+        <span>77</span>
+      </div>
+    </div>
+  </div>
+</article>
 <article class="card" data-id="1313" data-category="community" data-tier="recommended" data-date="2026-04-07T19:44:01.000Z">
   <button type="button" class="skip-btn" aria-label="スキップ">✕</button>
   <div class="card-row">
@@ -6677,6 +6878,33 @@ footer a:hover { color: var(--accent-light); }
     </div>
   </div>
 </article>
+<article class="card has-detail" data-id="2506" data-category="x" data-tier="must-read" data-date="" data-detail="・AWS WAFログ出力先3択：CloudWatch Logs・S3・Kinesis Data Firehose
+・CloudWatch Logsに無料枠が追加され、以前よりも実質単価が下がった
+・1レコードあたりのデータ量が大きい場合はFirehoseにコストメリットあり
+・標準的なWAFログ量では新しいCloudWatch料金体系がFirehoseより安価になりうる
+・Log Insightsでクエリできる利便性はCloudWatchの強み
+・WAFのWebACLに対してロギングを有効化する際の設定選択に直結
+・コスト最適化の再評価タイミングとして有益" data-url="https://x.com/futahashi/status/2043838260066328884?s=12&amp;t=f3WPjTmNClEEGPQatkVlhg" data-title="AWS WAFログ出力先のコスト比較：CloudWatch vs S3 vs Firehose" data-summary="AWS WAFのログ出力先3択（CloudWatch Logs・Amazon S3・Kinesis Data Firehose）をコスト観点で比較した検証記事。CloudWatch Logsへの無料枠追加により、以前はFirehose一択とされていた構成の優位性が変化した。レコードサイズが大きい場合はFirehoseにコストメリットが残るが、標準的なWAFログであればCloudWatch＋S3の組み合わせが安価になるケースがある。SREとして実際のWAF運用コスト最適化に直結する情報。">
+  <button type="button" class="skip-btn" aria-label="スキップ">✕</button>
+  <div class="card-row">
+    <button type="button" class="read-btn" aria-label="既読にする"></button>
+    <div class="card-body">
+      <h3 class="card-title"><a href="https://x.com/futahashi/status/2043838260066328884?s=12&amp;t=f3WPjTmNClEEGPQatkVlhg" target="_blank" rel="noopener noreferrer">AWS WAFログ出力先のコスト比較：CloudWatch vs S3 vs Firehose</a></h3>
+      <ul class="card-summary-list"><li>AWS WAFのログ出力先3択（CloudWatch Logs・Amazon S3・Kinesis Data Firehose）をコスト観点で比較した検証記事。</li><li>CloudWatch Logsへの無料枠追加により、以前はFirehose一択とされていた構成の優位性が変化した。</li><li>レコードサイズが大きい場合はFirehoseにコストメリットが残るが、標準的なWAFログであればCloudWatch＋S3の組み合わせが安価になるケースがある。</li><li>SREとして実際のWAF運用コスト最適化に直結する情報。。</li></ul>
+      <div class="card-meta">
+        <span class="feed-name">x</span>
+        <span class="sep">·</span>
+        <span class="date"></span>
+        <span class="tag">x</span>
+      </div>
+    </div>
+    <div class="card-score">
+      <div class="score-ring" style="--pct:71;--color:#10b981">
+        <span>71</span>
+      </div>
+    </div>
+  </div>
+</article>
 <article class="card has-detail" data-id="1961" data-category="community" data-tier="recommended" data-date="2026-04-10T14:16:09.000Z" data-detail="・Kaggleによるエージェント学習コンテンツ
 ・エージェントの基本定義と設計原則を解説
 ・ツール呼び出し・プランニング・メモリの概念を網羅
@@ -6915,7 +7143,7 @@ footer a:hover { color: var(--accent-light); }
   <div class="tier-header">
     <span class="tier-bar" style="background:#f59e0b"></span>
     <h2>Worth a Look</h2>
-    <span class="tier-count">168</span>
+    <span class="tier-count">174</span>
     <button type="button" class="mark-section-read">全て既読</button>
     <button type="button" class="skip-section-btn">スキップ</button>
   </div>
@@ -8972,6 +9200,31 @@ footer a:hover { color: var(--accent-light); }
     </div>
   </div>
 </article>
+<article class="card has-detail" data-id="2472" data-category="cloud" data-tier="worth-a-look" data-date="2026-04-14T10:00:10.000Z" data-detail="・Reddit r/kubernetes の毎週恒例 Q&amp;A スレッド
+・特定のテーマなく質問・回答が集まる形式
+・初心者の入門質問から運用上の詳細まで混在
+・本文が取得できないため具体的な内容は不明
+・週次定型投稿のため個別記事としての読了優先度は低い" data-url="https://www.reddit.com/r/kubernetes/comments/1sl47ep/weekly_questions_and_advice/" data-title="Kubernetes 週次 Q&amp;A スレッド" data-summary="Kubernetes コミュニティの週次質問・アドバイス共有スレッド。特定のトピックなく初心者から上級者まで質問が集まる定型フォーマット。本文は取得不可のため具体的な内容は不明。週次定期投稿であり個別記事としての情報密度は低い。">
+  <button type="button" class="skip-btn" aria-label="スキップ">✕</button>
+  <div class="card-row">
+    <button type="button" class="read-btn" aria-label="既読にする"></button>
+    <div class="card-body">
+      <h3 class="card-title"><a href="https://www.reddit.com/r/kubernetes/comments/1sl47ep/weekly_questions_and_advice/" target="_blank" rel="noopener noreferrer">Kubernetes 週次 Q&amp;A スレッド</a></h3>
+      <ul class="card-summary-list"><li>Kubernetes コミュニティの週次質問・アドバイス共有スレッド。</li><li>特定のトピックなく初心者から上級者まで質問が集まる定型フォーマット。</li><li>本文は取得不可のため具体的な内容は不明。</li><li>週次定期投稿であり個別記事としての情報密度は低い。。</li></ul>
+      <div class="card-meta">
+        <span class="feed-name">reddit_kubernetes</span>
+        <span class="sep">·</span>
+        <span class="date">4/14</span>
+        <span class="tag">クラウド</span>
+      </div>
+    </div>
+    <div class="card-score">
+      <div class="score-ring" style="--pct:61;--color:#f59e0b">
+        <span>61</span>
+      </div>
+    </div>
+  </div>
+</article>
 <article class="card" data-id="1392" data-category="community" data-tier="worth-a-look" data-date="2026-04-09T08:45:25.000Z">
   <button type="button" class="skip-btn" aria-label="スキップ">✕</button>
   <div class="card-row">
@@ -9213,6 +9466,35 @@ footer a:hover { color: var(--accent-light); }
     </div>
     <div class="card-score">
       <div class="score-ring" style="--pct:60;--color:#f59e0b">
+        <span>60</span>
+      </div>
+    </div>
+  </div>
+</article>
+<article class="card has-detail" data-id="2504" data-category="x" data-tier="must-read" data-date="" data-detail="・リポジトリ: github.com/Cocoon-AI/architecture-diagram-generator
+・Claude AIスキルとして動作し、コードベースを自動解析してアーキテクチャ図を生成
+・出力形式はHTMLファイル（内部はSVG）
+・ダークテーマの美しい配色が特徴
+・Slidevへの埋め込みやSpeakerDeckで使いやすい
+・SVGベースのため細かい修正には限界がある
+・競合ツール：AtomStorm Studio（実時間編集対応）、structura.tools
+・「自分のリポジトリで試すだけで動く」手軽さが評価されている
+・MkSaaS・TanStarterなどSaaSボイラープレートとの組み合わせ紹介もあり" data-url="https://x.com/servasyy_ai/status/2044040129359298668?s=12&amp;t=f3WPjTmNClEEGPQatkVlhg" data-title="Claude AIスキルで高品質なアーキテクチャ図を自動生成（Cocoon-AI）" data-summary="Cocoon-AIのarchitecture-diagram-generatorはClaude AIスキルとして動作し、コードベースを解析して美しいダークテーマのシステムアーキテクチャ図をHTMLとして生成する。既存ツールのSVG/PNG生成と異なりHTML出力のため後から編集しやすく、Slidevへの埋め込みも容易。ただしSVGベースであるため複雑な修正は難しい。AIエージェント開発者が自分のシステムを可視化・説明する際のツールとして参考になる。">
+  <button type="button" class="skip-btn" aria-label="スキップ">✕</button>
+  <div class="card-row">
+    <button type="button" class="read-btn" aria-label="既読にする"></button>
+    <div class="card-body">
+      <h3 class="card-title"><a href="https://x.com/servasyy_ai/status/2044040129359298668?s=12&amp;t=f3WPjTmNClEEGPQatkVlhg" target="_blank" rel="noopener noreferrer">Claude AIスキルで高品質なアーキテクチャ図を自動生成（Cocoon-AI）</a></h3>
+      <ul class="card-summary-list"><li>Cocoon-AIのarchitecture-diagram-generatorはClaude AIスキルとして動作し、コードベースを解析して美しいダークテーマのシステムアーキテクチャ図をHTMLとして生成する。</li><li>既存ツールのSVG/PNG生成と異なりHTML出力のため後から編集しやすく、Slidevへの埋め込みも容易。</li><li>ただしSVGベースであるため複雑な修正は難しい。</li><li>AIエージェント開発者が自分のシステムを可視化・説明する際のツールとして参考になる。。</li></ul>
+      <div class="card-meta">
+        <span class="feed-name">x</span>
+        <span class="sep">·</span>
+        <span class="date"></span>
+        <span class="tag">x</span>
+      </div>
+    </div>
+    <div class="card-score">
+      <div class="score-ring" style="--pct:60;--color:#10b981">
         <span>60</span>
       </div>
     </div>
@@ -9725,6 +10007,34 @@ footer a:hover { color: var(--accent-light); }
     </div>
     <div class="card-score">
       <div class="score-ring" style="--pct:57;--color:#f59e0b">
+        <span>57</span>
+      </div>
+    </div>
+  </div>
+</article>
+<article class="card has-detail" data-id="2502" data-category="x" data-tier="must-read" data-date="" data-detail="・id:2504と同一ツール（architecture-diagram-generator）の原投稿
+・Claude Coworkでも同様のHTML生成が可能という指摘
+・SVGベースのため「一箇所修正すると大動干戈」という安定性の問題
+・AtomStorm Studio（studio.atomstorm.ai）は実時間編集に対応する競合
+・structura.toolsも代替として紹介
+・MentisDBがMCP経由のメモリシステムプラグインの可能性を提案
+・Slidevへの埋め込みでプレゼン資料の品質向上に活用できる
+・「骗骗投资人（投資家を丸め込む）」といった実用的コメントも" data-url="https://x.com/indie_maker_fox/status/2043857352282255829?s=12&amp;t=f3WPjTmNClEEGPQatkVlhg" data-title="ClaudeスキルによるHTMLアーキテクチャ図生成の議論スレッド" data-summary="architecture-diagram-generatorのオリジナル紹介ツイートとその議論。Claudeスキルとして動作し、コードベースを読んでHTML/SVGアーキテクチャ図を自動生成する。id:2504と同一ツールだが、生成結果の安定性（一部修正すると全体が崩れる）・HTML vs SVGの議論・実時間編集ができるAtomStorm Studioとの比較など、より深い技術的議論が含まれている。MCP経由でメモリシステムをプラグインできる可能性についてのコメントもあり。">
+  <button type="button" class="skip-btn" aria-label="スキップ">✕</button>
+  <div class="card-row">
+    <button type="button" class="read-btn" aria-label="既読にする"></button>
+    <div class="card-body">
+      <h3 class="card-title"><a href="https://x.com/indie_maker_fox/status/2043857352282255829?s=12&amp;t=f3WPjTmNClEEGPQatkVlhg" target="_blank" rel="noopener noreferrer">ClaudeスキルによるHTMLアーキテクチャ図生成の議論スレッド</a></h3>
+      <ul class="card-summary-list"><li>architecture-diagram-generatorのオリジナル紹介ツイートとその議論。</li><li>Claudeスキルとして動作し、コードベースを読んでHTML/SVGアーキテクチャ図を自動生成する。</li><li>id:2504と同一ツールだが、生成結果の安定性（一部修正すると全体が崩れる）・HTML vs SVGの議論・実時間編集ができるAtomStorm Studioとの比較など、より深い技術的議論が含まれている。</li><li>MCP経由でメモリシステムをプラグインできる可能性についてのコメントもあり。。</li></ul>
+      <div class="card-meta">
+        <span class="feed-name">x</span>
+        <span class="sep">·</span>
+        <span class="date"></span>
+        <span class="tag">x</span>
+      </div>
+    </div>
+    <div class="card-score">
+      <div class="score-ring" style="--pct:57;--color:#10b981">
         <span>57</span>
       </div>
     </div>
@@ -10730,6 +11040,57 @@ footer a:hover { color: var(--accent-light); }
     </div>
   </div>
 </article>
+<article class="card has-detail" data-id="2468" data-category="ai_research" data-tier="worth-a-look" data-date="2026-04-14T17:48:38.000Z" data-detail="・HDNA Workbench は「open-box」設計のAI研究プラットフォーム
+・PyTorch モデルの任意ニューロンを1行のインスペクションラッパーで可視化
+・解釈可能性（Interpretability）研究向けのオープンソースツール
+・モデル内部の活性化・勾配を追跡しやすい設計
+・研究者・実験用途が主ターゲットでプロダクション利用は想定外
+・LLM の内部動作を理解したい開発者には参考になる可能性" data-url="https://www.reddit.com/r/MachineLearning/comments/1slfzu1/hdna_workbench_openbox_ai_research_platform_where/" data-title="HDNA Workbench: 全ニューロンを1行で検査できるオープンAI研究プラットフォーム" data-summary="PyTorch の1行ラッパーで任意のニューロンを検査できる解釈可能性重視の AI 研究プラットフォーム HDNA Workbench が公開された。ニューラルネットワークの内部状態を可視化・デバッグする用途向けで、研究者が実験を効率化できる設計。実践的な LLM アプリ開発への直接的な適用は限定的だが、モデル挙動の理解に関心があれば参照価値あり。">
+  <button type="button" class="skip-btn" aria-label="スキップ">✕</button>
+  <div class="card-row">
+    <button type="button" class="read-btn" aria-label="既読にする"></button>
+    <div class="card-body">
+      <h3 class="card-title"><a href="https://www.reddit.com/r/MachineLearning/comments/1slfzu1/hdna_workbench_openbox_ai_research_platform_where/" target="_blank" rel="noopener noreferrer">HDNA Workbench: 全ニューロンを1行で検査できるオープンAI研究プラットフォーム</a></h3>
+      <ul class="card-summary-list"><li>PyTorch の1行ラッパーで任意のニューロンを検査できる解釈可能性重視の AI 研究プラットフォーム HDNA Workbench が公開された。</li><li>ニューラルネットワークの内部状態を可視化・デバッグする用途向けで、研究者が実験を効率化できる設計。</li><li>実践的な LLM アプリ開発への直接的な適用は限定的だが、モデル挙動の理解に関心があれば参照価値あり。。</li></ul>
+      <div class="card-meta">
+        <span class="feed-name">reddit_ml</span>
+        <span class="sep">·</span>
+        <span class="date">4/15</span>
+        <span class="tag">AI研究</span>
+      </div>
+    </div>
+    <div class="card-score">
+      <div class="score-ring" style="--pct:53;--color:#f59e0b">
+        <span>53</span>
+      </div>
+    </div>
+  </div>
+</article>
+<article class="card has-detail" data-id="2503" data-category="x" data-tier="must-read" data-date="" data-detail="・DaemonSet：全ノードに1 Pod/ノードを保証するKubernetesリソース
+・主要ユースケース：Prometheus Node Exporter・Fluentd・CNIプラグイン・セキュリティエージェント
+・ノード追加→自動Pod作成、ノード削除→自動Pod削除
+・デフォルトで1ノード1Pod
+・入門レベルの解説でSRE実務者への新情報は少ない" data-url="https://x.com/cloclodma/status/2043898302647722400?s=12&amp;t=f3WPjTmNClEEGPQatkVlhg" data-title="Kubernetes DaemonSetの仕組みと用途解説" data-summary="KubernetesのDaemonSetについて基礎的な解説をまとめたX（Twitter）投稿。DaemonSetはクラスタの全ノードに1つずつPodを配置するリソースで、監視エージェント（Prometheus Node Exporter）・ログ収集（Fluentd）・CNIプラグイン・セキュリティエージェントなどの用途に使われる。ノード追加時に自動でPodが作成され、削除時には自動削除される。Kubernetes初学者向けの内容で、SREとしての新規情報は少ない。">
+  <button type="button" class="skip-btn" aria-label="スキップ">✕</button>
+  <div class="card-row">
+    <button type="button" class="read-btn" aria-label="既読にする"></button>
+    <div class="card-body">
+      <h3 class="card-title"><a href="https://x.com/cloclodma/status/2043898302647722400?s=12&amp;t=f3WPjTmNClEEGPQatkVlhg" target="_blank" rel="noopener noreferrer">Kubernetes DaemonSetの仕組みと用途解説</a></h3>
+      <ul class="card-summary-list"><li>KubernetesのDaemonSetについて基礎的な解説をまとめたX（Twitter）投稿。</li><li>DaemonSetはクラスタの全ノードに1つずつPodを配置するリソースで、監視エージェント（Prometheus Node Exporter）・ログ収集（Fluentd）・CNIプラグイン・セキュリティエージェントなどの用途に使われる。</li><li>ノード追加時に自動でPodが作成され、削除時には自動削除される。</li><li>Kubernetes初学者向けの内容で、SREとしての新規情報は少ない。。</li></ul>
+      <div class="card-meta">
+        <span class="feed-name">x</span>
+        <span class="sep">·</span>
+        <span class="date"></span>
+        <span class="tag">x</span>
+      </div>
+    </div>
+    <div class="card-score">
+      <div class="score-ring" style="--pct:52;--color:#10b981">
+        <span>52</span>
+      </div>
+    </div>
+  </div>
+</article>
 <article class="card" data-id="1449" data-category="community" data-tier="worth-a-look" data-date="2026-04-08T13:06:33.000Z">
   <button type="button" class="skip-btn" aria-label="スキップ">✕</button>
   <div class="card-row">
@@ -10866,6 +11227,32 @@ footer a:hover { color: var(--accent-light); }
     <div class="card-score">
       <div class="score-ring" style="--pct:52;--color:#f59e0b">
         <span>52</span>
+      </div>
+    </div>
+  </div>
+</article>
+<article class="card has-detail" data-id="2464" data-category="ai_research" data-tier="worth-a-look" data-date="2026-04-14T05:45:50.000Z" data-detail="・HALO-Loss はニューラルネットワークが低確信度時に回答を棄権する仕組みを学習させる損失関数
+・過信（overconfidence）による誤答を抑制することが主目的
+・分類・予測タスクでの信頼性向上に寄与
+・LLM の hallucination 対策と概念的に関連
+・実際の LLM ファインチューニングへの適用可能性は研究段階
+・安全性・信頼性重視の AI システム設計に関心のある開発者向け" data-url="https://www.reddit.com/r/MachineLearning/comments/1skzuhd/i_dont_know_teaching_neural_networks_to_abstain/" data-title="HALO-Loss: 「わかりません」と言えるニューラルネットワークの学習手法" data-summary="不確実な入力に対してモデルが回答を棄権（abstain）できるよう学習させる HALO-Loss が提案された。過信による誤答を減らし、信頼性の高い AI システム構築に寄与する研究。LLM の hallucination 問題にも間接的に関連するが、実装への直接的な応用は研究段階。">
+  <button type="button" class="skip-btn" aria-label="スキップ">✕</button>
+  <div class="card-row">
+    <button type="button" class="read-btn" aria-label="既読にする"></button>
+    <div class="card-body">
+      <h3 class="card-title"><a href="https://www.reddit.com/r/MachineLearning/comments/1skzuhd/i_dont_know_teaching_neural_networks_to_abstain/" target="_blank" rel="noopener noreferrer">HALO-Loss: 「わかりません」と言えるニューラルネットワークの学習手法</a></h3>
+      <ul class="card-summary-list"><li>不確実な入力に対してモデルが回答を棄権（abstain）できるよう学習させる HALO-Loss が提案された。</li><li>過信による誤答を減らし、信頼性の高い AI システム構築に寄与する研究。</li><li>LLM の hallucination 問題にも間接的に関連するが、実装への直接的な応用は研究段階。。</li></ul>
+      <div class="card-meta">
+        <span class="feed-name">reddit_ml</span>
+        <span class="sep">·</span>
+        <span class="date">4/14</span>
+        <span class="tag">AI研究</span>
+      </div>
+    </div>
+    <div class="card-score">
+      <div class="score-ring" style="--pct:51;--color:#f59e0b">
+        <span>51</span>
       </div>
     </div>
   </div>
@@ -11034,7 +11421,7 @@ footer a:hover { color: var(--accent-light); }
   <div class="tier-header">
     <span class="tier-bar" style="background:#6b7280"></span>
     <h2>Low Priority</h2>
-    <span class="tier-count">235</span>
+    <span class="tier-count">241</span>
     <button type="button" class="mark-section-read">全て既読</button>
     <button type="button" class="skip-section-btn">スキップ</button>
   </div>
@@ -11352,6 +11739,29 @@ footer a:hover { color: var(--accent-light); }
         <span class="feed-name">reddit_ml</span>
         <span class="sep">·</span>
         <span class="date">4/12</span>
+        <span class="tag">AI研究</span>
+      </div>
+    </div>
+    <div class="card-score">
+      <div class="score-ring" style="--pct:48;--color:#6b7280">
+        <span>48</span>
+      </div>
+    </div>
+  </div>
+</article>
+<article class="card has-detail" data-id="2603" data-category="ai_research" data-tier="low-priority" data-date="2026-04-14T19:33:47.000Z" data-detail="・本文コンテンツが取得できなかったため詳細分析不可
+・タイトルからエネルギーベースモデルの連続推論への応用を議論するスレッドと推測
+・EBMはScore-based generative modelsや拡散モデルの基盤となる手法" data-url="https://www.reddit.com/r/MachineLearning/comments/1slj0d0/anyone_else_looking_back_at_energybased_models/" data-title="連続推論のためのエネルギーベースモデル再考" data-summary="Redditの機械学習コミュニティでエネルギーベースモデル（EBM）を連続推論に活用する動向について議論されているスレッド。本文は取得できず内容の詳細は不明。EBMは拡散モデルや最近のLLM推論研究との関連から再注目されている分野。実務的な示唆は限定的。">
+  <button type="button" class="skip-btn" aria-label="スキップ">✕</button>
+  <div class="card-row">
+    <button type="button" class="read-btn" aria-label="既読にする"></button>
+    <div class="card-body">
+      <h3 class="card-title"><a href="https://www.reddit.com/r/MachineLearning/comments/1slj0d0/anyone_else_looking_back_at_energybased_models/" target="_blank" rel="noopener noreferrer">連続推論のためのエネルギーベースモデル再考</a></h3>
+      <ul class="card-summary-list"><li>Redditの機械学習コミュニティでエネルギーベースモデル（EBM）を連続推論に活用する動向について議論されているスレッド。</li><li>本文は取得できず内容の詳細は不明。</li><li>EBMは拡散モデルや最近のLLM推論研究との関連から再注目されている分野。</li><li>実務的な示唆は限定的。。</li></ul>
+      <div class="card-meta">
+        <span class="feed-name">reddit_ml</span>
+        <span class="sep">·</span>
+        <span class="date">4/15</span>
         <span class="tag">AI研究</span>
       </div>
     </div>
@@ -12699,6 +13109,32 @@ footer a:hover { color: var(--accent-light); }
     </div>
   </div>
 </article>
+<article class="card has-detail" data-id="2470" data-category="ai_research" data-tier="low-priority" data-date="2026-04-14T14:14:43.000Z" data-detail="・インド法律文書 2000 万件以上を収録した大規模データセット
+・引用グラフ（判例間のリファレンス構造）付き
+・ベクトル埋め込み済みで RAG・セマンティック検索に即利用可能
+・法律 NLP、グラフニューラルネットワーク研究の基盤データとして公開
+・ユースケース例: 判例検索、法律文書分類、推論チェーン解析
+・SRE・AIエージェント開発との直接的な関連は薄い" data-url="https://www.reddit.com/r/MachineLearning/comments/1sl9yh9/20m_indian_legal_documents_with_citation_graphs/" data-title="インド法律文書2000万件＋引用グラフ・ベクトル埋め込みデータセット（法律NLP用途）" data-summary="インドの法律文書を2000万件以上収録し、引用グラフとベクトル埋め込みを付与したデータセットが公開された。法律 NLP・RAG・グラフ推論研究向けの大規模コーパスであり、法律テキストの特性（長文・専門用語・引用構造）を活用した研究に適している。ユーザーの主関心領域とは距離がある。">
+  <button type="button" class="skip-btn" aria-label="スキップ">✕</button>
+  <div class="card-row">
+    <button type="button" class="read-btn" aria-label="既読にする"></button>
+    <div class="card-body">
+      <h3 class="card-title"><a href="https://www.reddit.com/r/MachineLearning/comments/1sl9yh9/20m_indian_legal_documents_with_citation_graphs/" target="_blank" rel="noopener noreferrer">インド法律文書2000万件＋引用グラフ・ベクトル埋め込みデータセット（法律NLP用途）</a></h3>
+      <ul class="card-summary-list"><li>インドの法律文書を2000万件以上収録し、引用グラフとベクトル埋め込みを付与したデータセットが公開された。</li><li>法律 NLP・RAG・グラフ推論研究向けの大規模コーパスであり、法律テキストの特性（長文・専門用語・引用構造）を活用した研究に適している。</li><li>ユーザーの主関心領域とは距離がある。。</li></ul>
+      <div class="card-meta">
+        <span class="feed-name">reddit_ml</span>
+        <span class="sep">·</span>
+        <span class="date">4/14</span>
+        <span class="tag">AI研究</span>
+      </div>
+    </div>
+    <div class="card-score">
+      <div class="score-ring" style="--pct:40;--color:#6b7280">
+        <span>40</span>
+      </div>
+    </div>
+  </div>
+</article>
 <article class="card has-detail" data-id="2283" data-category="community" data-tier="low-priority" data-date="2026-04-13T12:12:22.000Z" data-detail="・Servoがv0.1.0としてcrates.ioに初めて公開された
 ・Linux Foundation Europe傘下プロジェクト
 ・アプリへのWeb技術埋め込みを軽量・高性能に行うことを目指す
@@ -12808,6 +13244,31 @@ footer a:hover { color: var(--accent-light); }
     </div>
   </div>
 </article>
+<article class="card has-detail" data-id="2557" data-category="community" data-tier="low-priority" data-date="2026-04-14T17:47:00.000Z" data-detail="・Flock Safetyはナンバープレート認識（ALPR）カメラで市民の移動を追跡
+・CCPAによるデータ削除要求を試みた個人の体験記
+・オプトアウトの実効性に疑問
+・プライバシー規制とAIスパイウェアの課題を提示
+・技術的な実装内容は含まれない" data-url="https://honeypot.net/2026/04/14/i-wrote-to-flocks-privacy.html" data-title="Flockの国内監視プログラムからCCPAでオプトアウトを試みた記録" data-summary="カリフォルニア州在住の著者がナンバープレート認識会社Flockに対しCCPAに基づくデータ削除要求を送付した顛末を記録したブログ記事。Flockは自動車・住民の移動データを収集し法執行機関に提供しているが、一般市民向けのオプトアウト手段は機能していない実態が明らかになっている。プライバシーと監視技術に関する示唆はあるがSRE・AI開発との直接的な関連は薄い。">
+  <button type="button" class="skip-btn" aria-label="スキップ">✕</button>
+  <div class="card-row">
+    <button type="button" class="read-btn" aria-label="既読にする"></button>
+    <div class="card-body">
+      <h3 class="card-title"><a href="https://honeypot.net/2026/04/14/i-wrote-to-flocks-privacy.html" target="_blank" rel="noopener noreferrer">Flockの国内監視プログラムからCCPAでオプトアウトを試みた記録</a></h3>
+      <ul class="card-summary-list"><li>カリフォルニア州在住の著者がナンバープレート認識会社Flockに対しCCPAに基づくデータ削除要求を送付した顛末を記録したブログ記事。</li><li>Flockは自動車・住民の移動データを収集し法執行機関に提供しているが、一般市民向けのオプトアウト手段は機能していない実態が明らかになっている。</li><li>プライバシーと監視技術に関する示唆はあるがSRE・AI開発との直接的な関連は薄い。。</li></ul>
+      <div class="card-meta">
+        <span class="feed-name">hacker_news</span>
+        <span class="sep">·</span>
+        <span class="date">4/15</span>
+        <span class="tag">コミュニティ</span>
+      </div>
+    </div>
+    <div class="card-score">
+      <div class="score-ring" style="--pct:40;--color:#6b7280">
+        <span>40</span>
+      </div>
+    </div>
+  </div>
+</article>
 <article class="card" data-id="1486" data-category="ai_research" data-tier="low-priority" data-date="2026-04-09T10:27:27.000Z">
   <button type="button" class="skip-btn" aria-label="スキップ">✕</button>
   <div class="card-row">
@@ -12819,6 +13280,33 @@ footer a:hover { color: var(--accent-light); }
         <span class="feed-name">reddit_ml</span>
         <span class="sep">·</span>
         <span class="date">4/9</span>
+        <span class="tag">AI研究</span>
+      </div>
+    </div>
+    <div class="card-score">
+      <div class="score-ring" style="--pct:40;--color:#6b7280">
+        <span>40</span>
+      </div>
+    </div>
+  </div>
+</article>
+<article class="card has-detail" data-id="2466" data-category="ai_research" data-tier="low-priority" data-date="2026-04-13T22:42:36.000Z" data-detail="・SNN（スパイキングニューラルネットワーク）を 1.088B パラメータまでスケーリング
+・スクラッチからの実装でアーキテクチャ設計の知見を報告
+・予算制約により完全な学習は未完了
+・SNN は従来の ANN より生物的に妥当で低電力が期待される
+・大規模 SNN のスケーリング則やトレーニング安定性に関する知見を含む
+・LLM・Transformer とは異なるアーキテクチャ路線の研究
+・実用的な AI エージェント開発への直接的な適用は現時点で困難" data-url="https://www.reddit.com/r/MachineLearning/comments/1skql34/i_scaled_a_pure_spiking_neural_network_snn_to/" data-title="10億パラメータ規模のスパイキングニューラルネットワーク(SNN)をスクラッチからスケーリングした実験報告" data-summary="予算不足で実験を途中終了したものの、1.088B パラメータのスパイキングニューラルネットワーク（SNN）をゼロから構築・スケーリングした研究報告。SNN は生物的に妥当な神経モデルで低消費電力が期待されるが、LLM 主流の現在は実用応用が限定的。基礎研究としての興味はあるが、ユーザーの実務・開発領域との関連は薄い。">
+  <button type="button" class="skip-btn" aria-label="スキップ">✕</button>
+  <div class="card-row">
+    <button type="button" class="read-btn" aria-label="既読にする"></button>
+    <div class="card-body">
+      <h3 class="card-title"><a href="https://www.reddit.com/r/MachineLearning/comments/1skql34/i_scaled_a_pure_spiking_neural_network_snn_to/" target="_blank" rel="noopener noreferrer">10億パラメータ規模のスパイキングニューラルネットワーク(SNN)をスクラッチからスケーリングした実験報告</a></h3>
+      <ul class="card-summary-list"><li>予算不足で実験を途中終了したものの、1.088B パラメータのスパイキングニューラルネットワーク（SNN）をゼロから構築・スケーリングした研究報告。</li><li>SNN は生物的に妥当な神経モデルで低消費電力が期待されるが、LLM 主流の現在は実用応用が限定的。</li><li>基礎研究としての興味はあるが、ユーザーの実務・開発領域との関連は薄い。。</li></ul>
+      <div class="card-meta">
+        <span class="feed-name">reddit_ml</span>
+        <span class="sep">·</span>
+        <span class="date">4/14</span>
         <span class="tag">AI研究</span>
       </div>
     </div>
@@ -13771,6 +14259,30 @@ footer a:hover { color: var(--accent-light); }
     </div>
   </div>
 </article>
+<article class="card has-detail" data-id="2463" data-category="ai_research" data-tier="low-priority" data-date="2026-04-14T14:16:10.000Z" data-detail="・ICML（国際機械学習会議）の査読プロセスに関する Q&amp;A
+・エリア・チェア（AC）向けのガイダンス内容が主題
+・学術論文投稿・査読者向けの情報
+・実務エンジニアリング・プロダクト開発との関連なし" data-url="https://www.reddit.com/r/MachineLearning/comments/1sl9zza/what_is_the_ac_guidance_for_icml_or_icml_qq/" data-title="ICML 査読ガイダンス Q&amp;A スレッド" data-summary="国際機械学習会議（ICML）のエリア・チェア（AC）向けガイダンスや査読プロセスに関するコミュニティ質問スレッド。学術投稿・査読者向けの情報であり、実務 SRE・AIエージェント開発との関連は皆無。">
+  <button type="button" class="skip-btn" aria-label="スキップ">✕</button>
+  <div class="card-row">
+    <button type="button" class="read-btn" aria-label="既読にする"></button>
+    <div class="card-body">
+      <h3 class="card-title"><a href="https://www.reddit.com/r/MachineLearning/comments/1sl9zza/what_is_the_ac_guidance_for_icml_or_icml_qq/" target="_blank" rel="noopener noreferrer">ICML 査読ガイダンス Q&amp;A スレッド</a></h3>
+      <ul class="card-summary-list"><li>国際機械学習会議（ICML）のエリア・チェア（AC）向けガイダンスや査読プロセスに関するコミュニティ質問スレッド。</li><li>学術投稿・査読者向けの情報であり、実務 SRE・AIエージェント開発との関連は皆無。。</li></ul>
+      <div class="card-meta">
+        <span class="feed-name">reddit_ml</span>
+        <span class="sep">·</span>
+        <span class="date">4/14</span>
+        <span class="tag">AI研究</span>
+      </div>
+    </div>
+    <div class="card-score">
+      <div class="score-ring" style="--pct:34;--color:#6b7280">
+        <span>34</span>
+      </div>
+    </div>
+  </div>
+</article>
 <article class="card" data-id="1282" data-category="security" data-tier="low-priority" data-date="2026-04-08T00:20:02.000Z">
   <button type="button" class="skip-btn" aria-label="スキップ">✕</button>
   <div class="card-row">
@@ -14153,6 +14665,31 @@ footer a:hover { color: var(--accent-light); }
     <div class="card-score">
       <div class="score-ring" style="--pct:33;--color:#6b7280">
         <span>33</span>
+      </div>
+    </div>
+  </div>
+</article>
+<article class="card has-detail" data-id="2558" data-category="community" data-tier="low-priority" data-date="2026-04-14T16:59:09.000Z" data-detail="・スペインでスポーツ放映権保護のためISPがリアルタイムIPブロックを実施
+・LaLigaのブロック制度が2027年まで認可済み
+・テニス・ゴルフ・映画等にも対象拡大
+・Telefónicaが実施主体
+・エンジニアリング的な新情報なし" data-url="https://bandaancha.eu/articulos/telefonica-consigue-bloqueos-ips-11731" data-title="スペイン、スポーツ放送中のインターネット遮断範囲を拡大" data-summary="スペインのTelefónicaがサッカーに加えてテニス・ゴルフ・映画などのライブ配信時間帯にインターネット遮断を拡大する。海賊版対策として導入されたラ・リーガのブロック制度が他スポーツにも波及している。技術的・インフラ的な内容ではなく、政策・規制の話題。">
+  <button type="button" class="skip-btn" aria-label="スキップ">✕</button>
+  <div class="card-row">
+    <button type="button" class="read-btn" aria-label="既読にする"></button>
+    <div class="card-body">
+      <h3 class="card-title"><a href="https://bandaancha.eu/articulos/telefonica-consigue-bloqueos-ips-11731" target="_blank" rel="noopener noreferrer">スペイン、スポーツ放送中のインターネット遮断範囲を拡大</a></h3>
+      <ul class="card-summary-list"><li>スペインのTelefónicaがサッカーに加えてテニス・ゴルフ・映画などのライブ配信時間帯にインターネット遮断を拡大する。</li><li>海賊版対策として導入されたラ・リーガのブロック制度が他スポーツにも波及している。</li><li>技術的・インフラ的な内容ではなく、政策・規制の話題。。</li></ul>
+      <div class="card-meta">
+        <span class="feed-name">hacker_news</span>
+        <span class="sep">·</span>
+        <span class="date">4/15</span>
+        <span class="tag">コミュニティ</span>
+      </div>
+    </div>
+    <div class="card-score">
+      <div class="score-ring" style="--pct:32;--color:#6b7280">
+        <span>32</span>
       </div>
     </div>
   </div>
@@ -16603,7 +17140,7 @@ footer a:hover { color: var(--accent-light); }
     <p>フィルターを変更するか、検索キーワードを変えてみてください。</p>
   </div>
 
-  <footer>更新: 4/15 04:48</footer>
+  <footer>更新: 4/15 05:14</footer>
 </main>
 
 </div>
