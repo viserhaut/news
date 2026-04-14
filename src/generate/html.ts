@@ -1183,7 +1183,8 @@ export async function generateHtml(
   for (const t of TIERS) tierMap.set(t.id, []);
   for (const row of rows) {
     const score = typeof row.personal_score === "number" ? row.personal_score : 0;
-    const tier = getTier(score);
+    // X ブックマークは手動選択のため常に Must Read
+    const tier = row.source_id === "x" ? TIERS[0]! : getTier(score);
     tierMap.get(tier.id)!.push(row);
   }
 

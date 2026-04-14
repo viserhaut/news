@@ -564,17 +564,17 @@ footer a:hover { color: var(--accent-light); }
       <a class="toc-link" href="#must-read">
         <span class="toc-dot" style="background:#10b981"></span>
         Must Read
-        <span class="toc-count">114</span>
+        <span class="toc-count">119</span>
       </a>
 <a class="toc-link" href="#recommended">
         <span class="toc-dot" style="background:#3b82f6"></span>
         Recommended
-        <span class="toc-count">146</span>
+        <span class="toc-count">144</span>
       </a>
 <a class="toc-link" href="#worth-a-look">
         <span class="toc-dot" style="background:#f59e0b"></span>
         Worth a Look
-        <span class="toc-count">174</span>
+        <span class="toc-count">171</span>
       </a>
 <a class="toc-link" href="#low-priority">
         <span class="toc-dot" style="background:#6b7280"></span>
@@ -594,7 +594,7 @@ footer a:hover { color: var(--accent-light); }
   <div class="tier-header">
     <span class="tier-bar" style="background:#10b981"></span>
     <h2>Must Read</h2>
-    <span class="tier-count">114</span>
+    <span class="tier-count">119</span>
     <button type="button" class="mark-section-read">全て既読</button>
     <button type="button" class="skip-section-btn">スキップ</button>
   </div>
@@ -3452,13 +3452,152 @@ footer a:hover { color: var(--accent-light); }
     </div>
   </div>
 </article>
+<article class="card has-detail" data-id="2505" data-category="x" data-tier="must-read" data-date="" data-detail="・有効化コマンド: `CLAUDE_CODE_NO_FLICKER=1 claude`
+・技術基盤：Reactの仮想DOMと同原理でターミナル画面を仮想化し差分レンダリング
+・フリッカー（画面ちらつき）が完全消滅
+・入力欄が画面下部に固定（チャットアプリUIに近い体験）
+・マウスクリック・ドラッグ選択・ホイールスクロールに対応
+・メモリ使用量が会話長に依存しなくなり定量化
+・長い会話でのCPUファン騒音問題が解消
+・制約：Cmd+Fが無効（代替: Ctrl+O→/で検索）
+・まだ実験的機能のためエッジケースの可能性あり
+・Claude Codeヘビーユーザー（長時間セッション）に特に効果的" data-url="https://x.com/0x__tom/status/2043890738690216437?s=12&amp;t=f3WPjTmNClEEGPQatkVlhg" data-title="Claude Code新レンダラー（CLAUDE_CODE_NO_FLICKER）の詳細レポート" data-summary="Claude Codeに実験的な新ターミナルレンダラーが追加され、`CLAUDE_CODE_NO_FLICKER=1 claude`で有効化できる。Reactの仮想DOMと同じ差分レンダリング方式でターミナル画面を仮想化し、フリッカー消滅・入力欄の画面下部固定・マウス操作対応・メモリ使用量の定量化（会話長に非依存）を実現した。長時間セッションでのファン騒音やメモリ膨張が解消され、毎日10時間以上使う重度ユーザーに特に恩恵が大きい。制約としてCmd+Fが使えなくなる（Ctrl+O→/で代替）。">
+  <button type="button" class="skip-btn" aria-label="スキップ">✕</button>
+  <div class="card-row">
+    <button type="button" class="read-btn" aria-label="既読にする"></button>
+    <div class="card-body">
+      <h3 class="card-title"><a href="https://x.com/0x__tom/status/2043890738690216437?s=12&amp;t=f3WPjTmNClEEGPQatkVlhg" target="_blank" rel="noopener noreferrer">Claude Code新レンダラー（CLAUDE_CODE_NO_FLICKER）の詳細レポート</a></h3>
+      <ul class="card-summary-list"><li>Claude Codeに実験的な新ターミナルレンダラーが追加され、`CLAUDE_CODE_NO_FLICKER=1 claude`で有効化できる。</li><li>Reactの仮想DOMと同じ差分レンダリング方式でターミナル画面を仮想化し、フリッカー消滅・入力欄の画面下部固定・マウス操作対応・メモリ使用量の定量化（会話長に非依存）を実現した。</li><li>長時間セッションでのファン騒音やメモリ膨張が解消され、毎日10時間以上使う重度ユーザーに特に恩恵が大きい。</li><li>制約としてCmd+Fが使えなくなる（Ctrl+O→/で代替）。。</li></ul>
+      <div class="card-meta">
+        <span class="feed-name">x</span>
+        <span class="sep">·</span>
+        <span class="date"></span>
+        <span class="tag">x</span>
+      </div>
+    </div>
+    <div class="card-score">
+      <div class="score-ring" style="--pct:84;--color:#10b981">
+        <span>84</span>
+      </div>
+    </div>
+  </div>
+</article>
+<article class="card has-detail" data-id="2506" data-category="x" data-tier="must-read" data-date="" data-detail="・AWS WAFログ出力先3択：CloudWatch Logs・S3・Kinesis Data Firehose
+・CloudWatch Logsに無料枠が追加され、以前よりも実質単価が下がった
+・1レコードあたりのデータ量が大きい場合はFirehoseにコストメリットあり
+・標準的なWAFログ量では新しいCloudWatch料金体系がFirehoseより安価になりうる
+・Log Insightsでクエリできる利便性はCloudWatchの強み
+・WAFのWebACLに対してロギングを有効化する際の設定選択に直結
+・コスト最適化の再評価タイミングとして有益" data-url="https://x.com/futahashi/status/2043838260066328884?s=12&amp;t=f3WPjTmNClEEGPQatkVlhg" data-title="AWS WAFログ出力先のコスト比較：CloudWatch vs S3 vs Firehose" data-summary="AWS WAFのログ出力先3択（CloudWatch Logs・Amazon S3・Kinesis Data Firehose）をコスト観点で比較した検証記事。CloudWatch Logsへの無料枠追加により、以前はFirehose一択とされていた構成の優位性が変化した。レコードサイズが大きい場合はFirehoseにコストメリットが残るが、標準的なWAFログであればCloudWatch＋S3の組み合わせが安価になるケースがある。SREとして実際のWAF運用コスト最適化に直結する情報。">
+  <button type="button" class="skip-btn" aria-label="スキップ">✕</button>
+  <div class="card-row">
+    <button type="button" class="read-btn" aria-label="既読にする"></button>
+    <div class="card-body">
+      <h3 class="card-title"><a href="https://x.com/futahashi/status/2043838260066328884?s=12&amp;t=f3WPjTmNClEEGPQatkVlhg" target="_blank" rel="noopener noreferrer">AWS WAFログ出力先のコスト比較：CloudWatch vs S3 vs Firehose</a></h3>
+      <ul class="card-summary-list"><li>AWS WAFのログ出力先3択（CloudWatch Logs・Amazon S3・Kinesis Data Firehose）をコスト観点で比較した検証記事。</li><li>CloudWatch Logsへの無料枠追加により、以前はFirehose一択とされていた構成の優位性が変化した。</li><li>レコードサイズが大きい場合はFirehoseにコストメリットが残るが、標準的なWAFログであればCloudWatch＋S3の組み合わせが安価になるケースがある。</li><li>SREとして実際のWAF運用コスト最適化に直結する情報。。</li></ul>
+      <div class="card-meta">
+        <span class="feed-name">x</span>
+        <span class="sep">·</span>
+        <span class="date"></span>
+        <span class="tag">x</span>
+      </div>
+    </div>
+    <div class="card-score">
+      <div class="score-ring" style="--pct:71;--color:#10b981">
+        <span>71</span>
+      </div>
+    </div>
+  </div>
+</article>
+<article class="card has-detail" data-id="2504" data-category="x" data-tier="must-read" data-date="" data-detail="・リポジトリ: github.com/Cocoon-AI/architecture-diagram-generator
+・Claude AIスキルとして動作し、コードベースを自動解析してアーキテクチャ図を生成
+・出力形式はHTMLファイル（内部はSVG）
+・ダークテーマの美しい配色が特徴
+・Slidevへの埋め込みやSpeakerDeckで使いやすい
+・SVGベースのため細かい修正には限界がある
+・競合ツール：AtomStorm Studio（実時間編集対応）、structura.tools
+・「自分のリポジトリで試すだけで動く」手軽さが評価されている
+・MkSaaS・TanStarterなどSaaSボイラープレートとの組み合わせ紹介もあり" data-url="https://x.com/servasyy_ai/status/2044040129359298668?s=12&amp;t=f3WPjTmNClEEGPQatkVlhg" data-title="Claude AIスキルで高品質なアーキテクチャ図を自動生成（Cocoon-AI）" data-summary="Cocoon-AIのarchitecture-diagram-generatorはClaude AIスキルとして動作し、コードベースを解析して美しいダークテーマのシステムアーキテクチャ図をHTMLとして生成する。既存ツールのSVG/PNG生成と異なりHTML出力のため後から編集しやすく、Slidevへの埋め込みも容易。ただしSVGベースであるため複雑な修正は難しい。AIエージェント開発者が自分のシステムを可視化・説明する際のツールとして参考になる。">
+  <button type="button" class="skip-btn" aria-label="スキップ">✕</button>
+  <div class="card-row">
+    <button type="button" class="read-btn" aria-label="既読にする"></button>
+    <div class="card-body">
+      <h3 class="card-title"><a href="https://x.com/servasyy_ai/status/2044040129359298668?s=12&amp;t=f3WPjTmNClEEGPQatkVlhg" target="_blank" rel="noopener noreferrer">Claude AIスキルで高品質なアーキテクチャ図を自動生成（Cocoon-AI）</a></h3>
+      <ul class="card-summary-list"><li>Cocoon-AIのarchitecture-diagram-generatorはClaude AIスキルとして動作し、コードベースを解析して美しいダークテーマのシステムアーキテクチャ図をHTMLとして生成する。</li><li>既存ツールのSVG/PNG生成と異なりHTML出力のため後から編集しやすく、Slidevへの埋め込みも容易。</li><li>ただしSVGベースであるため複雑な修正は難しい。</li><li>AIエージェント開発者が自分のシステムを可視化・説明する際のツールとして参考になる。。</li></ul>
+      <div class="card-meta">
+        <span class="feed-name">x</span>
+        <span class="sep">·</span>
+        <span class="date"></span>
+        <span class="tag">x</span>
+      </div>
+    </div>
+    <div class="card-score">
+      <div class="score-ring" style="--pct:60;--color:#10b981">
+        <span>60</span>
+      </div>
+    </div>
+  </div>
+</article>
+<article class="card has-detail" data-id="2502" data-category="x" data-tier="must-read" data-date="" data-detail="・id:2504と同一ツール（architecture-diagram-generator）の原投稿
+・Claude Coworkでも同様のHTML生成が可能という指摘
+・SVGベースのため「一箇所修正すると大動干戈」という安定性の問題
+・AtomStorm Studio（studio.atomstorm.ai）は実時間編集に対応する競合
+・structura.toolsも代替として紹介
+・MentisDBがMCP経由のメモリシステムプラグインの可能性を提案
+・Slidevへの埋め込みでプレゼン資料の品質向上に活用できる
+・「骗骗投资人（投資家を丸め込む）」といった実用的コメントも" data-url="https://x.com/indie_maker_fox/status/2043857352282255829?s=12&amp;t=f3WPjTmNClEEGPQatkVlhg" data-title="ClaudeスキルによるHTMLアーキテクチャ図生成の議論スレッド" data-summary="architecture-diagram-generatorのオリジナル紹介ツイートとその議論。Claudeスキルとして動作し、コードベースを読んでHTML/SVGアーキテクチャ図を自動生成する。id:2504と同一ツールだが、生成結果の安定性（一部修正すると全体が崩れる）・HTML vs SVGの議論・実時間編集ができるAtomStorm Studioとの比較など、より深い技術的議論が含まれている。MCP経由でメモリシステムをプラグインできる可能性についてのコメントもあり。">
+  <button type="button" class="skip-btn" aria-label="スキップ">✕</button>
+  <div class="card-row">
+    <button type="button" class="read-btn" aria-label="既読にする"></button>
+    <div class="card-body">
+      <h3 class="card-title"><a href="https://x.com/indie_maker_fox/status/2043857352282255829?s=12&amp;t=f3WPjTmNClEEGPQatkVlhg" target="_blank" rel="noopener noreferrer">ClaudeスキルによるHTMLアーキテクチャ図生成の議論スレッド</a></h3>
+      <ul class="card-summary-list"><li>architecture-diagram-generatorのオリジナル紹介ツイートとその議論。</li><li>Claudeスキルとして動作し、コードベースを読んでHTML/SVGアーキテクチャ図を自動生成する。</li><li>id:2504と同一ツールだが、生成結果の安定性（一部修正すると全体が崩れる）・HTML vs SVGの議論・実時間編集ができるAtomStorm Studioとの比較など、より深い技術的議論が含まれている。</li><li>MCP経由でメモリシステムをプラグインできる可能性についてのコメントもあり。。</li></ul>
+      <div class="card-meta">
+        <span class="feed-name">x</span>
+        <span class="sep">·</span>
+        <span class="date"></span>
+        <span class="tag">x</span>
+      </div>
+    </div>
+    <div class="card-score">
+      <div class="score-ring" style="--pct:57;--color:#10b981">
+        <span>57</span>
+      </div>
+    </div>
+  </div>
+</article>
+<article class="card has-detail" data-id="2503" data-category="x" data-tier="must-read" data-date="" data-detail="・DaemonSet：全ノードに1 Pod/ノードを保証するKubernetesリソース
+・主要ユースケース：Prometheus Node Exporter・Fluentd・CNIプラグイン・セキュリティエージェント
+・ノード追加→自動Pod作成、ノード削除→自動Pod削除
+・デフォルトで1ノード1Pod
+・入門レベルの解説でSRE実務者への新情報は少ない" data-url="https://x.com/cloclodma/status/2043898302647722400?s=12&amp;t=f3WPjTmNClEEGPQatkVlhg" data-title="Kubernetes DaemonSetの仕組みと用途解説" data-summary="KubernetesのDaemonSetについて基礎的な解説をまとめたX（Twitter）投稿。DaemonSetはクラスタの全ノードに1つずつPodを配置するリソースで、監視エージェント（Prometheus Node Exporter）・ログ収集（Fluentd）・CNIプラグイン・セキュリティエージェントなどの用途に使われる。ノード追加時に自動でPodが作成され、削除時には自動削除される。Kubernetes初学者向けの内容で、SREとしての新規情報は少ない。">
+  <button type="button" class="skip-btn" aria-label="スキップ">✕</button>
+  <div class="card-row">
+    <button type="button" class="read-btn" aria-label="既読にする"></button>
+    <div class="card-body">
+      <h3 class="card-title"><a href="https://x.com/cloclodma/status/2043898302647722400?s=12&amp;t=f3WPjTmNClEEGPQatkVlhg" target="_blank" rel="noopener noreferrer">Kubernetes DaemonSetの仕組みと用途解説</a></h3>
+      <ul class="card-summary-list"><li>KubernetesのDaemonSetについて基礎的な解説をまとめたX（Twitter）投稿。</li><li>DaemonSetはクラスタの全ノードに1つずつPodを配置するリソースで、監視エージェント（Prometheus Node Exporter）・ログ収集（Fluentd）・CNIプラグイン・セキュリティエージェントなどの用途に使われる。</li><li>ノード追加時に自動でPodが作成され、削除時には自動削除される。</li><li>Kubernetes初学者向けの内容で、SREとしての新規情報は少ない。。</li></ul>
+      <div class="card-meta">
+        <span class="feed-name">x</span>
+        <span class="sep">·</span>
+        <span class="date"></span>
+        <span class="tag">x</span>
+      </div>
+    </div>
+    <div class="card-score">
+      <div class="score-ring" style="--pct:52;--color:#10b981">
+        <span>52</span>
+      </div>
+    </div>
+  </div>
+</article>
 </section>
 
 <section id="recommended" class="tier-section">
   <div class="tier-header">
     <span class="tier-bar" style="background:#3b82f6"></span>
     <h2>Recommended</h2>
-    <span class="tier-count">146</span>
+    <span class="tier-count">144</span>
     <button type="button" class="mark-section-read">全て既読</button>
     <button type="button" class="skip-section-btn">スキップ</button>
   </div>
@@ -3619,36 +3758,6 @@ footer a:hover { color: var(--accent-light); }
     </div>
     <div class="card-score">
       <div class="score-ring" style="--pct:84;--color:#3b82f6">
-        <span>84</span>
-      </div>
-    </div>
-  </div>
-</article>
-<article class="card has-detail" data-id="2505" data-category="x" data-tier="must-read" data-date="" data-detail="・有効化コマンド: `CLAUDE_CODE_NO_FLICKER=1 claude`
-・技術基盤：Reactの仮想DOMと同原理でターミナル画面を仮想化し差分レンダリング
-・フリッカー（画面ちらつき）が完全消滅
-・入力欄が画面下部に固定（チャットアプリUIに近い体験）
-・マウスクリック・ドラッグ選択・ホイールスクロールに対応
-・メモリ使用量が会話長に依存しなくなり定量化
-・長い会話でのCPUファン騒音問題が解消
-・制約：Cmd+Fが無効（代替: Ctrl+O→/で検索）
-・まだ実験的機能のためエッジケースの可能性あり
-・Claude Codeヘビーユーザー（長時間セッション）に特に効果的" data-url="https://x.com/0x__tom/status/2043890738690216437?s=12&amp;t=f3WPjTmNClEEGPQatkVlhg" data-title="Claude Code新レンダラー（CLAUDE_CODE_NO_FLICKER）の詳細レポート" data-summary="Claude Codeに実験的な新ターミナルレンダラーが追加され、`CLAUDE_CODE_NO_FLICKER=1 claude`で有効化できる。Reactの仮想DOMと同じ差分レンダリング方式でターミナル画面を仮想化し、フリッカー消滅・入力欄の画面下部固定・マウス操作対応・メモリ使用量の定量化（会話長に非依存）を実現した。長時間セッションでのファン騒音やメモリ膨張が解消され、毎日10時間以上使う重度ユーザーに特に恩恵が大きい。制約としてCmd+Fが使えなくなる（Ctrl+O→/で代替）。">
-  <button type="button" class="skip-btn" aria-label="スキップ">✕</button>
-  <div class="card-row">
-    <button type="button" class="read-btn" aria-label="既読にする"></button>
-    <div class="card-body">
-      <h3 class="card-title"><a href="https://x.com/0x__tom/status/2043890738690216437?s=12&amp;t=f3WPjTmNClEEGPQatkVlhg" target="_blank" rel="noopener noreferrer">Claude Code新レンダラー（CLAUDE_CODE_NO_FLICKER）の詳細レポート</a></h3>
-      <ul class="card-summary-list"><li>Claude Codeに実験的な新ターミナルレンダラーが追加され、`CLAUDE_CODE_NO_FLICKER=1 claude`で有効化できる。</li><li>Reactの仮想DOMと同じ差分レンダリング方式でターミナル画面を仮想化し、フリッカー消滅・入力欄の画面下部固定・マウス操作対応・メモリ使用量の定量化（会話長に非依存）を実現した。</li><li>長時間セッションでのファン騒音やメモリ膨張が解消され、毎日10時間以上使う重度ユーザーに特に恩恵が大きい。</li><li>制約としてCmd+Fが使えなくなる（Ctrl+O→/で代替）。。</li></ul>
-      <div class="card-meta">
-        <span class="feed-name">x</span>
-        <span class="sep">·</span>
-        <span class="date"></span>
-        <span class="tag">x</span>
-      </div>
-    </div>
-    <div class="card-score">
-      <div class="score-ring" style="--pct:84;--color:#10b981">
         <span>84</span>
       </div>
     </div>
@@ -6879,33 +6988,6 @@ footer a:hover { color: var(--accent-light); }
     </div>
   </div>
 </article>
-<article class="card has-detail" data-id="2506" data-category="x" data-tier="must-read" data-date="" data-detail="・AWS WAFログ出力先3択：CloudWatch Logs・S3・Kinesis Data Firehose
-・CloudWatch Logsに無料枠が追加され、以前よりも実質単価が下がった
-・1レコードあたりのデータ量が大きい場合はFirehoseにコストメリットあり
-・標準的なWAFログ量では新しいCloudWatch料金体系がFirehoseより安価になりうる
-・Log Insightsでクエリできる利便性はCloudWatchの強み
-・WAFのWebACLに対してロギングを有効化する際の設定選択に直結
-・コスト最適化の再評価タイミングとして有益" data-url="https://x.com/futahashi/status/2043838260066328884?s=12&amp;t=f3WPjTmNClEEGPQatkVlhg" data-title="AWS WAFログ出力先のコスト比較：CloudWatch vs S3 vs Firehose" data-summary="AWS WAFのログ出力先3択（CloudWatch Logs・Amazon S3・Kinesis Data Firehose）をコスト観点で比較した検証記事。CloudWatch Logsへの無料枠追加により、以前はFirehose一択とされていた構成の優位性が変化した。レコードサイズが大きい場合はFirehoseにコストメリットが残るが、標準的なWAFログであればCloudWatch＋S3の組み合わせが安価になるケースがある。SREとして実際のWAF運用コスト最適化に直結する情報。">
-  <button type="button" class="skip-btn" aria-label="スキップ">✕</button>
-  <div class="card-row">
-    <button type="button" class="read-btn" aria-label="既読にする"></button>
-    <div class="card-body">
-      <h3 class="card-title"><a href="https://x.com/futahashi/status/2043838260066328884?s=12&amp;t=f3WPjTmNClEEGPQatkVlhg" target="_blank" rel="noopener noreferrer">AWS WAFログ出力先のコスト比較：CloudWatch vs S3 vs Firehose</a></h3>
-      <ul class="card-summary-list"><li>AWS WAFのログ出力先3択（CloudWatch Logs・Amazon S3・Kinesis Data Firehose）をコスト観点で比較した検証記事。</li><li>CloudWatch Logsへの無料枠追加により、以前はFirehose一択とされていた構成の優位性が変化した。</li><li>レコードサイズが大きい場合はFirehoseにコストメリットが残るが、標準的なWAFログであればCloudWatch＋S3の組み合わせが安価になるケースがある。</li><li>SREとして実際のWAF運用コスト最適化に直結する情報。。</li></ul>
-      <div class="card-meta">
-        <span class="feed-name">x</span>
-        <span class="sep">·</span>
-        <span class="date"></span>
-        <span class="tag">x</span>
-      </div>
-    </div>
-    <div class="card-score">
-      <div class="score-ring" style="--pct:71;--color:#10b981">
-        <span>71</span>
-      </div>
-    </div>
-  </div>
-</article>
 <article class="card has-detail" data-id="1961" data-category="community" data-tier="recommended" data-date="2026-04-10T14:16:09.000Z" data-detail="・Kaggleによるエージェント学習コンテンツ
 ・エージェントの基本定義と設計原則を解説
 ・ツール呼び出し・プランニング・メモリの概念を網羅
@@ -7144,7 +7226,7 @@ footer a:hover { color: var(--accent-light); }
   <div class="tier-header">
     <span class="tier-bar" style="background:#f59e0b"></span>
     <h2>Worth a Look</h2>
-    <span class="tier-count">174</span>
+    <span class="tier-count">171</span>
     <button type="button" class="mark-section-read">全て既読</button>
     <button type="button" class="skip-section-btn">スキップ</button>
   </div>
@@ -9472,35 +9554,6 @@ footer a:hover { color: var(--accent-light); }
     </div>
   </div>
 </article>
-<article class="card has-detail" data-id="2504" data-category="x" data-tier="must-read" data-date="" data-detail="・リポジトリ: github.com/Cocoon-AI/architecture-diagram-generator
-・Claude AIスキルとして動作し、コードベースを自動解析してアーキテクチャ図を生成
-・出力形式はHTMLファイル（内部はSVG）
-・ダークテーマの美しい配色が特徴
-・Slidevへの埋め込みやSpeakerDeckで使いやすい
-・SVGベースのため細かい修正には限界がある
-・競合ツール：AtomStorm Studio（実時間編集対応）、structura.tools
-・「自分のリポジトリで試すだけで動く」手軽さが評価されている
-・MkSaaS・TanStarterなどSaaSボイラープレートとの組み合わせ紹介もあり" data-url="https://x.com/servasyy_ai/status/2044040129359298668?s=12&amp;t=f3WPjTmNClEEGPQatkVlhg" data-title="Claude AIスキルで高品質なアーキテクチャ図を自動生成（Cocoon-AI）" data-summary="Cocoon-AIのarchitecture-diagram-generatorはClaude AIスキルとして動作し、コードベースを解析して美しいダークテーマのシステムアーキテクチャ図をHTMLとして生成する。既存ツールのSVG/PNG生成と異なりHTML出力のため後から編集しやすく、Slidevへの埋め込みも容易。ただしSVGベースであるため複雑な修正は難しい。AIエージェント開発者が自分のシステムを可視化・説明する際のツールとして参考になる。">
-  <button type="button" class="skip-btn" aria-label="スキップ">✕</button>
-  <div class="card-row">
-    <button type="button" class="read-btn" aria-label="既読にする"></button>
-    <div class="card-body">
-      <h3 class="card-title"><a href="https://x.com/servasyy_ai/status/2044040129359298668?s=12&amp;t=f3WPjTmNClEEGPQatkVlhg" target="_blank" rel="noopener noreferrer">Claude AIスキルで高品質なアーキテクチャ図を自動生成（Cocoon-AI）</a></h3>
-      <ul class="card-summary-list"><li>Cocoon-AIのarchitecture-diagram-generatorはClaude AIスキルとして動作し、コードベースを解析して美しいダークテーマのシステムアーキテクチャ図をHTMLとして生成する。</li><li>既存ツールのSVG/PNG生成と異なりHTML出力のため後から編集しやすく、Slidevへの埋め込みも容易。</li><li>ただしSVGベースであるため複雑な修正は難しい。</li><li>AIエージェント開発者が自分のシステムを可視化・説明する際のツールとして参考になる。。</li></ul>
-      <div class="card-meta">
-        <span class="feed-name">x</span>
-        <span class="sep">·</span>
-        <span class="date"></span>
-        <span class="tag">x</span>
-      </div>
-    </div>
-    <div class="card-score">
-      <div class="score-ring" style="--pct:60;--color:#10b981">
-        <span>60</span>
-      </div>
-    </div>
-  </div>
-</article>
 <article class="card has-detail" data-id="2155" data-category="community" data-tier="worth-a-look" data-date="2026-04-11T14:32:39.000Z" data-detail="・Aphyr（Jepsen作者、著名なシステムエンジニア）によるLLM批判連載
 ・シリーズ構成：Introduction → Dynamics → Culture → Information Ecology → Annoyances
 ・全文はPDF/EPUBで公開
@@ -10008,34 +10061,6 @@ footer a:hover { color: var(--accent-light); }
     </div>
     <div class="card-score">
       <div class="score-ring" style="--pct:57;--color:#f59e0b">
-        <span>57</span>
-      </div>
-    </div>
-  </div>
-</article>
-<article class="card has-detail" data-id="2502" data-category="x" data-tier="must-read" data-date="" data-detail="・id:2504と同一ツール（architecture-diagram-generator）の原投稿
-・Claude Coworkでも同様のHTML生成が可能という指摘
-・SVGベースのため「一箇所修正すると大動干戈」という安定性の問題
-・AtomStorm Studio（studio.atomstorm.ai）は実時間編集に対応する競合
-・structura.toolsも代替として紹介
-・MentisDBがMCP経由のメモリシステムプラグインの可能性を提案
-・Slidevへの埋め込みでプレゼン資料の品質向上に活用できる
-・「骗骗投资人（投資家を丸め込む）」といった実用的コメントも" data-url="https://x.com/indie_maker_fox/status/2043857352282255829?s=12&amp;t=f3WPjTmNClEEGPQatkVlhg" data-title="ClaudeスキルによるHTMLアーキテクチャ図生成の議論スレッド" data-summary="architecture-diagram-generatorのオリジナル紹介ツイートとその議論。Claudeスキルとして動作し、コードベースを読んでHTML/SVGアーキテクチャ図を自動生成する。id:2504と同一ツールだが、生成結果の安定性（一部修正すると全体が崩れる）・HTML vs SVGの議論・実時間編集ができるAtomStorm Studioとの比較など、より深い技術的議論が含まれている。MCP経由でメモリシステムをプラグインできる可能性についてのコメントもあり。">
-  <button type="button" class="skip-btn" aria-label="スキップ">✕</button>
-  <div class="card-row">
-    <button type="button" class="read-btn" aria-label="既読にする"></button>
-    <div class="card-body">
-      <h3 class="card-title"><a href="https://x.com/indie_maker_fox/status/2043857352282255829?s=12&amp;t=f3WPjTmNClEEGPQatkVlhg" target="_blank" rel="noopener noreferrer">ClaudeスキルによるHTMLアーキテクチャ図生成の議論スレッド</a></h3>
-      <ul class="card-summary-list"><li>architecture-diagram-generatorのオリジナル紹介ツイートとその議論。</li><li>Claudeスキルとして動作し、コードベースを読んでHTML/SVGアーキテクチャ図を自動生成する。</li><li>id:2504と同一ツールだが、生成結果の安定性（一部修正すると全体が崩れる）・HTML vs SVGの議論・実時間編集ができるAtomStorm Studioとの比較など、より深い技術的議論が含まれている。</li><li>MCP経由でメモリシステムをプラグインできる可能性についてのコメントもあり。。</li></ul>
-      <div class="card-meta">
-        <span class="feed-name">x</span>
-        <span class="sep">·</span>
-        <span class="date"></span>
-        <span class="tag">x</span>
-      </div>
-    </div>
-    <div class="card-score">
-      <div class="score-ring" style="--pct:57;--color:#10b981">
         <span>57</span>
       </div>
     </div>
@@ -11063,31 +11088,6 @@ footer a:hover { color: var(--accent-light); }
     <div class="card-score">
       <div class="score-ring" style="--pct:53;--color:#f59e0b">
         <span>53</span>
-      </div>
-    </div>
-  </div>
-</article>
-<article class="card has-detail" data-id="2503" data-category="x" data-tier="must-read" data-date="" data-detail="・DaemonSet：全ノードに1 Pod/ノードを保証するKubernetesリソース
-・主要ユースケース：Prometheus Node Exporter・Fluentd・CNIプラグイン・セキュリティエージェント
-・ノード追加→自動Pod作成、ノード削除→自動Pod削除
-・デフォルトで1ノード1Pod
-・入門レベルの解説でSRE実務者への新情報は少ない" data-url="https://x.com/cloclodma/status/2043898302647722400?s=12&amp;t=f3WPjTmNClEEGPQatkVlhg" data-title="Kubernetes DaemonSetの仕組みと用途解説" data-summary="KubernetesのDaemonSetについて基礎的な解説をまとめたX（Twitter）投稿。DaemonSetはクラスタの全ノードに1つずつPodを配置するリソースで、監視エージェント（Prometheus Node Exporter）・ログ収集（Fluentd）・CNIプラグイン・セキュリティエージェントなどの用途に使われる。ノード追加時に自動でPodが作成され、削除時には自動削除される。Kubernetes初学者向けの内容で、SREとしての新規情報は少ない。">
-  <button type="button" class="skip-btn" aria-label="スキップ">✕</button>
-  <div class="card-row">
-    <button type="button" class="read-btn" aria-label="既読にする"></button>
-    <div class="card-body">
-      <h3 class="card-title"><a href="https://x.com/cloclodma/status/2043898302647722400?s=12&amp;t=f3WPjTmNClEEGPQatkVlhg" target="_blank" rel="noopener noreferrer">Kubernetes DaemonSetの仕組みと用途解説</a></h3>
-      <ul class="card-summary-list"><li>KubernetesのDaemonSetについて基礎的な解説をまとめたX（Twitter）投稿。</li><li>DaemonSetはクラスタの全ノードに1つずつPodを配置するリソースで、監視エージェント（Prometheus Node Exporter）・ログ収集（Fluentd）・CNIプラグイン・セキュリティエージェントなどの用途に使われる。</li><li>ノード追加時に自動でPodが作成され、削除時には自動削除される。</li><li>Kubernetes初学者向けの内容で、SREとしての新規情報は少ない。。</li></ul>
-      <div class="card-meta">
-        <span class="feed-name">x</span>
-        <span class="sep">·</span>
-        <span class="date"></span>
-        <span class="tag">x</span>
-      </div>
-    </div>
-    <div class="card-score">
-      <div class="score-ring" style="--pct:52;--color:#10b981">
-        <span>52</span>
       </div>
     </div>
   </div>
@@ -17141,7 +17141,7 @@ footer a:hover { color: var(--accent-light); }
     <p>フィルターを変更するか、検索キーワードを変えてみてください。</p>
   </div>
 
-  <footer>更新: 4/15 05:19</footer>
+  <footer>更新: 4/15 05:32</footer>
 </main>
 
 </div>
