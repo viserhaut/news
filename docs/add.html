@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>X → News Queue</title>
+<style>
+  body { font-family: system-ui, sans-serif; background: #0f172a; color: #e2e8f0; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; }
+  .box { background: #1e293b; border-radius: 12px; padding: 2rem; width: 100%; max-width: 420px; box-shadow: 0 4px 24px rgba(0,0,0,0.4); }
+  h1 { font-size: 1.1rem; margin: 0 0 1.25rem; color: #f8fafc; }
+  .url { font-size: 0.8rem; color: #94a3b8; word-break: break-all; margin-bottom: 1.25rem; background: #0f172a; padding: 0.625rem 0.75rem; border-radius: 6px; }
+  input { width: 100%; box-sizing: border-box; background: #0f172a; border: 1px solid #334155; border-radius: 6px; color: #e2e8f0; padding: 0.625rem 0.75rem; font-size: 0.9rem; margin-bottom: 0.75rem; }
+  input:focus { outline: none; border-color: #3b82f6; }
+  button { width: 100%; padding: 0.625rem; border-radius: 6px; border: none; background: #3b82f6; color: #fff; font-size: 0.95rem; font-weight: 600; cursor: pointer; }
+  button:hover { background: #2563eb; }
+  button:disabled { background: #475569; cursor: not-allowed; }
+  .msg { margin-top: 1rem; padding: 0.625rem 0.75rem; border-radius: 6px; font-size: 0.875rem; text-align: center; }
+  .msg.ok  { background: #052e16; color: #4ade80; }
+  .msg.err { background: #2d0f0f; color: #f87171; }
+  .note { font-size: 0.75rem; color: #64748b; margin-top: 0.75rem; text-align: center; }
+  a { color: #3b82f6; text-decoration: none; }
+</style>
+</head>
+<body>
+<div class="box">
+  <h1>X → News Queue</h1>
+  <div id="content"></div>
+</div>
+<script>
+var PAT_KEY = 'xnq_pat';
+var API = 'https://api.github.com/repos/viserhaut/news/contents/pending/tweets.json';
+
+var params = new URLSearchParams(location.search);
+var tweetUrl = params.get('url') || '';
+
+function headers(pat) {
+  return {
+    'Authorization': 'Bearer ' + pat,
+    'Accept': 'application/vnd.github+json',
+    'X-GitHub-Api-Version': '2022-11-28'
+  };
+}
+
+function render(html) {
+  document.getElementById('content').innerHTML = html;
+}
+
+function showMsg(type, text) {
+  var el = document.getElementById('msg');
+  if (el) { el.className = 'msg ' + type; el.textContent = text; }
+}
+
+function addToQueue(pat) {
+  var btn = document.getElementById('btn');
+  if (btn) { btn.disabled = true; btn.textContent = '追加中...'; }
+
+  fetch(API, { headers: headers(pat) })
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      if (d.message) throw new Error(d.message);
+      var content = JSON.parse(atob(d.content.replace(/\n/g, '')));
+      var existing = content.urls.flatMap(function(u) { return u.split('\n').map(function(s) { return s.trim(); }); });
+      if (existing.indexOf(tweetUrl) >= 0) {
+        showMsg('err', '⚠️ 既に登録済みです');
+        if (btn) { btn.disabled = false; btn.textContent = '追加する'; }
+        return;
+      }
+      content.urls.push(tweetUrl);
+      var newContent = btoa(unescape(encodeURIComponent(JSON.stringify(content))));
+      return fetch(API, {
+        method: 'PUT',
+        headers: Object.assign({ 'Content-Type': 'application/json' }, headers(pat)),
+        body: JSON.stringify({ message: 'Add X bookmark', content: newContent, sha: d.sha })
+      });
+    })
+    .then(function(r) { if (r) return r.json(); })
+    .then(function(r) {
+      if (!r) return;
+      if (r.commit) {
+        showMsg('ok', '✅ キューに追加しました');
+        setTimeout(function() { window.close(); }, 1500);
+      } else {
+        throw new Error(JSON.stringify(r));
+      }
+    })
+    .catch(function(e) {
+      showMsg('err', '❌ ' + e.message);
+      if (btn) { btn.disabled = false; btn.textContent = '追加する'; }
+    });
+}
+
+function renderMain(pat) {
+  render(
+    '<div class="url">' + tweetUrl + '</div>' +
+    '<button id="btn" onclick="addToQueue(\'' + pat + '\')">追加する</button>' +
+    '<div id="msg"></div>' +
+    '<p class="note"><a href="#" onclick="localStorage.removeItem(\'' + PAT_KEY + '\');location.reload();return false;">PAT を変更する</a></p>'
+  );
+  // 自動実行
+  addToQueue(pat);
+}
+
+function renderPatForm() {
+  render(
+    '<p style="font-size:0.875rem;color:#94a3b8;margin:0 0 1rem">GitHub PAT を入力してください。<br>このブラウザにのみ保存されます。</p>' +
+    '<input id="pat" type="password" placeholder="github_pat_... または ghp_..." />' +
+    '<button onclick="savePat()">保存して続ける</button>' +
+    '<div id="msg"></div>' +
+    '<p class="note">PAT に必要なスコープ: <code>Contents: Read and write</code></p>'
+  );
+}
+
+function savePat() {
+  var val = document.getElementById('pat').value.trim();
+  if (!val) { showMsg('err', 'PAT を入力してください'); return; }
+  localStorage.setItem(PAT_KEY, val);
+  renderMain(val);
+}
+
+// 起動
+if (!tweetUrl) {
+  render('<p style="color:#f87171">URL が指定されていません。<br>ブックマークレットから開いてください。</p>');
+} else {
+  var saved = localStorage.getItem(PAT_KEY);
+  if (saved) {
+    renderMain(saved);
+  } else {
+    renderPatForm();
+  }
+}
+</script>
+</body>
+</html>

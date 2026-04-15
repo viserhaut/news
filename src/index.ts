@@ -1,5 +1,6 @@
 import { join } from "path";
 import { mkdirSync, readFileSync, writeFileSync } from "fs";
+import { createHash } from "crypto";
 import { initDb } from "./db/schema";
 import { makeQueries } from "./db/queries";
 import { loadSources } from "./config/sources";
@@ -40,13 +41,25 @@ async function main() {
       // ファイル不在またはパースエラーは無視
     }
 
-    // iOS Shortcut が改行結合で保存した場合に備えてフラット化
-    const urlList = pending.urls.flatMap((u) => u.split("\n").map((s) => s.trim()).filter(Boolean));
+    // iOS Shortcut が改行結合で保存した場合に備えてフラット化 + 重複排除
+    const urlList = [
+      ...new Set(
+        pending.urls.flatMap((u) => u.split("\n").map((s) => s.trim()).filter(Boolean))
+      ),
+    ];
 
     if (urlList.length > 0) {
       console.log(`[info] X bookmark import: ${urlList.length} URLs`);
       let xNew = 0;
       for (const tweetUrl of urlList) {
+        // DB 登録済みの URL はスキップ（xAI API コスト節約）
+        const hash = createHash("sha256").update(tweetUrl).digest("hex");
+        const exists = db.query("SELECT 1 FROM articles WHERE url_hash = ?").get(hash);
+        if (exists) {
+          console.log(`[skip]  x_bookmark already exists: ${tweetUrl.slice(0, 60)}`);
+          continue;
+        }
+
         const result = await fetchTweetThread(tweetUrl, xApiKey);
         if (!result) continue;
 
