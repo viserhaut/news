@@ -531,11 +531,29 @@ footer a:hover { color: var(--accent-light); }
 
 /* ── モバイルタップ改善 ── */
 @media (max-width: 768px) {
-  .read-btn { width: 2rem; height: 2rem; font-size: 0.875rem; }
-  .skip-btn { opacity: 1; width: 1.75rem; height: 1.75rem; font-size: 0.75rem; top: 0.375rem; right: 0.375rem; }
-  .bookmark-btn { font-size: 1.25rem; padding: 0.25rem 0.375rem; }
-  .copy-btn { font-size: 0.875rem; padding: 0.25rem; }
-  .card-meta { gap: 0.5rem; flex-wrap: wrap; }
+  /* read-btn: 44px タップ領域 */
+  .read-btn { width: 2.75rem; height: 2.75rem; font-size: 1rem; }
+  /* skip-btn: 常時表示・大きめ */
+  .skip-btn { opacity: 1; width: 2rem; height: 2rem; font-size: 0.875rem; top: 0.375rem; right: 0.375rem; }
+  /* bookmark-btn: 44px タップ領域 + 大きい星アイコン */
+  .bookmark-btn {
+    font-size: 1.5rem;
+    min-width: 2.75rem; min-height: 2.75rem;
+    display: inline-flex; align-items: center; justify-content: center;
+    padding: 0.5rem;
+  }
+  .copy-btn { font-size: 0.875rem; padding: 0.375rem; }
+  .card-meta { gap: 0.5rem; flex-wrap: wrap; align-items: center; }
+  /* 詳細パネル: ボトムシートスタイル */
+  #detail-dialog {
+    width: 100%;
+    max-width: 100%;
+    max-height: 82vh;
+    margin: auto 0 0 0;
+    border-radius: 16px 16px 0 0;
+    transform: translateY(6px);
+  }
+  #detail-dialog[open] { transform: translateY(0); }
 }</style>
 <script>
   (function(){
@@ -17219,7 +17237,7 @@ footer a:hover { color: var(--accent-light); }
     <p>フィルターを変更するか、検索キーワードを変えてみてください。</p>
   </div>
 
-  <footer>更新: 4/18 05:36</footer>
+  <footer>更新: 4/18 05:48</footer>
 </main>
 
 </div>
