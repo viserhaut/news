@@ -653,6 +653,24 @@ footer a:hover { color: var(--accent-light); }
 .sync-indicator.error   { color: #ef4444; }
 .sidebar-top-actions { display: flex; gap: 0.25rem; align-items: center; }
 
+/* ── サイドバー同期ドット ── */
+.settings-btn-wrap { position: relative; display: inline-flex; }
+.sync-dot {
+  position: absolute; top: -3px; right: -3px;
+  width: 9px; height: 9px; border-radius: 50%;
+  border: 2px solid var(--bg);
+  background: var(--border-light);
+  pointer-events: none;
+  transition: background 0.2s ease;
+}
+.sync-dot.ok      { background: #10b981; }
+.sync-dot.error   { background: #ef4444; }
+.sync-dot.syncing { background: var(--accent-light); animation: pulse-dot 1s ease-in-out infinite; }
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.4; }
+}
+
 /* ── モバイルタップ改善 ── */
 @media (max-width: 768px) {
   /* read-btn: 44px タップ領域 */
@@ -1076,9 +1094,27 @@ function getGistConfig() {
 
 function setSyncStatus(status, msg) {
   var el = document.getElementById('sync-indicator');
-  if (!el) return;
-  el.className = 'sync-indicator' + (status ? ' ' + status : '');
-  el.textContent = msg;
+  if (el) {
+    el.className = 'sync-indicator' + (status ? ' ' + status : '');
+    el.textContent = msg;
+  }
+  var dot = document.getElementById('sync-dot');
+  if (!dot) return;
+  var dotClass = status === 'synced' ? 'ok' : status === 'syncing' ? 'syncing' : status === 'error' ? 'error' : '';
+  dot.className = 'sync-dot' + (dotClass ? ' ' + dotClass : '');
+  var tooltips = { synced: '同期済み', syncing: '同期中...', error: '同期エラー — ⚙ を確認' };
+  dot.title = tooltips[status] || '';
+}
+
+function initSyncDot() {
+  var cfg = getGistConfig();
+  var dot = document.getElementById('sync-dot');
+  if (!dot) return;
+  if (!cfg.pat || !cfg.id) {
+    dot.className = 'sync-dot error';
+    dot.title = '同期未設定 — ⚙ をクリックして設定';
+    document.getElementById('settings-btn').title = '同期未設定 — クリックして設定';
+  }
 }
 
 async function loadFromGist() {
@@ -1369,6 +1405,7 @@ setActiveBtn('date-filters', currentDateFilter);
 setActiveBtn('source-filters', currentSourceFilter);
 applyFilters();
 initShareButtons();
+initSyncDot();
 loadFromGist();
 `.trim();
 
@@ -1464,7 +1501,10 @@ export async function generateHtml(
       News Digest
     </div>
     <div class="sidebar-top-actions">
-      <button type="button" class="settings-btn" id="settings-btn" title="同期設定">&#9881;</button>
+      <div class="settings-btn-wrap">
+        <button type="button" class="settings-btn" id="settings-btn" title="同期設定">&#9881;</button>
+        <span class="sync-dot" id="sync-dot"></span>
+      </div>
       <button type="button" class="theme-toggle" id="theme-toggle" title="テーマ切り替え">
         <span class="theme-icon"></span>
       </button>
