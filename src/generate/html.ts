@@ -596,6 +596,71 @@ footer a:hover { color: var(--accent-light); }
   .mobile-filter-toggle { display: none; }
   .sidebar-collapsible { display: block !important; }
 }
+
+/* ── 設定モーダル ── */
+.settings-btn {
+  background: none; border: 1px solid var(--border); border-radius: 6px;
+  width: 2rem; height: 2rem; cursor: pointer; display: flex; align-items: center;
+  justify-content: center; transition: all 0.15s ease; color: var(--text-dim); font-size: 0.875rem;
+}
+@media (any-hover: hover) {
+  .settings-btn:hover { border-color: var(--accent-light); color: var(--accent-light); }
+}
+#settings-dialog {
+  border: 1px solid var(--border); border-radius: 14px; padding: 0;
+  width: 420px; max-width: calc(100vw - 2rem);
+  background: var(--surface); color: var(--text);
+  box-shadow: 0 24px 64px rgba(0,0,0,0.3), 0 4px 16px rgba(0,0,0,0.15);
+}
+#settings-dialog::backdrop { background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); }
+.settings-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1rem 1.25rem 0.75rem; border-bottom: 1px solid var(--border);
+}
+.settings-header h3 { font-size: 0.9375rem; font-weight: 600; }
+.settings-close {
+  background: none; border: none; color: var(--text-dim);
+  font-size: 1.125rem; cursor: pointer; padding: 0.125rem 0.375rem; line-height: 1;
+  transition: color 0.12s ease;
+}
+.settings-close:hover { color: var(--text); }
+.settings-body { padding: 1.25rem; display: flex; flex-direction: column; gap: 1rem; }
+.settings-field label {
+  display: block; font-size: 0.75rem; font-weight: 600; color: var(--text-dim);
+  margin-bottom: 0.375rem; text-transform: uppercase; letter-spacing: 0.04em;
+}
+.settings-input {
+  width: 100%; padding: 0.5rem 0.75rem; border: 1px solid var(--border);
+  border-radius: 8px; background: var(--bg); color: var(--text);
+  font-size: 0.875rem; font-family: monospace; outline: none;
+  transition: border-color 0.12s ease;
+}
+.settings-input:focus { border-color: var(--accent-light); }
+.settings-hint { font-size: 0.75rem; color: var(--text-dim); margin-top: 0.25rem; }
+.settings-footer {
+  padding: 0.875rem 1.25rem; border-top: 1px solid var(--border);
+  display: flex; align-items: center; gap: 0.75rem;
+}
+.settings-save {
+  padding: 0.5rem 1.25rem; background: var(--accent); color: #fff;
+  border: none; border-radius: 8px; font-size: 0.875rem; font-weight: 600;
+  cursor: pointer; transition: opacity 0.12s ease; flex-shrink: 0;
+}
+.settings-save:hover { opacity: 0.85; }
+.sync-indicator { font-size: 0.75rem; color: var(--text-dim); margin-left: auto; }
+.sync-indicator.syncing { color: var(--accent-light); }
+.sync-indicator.synced  { color: #10b981; }
+.sync-indicator.error   { color: #ef4444; }
+.sidebar-top-actions { display: flex; gap: 0.25rem; align-items: center; }
+
+/* ── モバイルタップ改善 ── */
+@media (max-width: 768px) {
+  .read-btn { width: 2rem; height: 2rem; font-size: 0.875rem; }
+  .skip-btn { opacity: 1; width: 1.75rem; height: 1.75rem; font-size: 0.75rem; top: 0.375rem; right: 0.375rem; }
+  .bookmark-btn { font-size: 1.25rem; padding: 0.25rem 0.375rem; }
+  .copy-btn { font-size: 0.875rem; padding: 0.25rem; }
+  .card-meta { gap: 0.5rem; flex-wrap: wrap; }
+}
 `.trim();
 
 // ── JavaScript (localStorage ベース、サーバー不要) ────
@@ -657,6 +722,7 @@ function toggleRead(card) {
     readIds.add(id);
   }
   saveSet(READ_KEY, readIds);
+  scheduleGistSave();
   updateUnreadCount();
   applyFilters();
 }
@@ -670,6 +736,7 @@ function markRead(card) {
   if (btn) { btn.classList.add('is-read'); btn.textContent = '\\u2713'; }
   readIds.add(id);
   saveSet(READ_KEY, readIds);
+  scheduleGistSave();
   updateUnreadCount();
   applyFilters();
 }
@@ -698,6 +765,7 @@ function markSectionRead(btn) {
     readIds.add(id);
   });
   saveSet(READ_KEY, readIds);
+  scheduleGistSave();
   updateUnreadCount();
   applyFilters();
 }
@@ -974,7 +1042,93 @@ function toggleBookmark(url) {
   var idx = bms.indexOf(url);
   if (idx === -1) bms.push(url); else bms.splice(idx, 1);
   saveBookmarks(bms);
+  scheduleGistSave();
   return idx === -1;
+}
+
+// ── Gist 同期 ────────────────────────────────────────
+var GIST_PAT_KEY = 'gist_pat';
+var GIST_ID_KEY  = 'gist_id';
+var GIST_FILE    = 'news-digest-sync.json';
+var gistSaveTimer = null;
+
+function getGistConfig() {
+  return { pat: localStorage.getItem(GIST_PAT_KEY) || '', id: localStorage.getItem(GIST_ID_KEY) || '' };
+}
+
+function setSyncStatus(status, msg) {
+  var el = document.getElementById('sync-indicator');
+  if (!el) return;
+  el.className = 'sync-indicator' + (status ? ' ' + status : '');
+  el.textContent = msg;
+}
+
+async function loadFromGist() {
+  var cfg = getGistConfig();
+  if (!cfg.pat || !cfg.id) return;
+  try {
+    setSyncStatus('syncing', '同期中...');
+    var res = await fetch('https://api.github.com/gists/' + cfg.id, {
+      headers: { Authorization: 'Bearer ' + cfg.pat, Accept: 'application/vnd.github+json' }
+    });
+    if (!res.ok) { setSyncStatus('error', '同期エラー'); return; }
+    var data = await res.json();
+    var file = data.files && data.files[GIST_FILE];
+    if (!file || !file.content) { setSyncStatus('synced', '同期済'); return; }
+    var remote = JSON.parse(file.content);
+    if (Array.isArray(remote.read)) {
+      var readIds = getSet(READ_KEY);
+      remote.read.forEach(function(id) { readIds.add(Number(id)); });
+      saveSet(READ_KEY, readIds);
+    }
+    if (Array.isArray(remote.bookmarks)) {
+      var bms = getBookmarks();
+      var bmsSet = new Set(bms);
+      remote.bookmarks.forEach(function(url) { bmsSet.add(url); });
+      saveBookmarks(Array.from(bmsSet));
+    }
+    restoreState();
+    restoreBookmarkState();
+    setSyncStatus('synced', '同期済');
+  } catch(e) {
+    setSyncStatus('error', 'オフライン');
+  }
+}
+
+async function saveToGist() {
+  var cfg = getGistConfig();
+  if (!cfg.pat || !cfg.id) return;
+  try {
+    setSyncStatus('syncing', '保存中...');
+    var files = {};
+    files[GIST_FILE] = { content: JSON.stringify({ read: Array.from(getSet(READ_KEY)), bookmarks: getBookmarks() }) };
+    var res = await fetch('https://api.github.com/gists/' + cfg.id, {
+      method: 'PATCH',
+      headers: { Authorization: 'Bearer ' + cfg.pat, Accept: 'application/vnd.github+json', 'Content-Type': 'application/json' },
+      body: JSON.stringify({ files: files })
+    });
+    setSyncStatus(res.ok ? 'synced' : 'error', res.ok ? '同期済' : '同期エラー');
+  } catch(e) {
+    setSyncStatus('error', 'オフライン');
+  }
+}
+
+function scheduleGistSave() {
+  if (gistSaveTimer) clearTimeout(gistSaveTimer);
+  gistSaveTimer = setTimeout(saveToGist, 800);
+}
+
+function restoreBookmarkState() {
+  document.querySelectorAll('.card').forEach(function(card) {
+    var link = card.querySelector('.card-title a');
+    var bBtn = card.querySelector('.bookmark-btn');
+    if (!link || !bBtn) return;
+    var bookmarked = isBookmarked(link.href);
+    bBtn.className = 'bookmark-btn' + (bookmarked ? ' is-bookmarked' : '');
+    bBtn.setAttribute('aria-label', bookmarked ? 'ブックマーク解除' : 'ブックマークに追加');
+    bBtn.textContent = bookmarked ? '\\u2605' : '\\u2606';
+  });
+  applyFilters();
 }
 
 document.querySelectorAll('.card').forEach(function(card) {
@@ -1159,6 +1313,35 @@ backToTopBtn.addEventListener('click', function() {
   mainEl.scrollTo({ top: 0, behavior: 'smooth' });
 });
 
+// ── 設定モーダル ──────────────────────────────────────
+(function() {
+  var settingsBtn    = document.getElementById('settings-btn');
+  var settingsDialog = document.getElementById('settings-dialog');
+  var settingsClose  = document.getElementById('settings-close');
+  var settingsSave   = document.getElementById('settings-save');
+  var patInput       = document.getElementById('settings-pat');
+  var gistIdInput    = document.getElementById('settings-gist-id');
+
+  settingsBtn.addEventListener('click', function() {
+    var cfg = getGistConfig();
+    patInput.value    = cfg.pat;
+    gistIdInput.value = cfg.id;
+    settingsDialog.showModal();
+  });
+  settingsClose.addEventListener('click', function() { settingsDialog.close(); });
+  settingsDialog.addEventListener('click', function(e) {
+    if (e.target === settingsDialog) settingsDialog.close();
+  });
+  settingsSave.addEventListener('click', function() {
+    var pat    = patInput.value.trim();
+    var gistId = gistIdInput.value.trim();
+    localStorage.setItem(GIST_PAT_KEY, pat);
+    localStorage.setItem(GIST_ID_KEY, gistId);
+    settingsDialog.close();
+    if (pat && gistId) loadFromGist();
+  });
+})();
+
 // ── 初期化 ────────────────────────────────────────────
 restoreState();
 buildSourceFilters();
@@ -1168,6 +1351,7 @@ setActiveBtn('date-filters', currentDateFilter);
 setActiveBtn('source-filters', currentSourceFilter);
 applyFilters();
 initShareButtons();
+loadFromGist();
 `.trim();
 
 // ── メイン生成関数 ────────────────────────────────────
@@ -1261,9 +1445,12 @@ export async function generateHtml(
       </svg>
       News Digest
     </div>
-    <button type="button" class="theme-toggle" id="theme-toggle" title="テーマ切り替え">
-      <span class="theme-icon"></span>
-    </button>
+    <div class="sidebar-top-actions">
+      <button type="button" class="settings-btn" id="settings-btn" title="同期設定">&#9881;</button>
+      <button type="button" class="theme-toggle" id="theme-toggle" title="テーマ切り替え">
+        <span class="theme-icon"></span>
+      </button>
+    </div>
   </div>
   <div class="date-label">${today}</div>
 
@@ -1348,6 +1535,30 @@ export async function generateHtml(
 
 <!-- トップへ戻るボタン -->
 <button type="button" class="back-to-top" id="back-to-top" aria-label="トップへ戻る">↑</button>
+
+<!-- 同期設定モーダル -->
+<dialog id="settings-dialog" aria-labelledby="settings-dialog-title">
+  <div class="settings-header">
+    <h3 id="settings-dialog-title">同期設定（GitHub Gist）</h3>
+    <button type="button" class="settings-close" id="settings-close" aria-label="閉じる">&#x2715;</button>
+  </div>
+  <div class="settings-body">
+    <div class="settings-field">
+      <label for="settings-pat">GitHub Fine-grained PAT</label>
+      <input type="password" id="settings-pat" class="settings-input" placeholder="github_pat_xxxx..." autocomplete="off">
+      <p class="settings-hint">Gist の read/write 権限のみ付与してください</p>
+    </div>
+    <div class="settings-field">
+      <label for="settings-gist-id">Gist ID</label>
+      <input type="text" id="settings-gist-id" class="settings-input" placeholder="abc123def456..." autocomplete="off">
+      <p class="settings-hint">プライベート Gist の ID（URLの末尾の文字列）</p>
+    </div>
+  </div>
+  <div class="settings-footer">
+    <button type="button" class="settings-save" id="settings-save">保存して同期</button>
+    <span class="sync-indicator" id="sync-indicator"></span>
+  </div>
+</dialog>
 
 <!-- 詳細パネル（ネイティブ dialog） -->
 <dialog id="detail-dialog" aria-labelledby="detail-panel-title">
