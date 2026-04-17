@@ -1420,7 +1420,7 @@ export async function generateHtml(
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta http-equiv="Content-Security-Policy"
-      content="default-src 'self'; img-src https: data:; script-src 'unsafe-inline'; style-src 'unsafe-inline'">
+      content="default-src 'self'; img-src https: data:; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src 'self' https://api.github.com">
 <meta name="robots" content="noindex,nofollow">
 <link rel="icon" href="https://github.com/viserhaut.png">
 <title>News Digest</title>
