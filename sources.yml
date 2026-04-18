@@ -104,3 +104,74 @@ sources:
     category: indie_dev
     max_items: 10
     enabled: false
+
+  # ── indie_dev カテゴリ（個人開発・副業・SaaS） ─────────────────────
+
+  - id: bootstrapped_founder
+    name: The Bootstrapped Founder (Arvid Kahl)
+    rss_url: https://thebootstrappedfounder.com/feed/
+    language: en
+    category: indie_dev
+    max_items: 10
+    enabled: true
+
+  - id: reddit_saas
+    name: Reddit r/SaaS
+    rss_url: https://www.reddit.com/r/SaaS/.rss
+    language: en
+    category: indie_dev
+    max_items: 15
+    enabled: true
+
+  - id: reddit_entrepreneur
+    name: Reddit r/Entrepreneur
+    rss_url: https://www.reddit.com/r/Entrepreneur/.rss
+    language: en
+    category: indie_dev
+    max_items: 10
+    enabled: true
+
+  - id: reddit_startups
+    name: Reddit r/startups
+    rss_url: https://www.reddit.com/r/startups/.rss
+    language: en
+    category: indie_dev
+    max_items: 10
+    enabled: true
+
+  # ── product カテゴリ（プロダクト設計・PDM） ───────────────────────
+
+  - id: ycombinator_blog
+    name: Y Combinator Blog
+    rss_url: https://www.ycombinator.com/blog/rss.xml
+    language: en
+    category: product
+    max_items: 10
+    enabled: true
+
+  - id: lenny_newsletter
+    name: Lenny's Newsletter
+    rss_url: https://www.lennysnewsletter.com/feed
+    language: en
+    category: product
+    max_items: 5
+    enabled: true
+
+  # ── japan_biz カテゴリ（日本市場・スタートアップ） ────────────────
+
+  - id: techcrunch_japan
+    name: TechCrunch Japan (via tag)
+    # jp.techcrunch.com は TLS 証明書の問題あり。英語版の Japan タグを代替利用。
+    rss_url: https://techcrunch.com/tag/japan/feed/
+    language: en
+    category: japan_biz
+    max_items: 10
+    enabled: true
+
+  - id: coral_capital
+    name: Coral Capital Blog
+    rss_url: https://coralcap.co/feed/
+    language: ja
+    category: japan_biz
+    max_items: 10
+    enabled: true
