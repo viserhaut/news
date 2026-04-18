@@ -2,6 +2,10 @@ import { callClaude, ClaudeAuthError } from "./claude";
 import type { UnsummarizedRow, SummaryInsert } from "../db/queries";
 
 const BATCH_SIZE = 10;
+// レート制限対策: バッチ間のスリープ（ms）
+const BATCH_SLEEP_MS = 3_000;
+// エラー時のリトライ待機（ms）
+const RETRY_SLEEP_MS = 15_000;
 
 // AI スコアと新しさの配合比（確定パラメータ）
 const AI_WEIGHT = 0.7;
@@ -134,14 +138,19 @@ export async function summarizeBatch(
 
     try {
       const prompt = buildPrompt(inputs, personalContext);
-      // タイムアウト時に1回リトライ
+      // タイムアウト・レート制限時に1回リトライ
       let raw: string;
       try {
         raw = await callClaude(prompt);
       } catch (firstErr) {
         const msg = firstErr instanceof Error ? firstErr.message : String(firstErr);
-        if (msg.includes("code 143") || msg.includes("SIGTERM")) {
-          console.warn(`[llm] Batch ${batchNum} timed out, retrying...`);
+        const isRetryable =
+          msg.includes("code 143") ||
+          msg.includes("SIGTERM") ||
+          msg.includes("code 1");
+        if (isRetryable) {
+          console.warn(`[llm] Batch ${batchNum} failed, retrying in ${RETRY_SLEEP_MS / 1000}s...`);
+          await Bun.sleep(RETRY_SLEEP_MS);
           raw = await callClaude(prompt);
         } else {
           throw firstErr;
@@ -170,6 +179,11 @@ export async function summarizeBatch(
       }
 
       console.log(`[llm] Batch ${batchNum} done: ${outputs.length} summaries`);
+
+      // バッチ間スリープ（レート制限対策）
+      if (i + BATCH_SIZE < articles.length) {
+        await Bun.sleep(BATCH_SLEEP_MS);
+      }
     } catch (err) {
       if (err instanceof ClaudeAuthError) {
         // 認証切れは致命的エラー — 即座に上位に伝播
