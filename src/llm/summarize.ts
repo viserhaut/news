@@ -54,6 +54,8 @@ function buildPrompt(articles: ArticleInput[], personalContext?: string | null):
 - 本業SRE: Kubernetes, IaC (Terraform/Pulumi), Observability, セキュリティ
 - AIエージェント開発: Claude, LLM, MCP, Claude Code
 - 個人開発・副業・収益化: インディーハッカー, SaaS, プロダクト開発
+- プロダクト設計・PDM: ユーザー課題発見, MVP定義, プロダクト戦略
+- 日本市場: 国内スタートアップ動向, 日本語SaaS, 日本未上陸サービス
 ${personalSection}
 以下の記事リストを読み、各記事に対してJSON配列を返してください。
 説明文・マークダウン・コードブロックは一切不要です。JSONのみを出力してください。
@@ -63,6 +65,11 @@ ${personalSection}
 - 0.60〜0.84: 関連分野の周辺情報。把握しておく価値あり
 - 0.30〜0.59: 薄い関連。読むか判断が必要
 - 0.00〜0.29: ほぼ無関係
+
+## カテゴリ別スコアリング補足
+- indie_dev: 「月10万円規模で個人実装可能か」「既存サービスの改善・組み合わせか」「Pain Pointが明確か」を重視
+- product: 「ユーザー課題の発見・解決フレームワークか」「PDM視点での再現可能な知見か」を重視
+- japan_biz: 「日本市場固有の機会か」「日本未上陸カテゴリのタイムマシン戦略に使えるか」を重視
 
 ## 出力フォーマット（JSON配列のみ）
 [
