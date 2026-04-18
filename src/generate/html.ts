@@ -369,9 +369,11 @@ body {
 
 /* ブックマーク / コピー / エクスポート */
 .bookmark-btn {
-  background: none; border: none; padding: 0 0.125rem; cursor: pointer;
-  color: var(--text-dim); font-size: 0.875rem; line-height: 1;
+  background: none; border: none; padding: 0.25rem 0.375rem; cursor: pointer;
+  color: var(--text-dim); font-size: 1.125rem; line-height: 1;
   transition: color 0.12s ease; flex-shrink: 0;
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 2rem; min-height: 2rem;
 }
 .bookmark-btn:hover { color: #f59e0b; }
 .bookmark-btn.is-bookmarked { color: #f59e0b; }
@@ -433,6 +435,7 @@ kbd {
   background: var(--surface); color: var(--text);
   box-shadow: 0 24px 64px rgba(0,0,0,0.3), 0 4px 16px rgba(0,0,0,0.15);
   display: flex; flex-direction: column;
+  margin: auto; /* 確実に中央表示 */
   /* 閉じた状態 */
   opacity: 0; transform: scale(0.95) translateY(2%);
   transition: opacity 0.18s ease, transform 0.22s cubic-bezier(0.34,1.56,0.64,1),
@@ -449,6 +452,24 @@ kbd {
 }
 @starting-style {
   #detail-dialog[open]::backdrop { background-color: transparent; }
+}
+/* モバイル: ボトムシート */
+@media (max-width: 768px) {
+  #detail-dialog {
+    position: fixed;
+    bottom: 0; left: 0; right: 0; top: auto;
+    width: 100%; max-width: 100%;
+    max-height: 88vh;
+    margin: 0;
+    border-radius: 16px 16px 0 0;
+    transform: translateY(100%);
+    transition: opacity 0.2s ease, transform 0.25s cubic-bezier(0.32,0.72,0,1),
+                display 0.25s allow-discrete, overlay 0.25s allow-discrete;
+  }
+  #detail-dialog[open] { opacity: 1; transform: translateY(0); }
+  @starting-style {
+    #detail-dialog[open] { opacity: 0; transform: translateY(100%); }
+  }
 }
 
 .detail-panel-header {
@@ -597,6 +618,15 @@ footer a:hover { color: var(--accent-light); }
   .sidebar-collapsible { display: block !important; }
 }
 
+/* ── NEW バッジ ── */
+.badge-new {
+  display: inline-flex; align-items: center;
+  font-size: 0.6rem; font-weight: 700; letter-spacing: 0.06em;
+  padding: 0.1rem 0.35rem; border-radius: 3px;
+  background: #10b981; color: #fff;
+  text-transform: uppercase; flex-shrink: 0; line-height: 1.4;
+}
+
 /* ── 設定モーダル ── */
 .settings-btn {
   background: none; border: 1px solid var(--border); border-radius: 6px;
@@ -686,16 +716,6 @@ footer a:hover { color: var(--accent-light); }
   }
   .copy-btn { font-size: 0.875rem; padding: 0.375rem; }
   .card-meta { gap: 0.5rem; flex-wrap: wrap; align-items: center; }
-  /* 詳細パネル: ボトムシートスタイル */
-  #detail-dialog {
-    width: 100%;
-    max-width: 100%;
-    max-height: 82vh;
-    margin: auto 0 0 0;
-    border-radius: 16px 16px 0 0;
-    transform: translateY(6px);
-  }
-  #detail-dialog[open] { transform: translateY(0); }
 }
 `.trim();
 
@@ -719,6 +739,7 @@ document.getElementById('theme-toggle').addEventListener('click', cycleTheme);
 // ── 既読 / スキップ状態 (localStorage) ───────────────
 var READ_KEY = 'news_read_v2';
 var SKIP_KEY = 'news_skip_v2';
+var LAST_VISIT_KEY = 'news_last_visit';
 
 function getSet(key) {
   try { return new Set(JSON.parse(localStorage.getItem(key) || '[]')); } catch { return new Set(); }
@@ -744,6 +765,11 @@ function restoreState() {
   });
 }
 
+function removeNewBadge(card) {
+  var badge = card.querySelector('.badge-new');
+  if (badge) badge.remove();
+}
+
 function toggleRead(card) {
   var id = Number(card.dataset.id);
   var readIds = getSet(READ_KEY);
@@ -756,6 +782,7 @@ function toggleRead(card) {
     card.classList.add('read');
     if (btn) { btn.classList.add('is-read'); btn.textContent = '\\u2713'; }
     readIds.add(id);
+    removeNewBadge(card);
   }
   saveSet(READ_KEY, readIds);
   scheduleGistSave();
@@ -771,6 +798,7 @@ function markRead(card) {
   var btn = card.querySelector('.read-btn');
   if (btn) { btn.classList.add('is-read'); btn.textContent = '\\u2713'; }
   readIds.add(id);
+  removeNewBadge(card);
   saveSet(READ_KEY, readIds);
   scheduleGistSave();
   updateUnreadCount();
@@ -1397,6 +1425,26 @@ backToTopBtn.addEventListener('click', function() {
 })();
 
 // ── 初期化 ────────────────────────────────────────────
+// ── 新着バッジ ────────────────────────────────────────
+function applyNewBadges() {
+  var lastVisit = localStorage.getItem(LAST_VISIT_KEY);
+  if (!lastVisit) return; // 初回訪問はバッジなし
+  var readIds = getSet(READ_KEY);
+  document.querySelectorAll('.card').forEach(function(card) {
+    var pubDate = card.dataset.date;
+    if (!pubDate || card.querySelector('.badge-new')) return;
+    if (pubDate > lastVisit && !readIds.has(Number(card.dataset.id))) {
+      var badge = document.createElement('span');
+      badge.className = 'badge-new';
+      badge.textContent = 'NEW';
+      var meta = card.querySelector('.card-meta');
+      if (meta) meta.prepend(badge);
+    }
+  });
+  // 今回の訪問時刻を記録（次回のために）
+  localStorage.setItem(LAST_VISIT_KEY, new Date().toISOString());
+}
+
 restoreState();
 buildSourceFilters();
 setActiveBtn('read-filters', currentReadFilter);
@@ -1406,6 +1454,7 @@ setActiveBtn('source-filters', currentSourceFilter);
 applyFilters();
 initShareButtons();
 initSyncDot();
+applyNewBadges();
 loadFromGist();
 `.trim();
 
