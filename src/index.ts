@@ -13,8 +13,9 @@ import { ClaudeAuthError } from "./llm/claude";
 import { computeTagAffinity, applyTagBoost } from "./personalize/layer1";
 import { maybeGenerateProfile } from "./personalize/layer2";
 import { buildPersonalContext } from "./personalize/inject";
+import { syncGistReads } from "./sync/gist";
 import { notifyDigest, notifyError } from "./notify/slack";
-import type { DigestArticleRow } from "./db/queries";
+import type { DigestArticleRow, UnsummarizedRow } from "./db/queries";
 
 const ROOT_DIR = join(import.meta.dir, "..");
 const DB_PATH = process.env.DB_PATH ?? join(ROOT_DIR, "data", "digest.db");
@@ -109,6 +110,20 @@ async function main() {
     console.log("[info] XAI_API_KEY not set, skipping X bookmark import");
   }
 
+  // ── Step 0b: Gist 読了同期 ──────────────────────────────
+  const gistPat = process.env.GIST_PAT;
+  const gistId  = process.env.GIST_ID;
+  if (gistPat && gistId) {
+    try {
+      const { synced, skipped } = await syncGistReads(q, gistPat, gistId);
+      console.log(`[sync]  Gist reads: ${synced} new, ${skipped} already recorded`);
+    } catch (err) {
+      console.error(`[warn]  Gist sync failed: ${err instanceof Error ? err.message : err}`);
+    }
+  } else {
+    console.log("[info]  GIST_PAT/GIST_ID not set, skipping read sync");
+  }
+
   // ── Step 1: RSS フェッチ ──────────────────────────────
   const sources = loadSources(ROOT_DIR);
   console.log(`[info] ${sources.length} sources loaded`);
@@ -167,7 +182,7 @@ async function main() {
   console.log(`[info] Body fetch complete`);
 
   // ── Step 3: 要約・スコアリング ────────────────────────
-  const unsummarized = q.selectUnsummarized.all();
+  const unsummarized = q.selectUnsummarized.all() as UnsummarizedRow[];
   console.log(`[info] Summarizing ${unsummarized.length} articles...`);
 
   if (unsummarized.length > 0) {
@@ -179,8 +194,18 @@ async function main() {
       const preferences = q.selectUserPreferences.all() as Array<{ type: string; value: string }>;
       const personalContext = buildPersonalContext(tagAffinity, latestProfile?.profile ?? null, preferences);
 
+      // 72h 以内 + affinity 降順 + 上限 50 件に絞る（トークン消費を抑制）
+      const MAX_SUMMARIZE = 50;
+      const cutoff72h = Date.now() - 72 * 60 * 60 * 1000;
+      const toSummarize = unsummarized
+        .filter((a) => !a.published_at || new Date(a.published_at).getTime() > cutoff72h)
+        .sort((a, b) => (tagAffinity.get(b.category) ?? 0) - (tagAffinity.get(a.category) ?? 0))
+        .slice(0, MAX_SUMMARIZE);
+      const skipped = unsummarized.length - toSummarize.length;
+      if (skipped > 0) console.log(`[info] Skipped ${skipped} articles (age/cap filter)`);
+
       const result = await summarizeBatch(
-        unsummarized,
+        toSummarize,
         (row) => q.insertSummary.run(row),
         personalContext
       );

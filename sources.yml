@@ -4,7 +4,7 @@ sources:
     rss_url: https://b.hatena.ne.jp/hotentry/it.rss
     language: ja
     category: community
-    max_items: 20
+    max_items: 7
     enabled: true
 
   - id: aws_blog
@@ -20,7 +20,7 @@ sources:
     rss_url: https://www.security-next.com/feed
     language: ja
     category: security
-    max_items: 10
+    max_items: 5
     enabled: true
 
   - id: zenn_claude
@@ -45,7 +45,7 @@ sources:
     rss_url: https://hnrss.org/best
     language: en
     category: community
-    max_items: 30
+    max_items: 10
     enabled: true
 
   - id: simon_willison
@@ -61,7 +61,7 @@ sources:
     rss_url: https://www.reddit.com/r/MachineLearning/.rss
     language: en
     category: ai_research
-    max_items: 10
+    max_items: 5
     enabled: true
 
   - id: reddit_localllama
@@ -69,7 +69,7 @@ sources:
     rss_url: https://www.reddit.com/r/LocalLLaMA/.rss
     language: en
     category: ai_tools
-    max_items: 10
+    max_items: 5
     enabled: true
 
   - id: reddit_kubernetes
@@ -77,7 +77,7 @@ sources:
     rss_url: https://www.reddit.com/r/kubernetes/.rss
     language: en
     category: cloud
-    max_items: 10
+    max_items: 3
     enabled: true
 
   - id: cncf_blog
@@ -85,7 +85,7 @@ sources:
     rss_url: https://www.cncf.io/feed/
     language: en
     category: cloud
-    max_items: 10
+    max_items: 3
     enabled: true
 
   - id: devto_claudeai
@@ -94,7 +94,7 @@ sources:
     language: en
     category: ai_tools
     max_items: 10
-    enabled: true
+    enabled: false
 
   - id: indie_hackers
     name: Indie Hackers
@@ -112,7 +112,7 @@ sources:
     rss_url: https://thebootstrappedfounder.com/feed/
     language: en
     category: indie_dev
-    max_items: 10
+    max_items: 3
     enabled: true
 
   - id: reddit_saas
@@ -120,7 +120,7 @@ sources:
     rss_url: https://www.reddit.com/r/SaaS/.rss
     language: en
     category: indie_dev
-    max_items: 15
+    max_items: 3
     enabled: true
 
   - id: reddit_entrepreneur
@@ -128,7 +128,7 @@ sources:
     rss_url: https://www.reddit.com/r/Entrepreneur/.rss
     language: en
     category: indie_dev
-    max_items: 10
+    max_items: 3
     enabled: true
 
   - id: reddit_startups
@@ -136,7 +136,7 @@ sources:
     rss_url: https://www.reddit.com/r/startups/.rss
     language: en
     category: indie_dev
-    max_items: 10
+    max_items: 3
     enabled: true
 
   # ── product カテゴリ（プロダクト設計・PDM） ───────────────────────
@@ -146,7 +146,7 @@ sources:
     rss_url: https://www.ycombinator.com/blog/rss.xml
     language: en
     category: product
-    max_items: 10
+    max_items: 5
     enabled: true
 
   - id: lenny_newsletter
@@ -154,7 +154,7 @@ sources:
     rss_url: https://www.lennysnewsletter.com/feed
     language: en
     category: product
-    max_items: 5
+    max_items: 3
     enabled: true
 
   # ── japan_biz カテゴリ（日本市場・スタートアップ） ────────────────
@@ -165,7 +165,7 @@ sources:
     rss_url: https://techcrunch.com/tag/japan/feed/
     language: en
     category: japan_biz
-    max_items: 10
+    max_items: 5
     enabled: true
 
   - id: coral_capital
@@ -173,5 +173,5 @@ sources:
     rss_url: https://coralcap.co/feed/
     language: ja
     category: japan_biz
-    max_items: 10
+    max_items: 5
     enabled: true

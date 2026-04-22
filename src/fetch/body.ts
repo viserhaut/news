@@ -1,7 +1,6 @@
 const BODY_TIMEOUT_MS = 15_000;
-const FULL_TEXT_THRESHOLD = 800;
-const HEAD_CHARS = 500;
-const TAIL_CHARS = 300;
+const FULL_TEXT_THRESHOLD = 400;
+const HEAD_CHARS = 300;
 
 const USER_AGENT =
   "Mozilla/5.0 (compatible; news-digest/1.0; +https://github.com/viserhaut/news)";
@@ -58,7 +57,5 @@ function extractText(html: string): string {
 
 function headTail(text: string): string {
   if (text.length <= FULL_TEXT_THRESHOLD) return text;
-  const head = text.slice(0, HEAD_CHARS);
-  const tail = text.slice(-TAIL_CHARS);
-  return `${head}\n...\n${tail}`;
+  return text.slice(0, HEAD_CHARS);
 }
