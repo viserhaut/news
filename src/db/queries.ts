@@ -137,6 +137,14 @@ export function makeQueries(db: Database) {
     INSERT INTO read_history (article_id, feedback) VALUES ($article_id, $feedback)
   `);
 
+  const articleExists = db.prepare<{ id: number }, { $id: number }>(`
+    SELECT id FROM articles WHERE id = $id
+  `);
+
+  const countReadByArticle = db.prepare<{ count: number }, { $article_id: number }>(`
+    SELECT COUNT(*) as count FROM read_history WHERE article_id = $article_id
+  `);
+
   const updateReadFeedback = db.prepare<void, { $article_id: number; $feedback: string }>(`
     UPDATE read_history SET feedback = $feedback
     WHERE id = (SELECT MAX(id) FROM read_history WHERE article_id = $article_id)
@@ -231,6 +239,8 @@ export function makeQueries(db: Database) {
     selectUnsummarized,
     insertSummary,
     insertReadHistory,
+    articleExists,
+    countReadByArticle,
     updateReadFeedback,
     selectReadCountByCategory,
     selectRecentReads,

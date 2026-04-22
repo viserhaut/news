@@ -13,6 +13,7 @@ import { ClaudeAuthError } from "./llm/claude";
 import { computeTagAffinity, applyTagBoost } from "./personalize/layer1";
 import { maybeGenerateProfile } from "./personalize/layer2";
 import { buildPersonalContext } from "./personalize/inject";
+import { syncGistReads } from "./sync/gist";
 import { notifyDigest, notifyError } from "./notify/slack";
 import type { DigestArticleRow, UnsummarizedRow } from "./db/queries";
 
@@ -107,6 +108,20 @@ async function main() {
     }
   } else {
     console.log("[info] XAI_API_KEY not set, skipping X bookmark import");
+  }
+
+  // ── Step 0b: Gist 読了同期 ──────────────────────────────
+  const gistPat = process.env.GIST_PAT;
+  const gistId  = process.env.GIST_ID;
+  if (gistPat && gistId) {
+    try {
+      const { synced, skipped } = await syncGistReads(q, gistPat, gistId);
+      console.log(`[sync]  Gist reads: ${synced} new, ${skipped} already recorded`);
+    } catch (err) {
+      console.error(`[warn]  Gist sync failed: ${err instanceof Error ? err.message : err}`);
+    }
+  } else {
+    console.log("[info]  GIST_PAT/GIST_ID not set, skipping read sync");
   }
 
   // ── Step 1: RSS フェッチ ──────────────────────────────
