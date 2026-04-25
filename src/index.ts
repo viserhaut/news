@@ -91,7 +91,7 @@ async function main() {
           $source_id: "x",
           $language: language,
           $category: "x",
-          $published_at: null,
+          $published_at: new Date().toISOString(),
           $body_raw: bodyRaw,
         });
         const after =

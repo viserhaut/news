@@ -124,6 +124,7 @@ export function makeQueries(db: Database) {
     FROM articles a
     LEFT JOIN summaries s ON s.article_id = a.id
     WHERE s.article_id IS NULL
+      AND a.fetched_at > datetime('now', '-3 days')
     ORDER BY a.fetched_at DESC
   `);
 

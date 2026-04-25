@@ -12,11 +12,11 @@
     <string>/Users/viserhaut/dev/src/news/scripts/run.sh</string>
   </array>
 
-  <!-- 毎朝 4:00 JST（macOS はローカルタイムで動作） -->
+  <!-- 毎日 0:00 JST（macOS はローカルタイムで動作） -->
   <key>StartCalendarInterval</key>
   <dict>
     <key>Hour</key>
-    <integer>4</integer>
+    <integer>0</integer>
     <key>Minute</key>
     <integer>0</integer>
   </dict>
