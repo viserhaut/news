@@ -36,10 +36,10 @@ function formatDate(isoStr: string | null): string {
 
 // ── ティア定義 ───────────────────────────────────────
 const TIERS = [
-  { id: "must-read",    label: "Must Read",    color: "#10b981", min: 0.85 },
-  { id: "recommended",  label: "Recommended",  color: "#3b82f6", min: 0.70 },
-  { id: "worth-a-look", label: "Worth a Look", color: "#f59e0b", min: 0.50 },
-  { id: "low-priority", label: "Low Priority", color: "#6b7280", min: 0.00 },
+  { id: "must-read",    label: "Must Read",    color: "#1748a8", min: 0.85 },
+  { id: "recommended",  label: "Recommended",  color: "#4a6a3a", min: 0.70 },
+  { id: "worth-a-look", label: "Worth a Look", color: "#a8741a", min: 0.50 },
+  { id: "low-priority", label: "Low Priority", color: "#8a8174", min: 0.00 },
 ] as const;
 
 type Tier = (typeof TIERS)[number];
@@ -50,6 +50,16 @@ function getTier(score: number): Tier {
   }
   return TIERS[TIERS.length - 1]!;
 }
+
+const FEED_COLOR: Record<string, string> = {
+  anthropic_blog: "#cc785c", openai_blog: "#10a37f", cloudflare_blog: "#f6821f",
+  bun_sh: "#d97aa6", vercel_blog: "#0f172a", hono_dev: "#ff6b35",
+  mcp_spec: "#6d4ec7", postgres_news: "#336791", github_blog: "#24292e",
+  aws_blog: "#cc7a00", hashicorp_blog: "#5b3aa8", cncf_blog: "#3970e4",
+  zenn_trending: "#3b82f6", cisa_news: "#1e3a8a", openssh_news: "#5a5a5a",
+  x: "#1a1a1a",
+};
+const feedColor = (f: string) => FEED_COLOR[f] ?? "#7a6f5d";
 
 // ── カテゴリラベル ────────────────────────────────────
 const CATEGORY_LABELS: Record<string, string> = {
@@ -91,25 +101,31 @@ function cardHtml(a: DigestArticleRow): string {
   const scorePct = Math.round(score * 100);
   // X ブックマークは手動選択のため常に Must Read
   const tier = a.source_id === "x" ? TIERS[0]! : getTier(score);
+  const fc = feedColor(a.source_id);
+  const initial = (a.source_id ?? "?")[0]!.toUpperCase();
+  const title = esc(a.title_ja ?? a.url);
+  const published = formatDate(a.published_at);
 
   return `<article class="card${a.detail_summary_ja ? " has-detail" : ""}" data-id="${a.id}" data-category="${esc(a.category)}" data-tier="${tier.id}" data-date="${esc(a.published_at ?? "")}"${a.detail_summary_ja ? ` data-detail="${esc(a.detail_summary_ja)}" data-url="${safeUrl(a.url)}" data-title="${esc(a.title_ja ?? a.url)}" data-summary="${esc(a.summary_ja ?? "")}"` : ""}>
-  <button type="button" class="skip-btn" aria-label="スキップ">✕</button>
-  <div class="card-row">
-    <button type="button" class="read-btn" aria-label="既読にする"></button>
-    <div class="card-body">
-      <h3 class="card-title"><a href="${safeUrl(a.url)}" target="_blank" rel="noopener noreferrer">${esc(a.title_ja ?? a.url)}</a></h3>
-      ${summaryHtml(a.summary_ja)}
-      <div class="card-meta">
-        <span class="feed-name">${esc(a.source_id)}</span>
-        <span class="sep">·</span>
-        <span class="date">${formatDate(a.published_at)}</span>
-        <span class="tag">${esc(categoryLabel(a.category))}</span>
-      </div>
+  <div class="c-row">
+    <div class="c-head">
+      <span class="feed-avatar" style="background:${fc}">${initial}</span>
+      <span class="feed-name">${esc(a.source_id)}</span>
+      <span class="meta-sep">·</span>
+      <span>${published}</span>
+      <span class="tag">${esc(categoryLabel(a.category))}</span>
     </div>
-    <div class="card-score">
-      <div class="score-ring" style="--pct:${scorePct};--color:${tier.color}">
-        <span>${scorePct}</span>
-      </div>
+    <h3 class="c-title"><a href="${safeUrl(a.url)}" target="_blank" rel="noopener noreferrer">${title}</a></h3>
+    ${a.summary_ja ? `<p class="c-summary">${esc(a.summary_ja)}</p>` : ""}
+    <div class="c-actions">
+      <button type="button" class="icon-btn" data-action="read" aria-label="既読にする">✓</button>
+      <button type="button" class="icon-btn bookmark" data-action="bookmark" aria-label="ブックマーク">☆</button>
+      <button type="button" class="icon-btn skip" data-action="skip" aria-label="スキップ">✕</button>
+      <button type="button" class="icon-btn share-btn" data-action="share" data-share-url="${safeUrl(a.url)}" data-share-title="${title}" aria-label="シェア">↗</button>
+      <span class="c-score">
+        <span class="score-bar"><span class="score-fill" style="width:${scorePct}%;background:${tier.color}"></span></span>
+        relevance ${scorePct}
+      </span>
     </div>
   </div>
 </article>`;
@@ -117,606 +133,271 @@ function cardHtml(a: DigestArticleRow): string {
 
 // ── ティアセクション HTML ─────────────────────────────
 function tierSectionHtml(tier: Tier, cards: DigestArticleRow[]): string {
+  const tierId = tier.id.replace(/-/g, "_");
   const cardsHtml = cards.map(cardHtml).join("\n");
-  return `<section id="${tier.id}" class="tier-section">
-  <div class="tier-header">
-    <span class="tier-bar" style="background:${tier.color}"></span>
-    <h2>${tier.label}</h2>
-    <span class="tier-count">${cards.length}</span>
-    <button type="button" class="mark-section-read">全て既読</button>
-    <button type="button" class="skip-section-btn">スキップ</button>
+  return `<section id="${tier.id}" class="tier-section" data-tier="${tierId}">
+  <div class="tier-divider">
+    <span class="tier-mark">${tier.label[0]}</span>
+    <span class="tier-eyebrow"><strong>${tier.label}</strong></span>
+    <span class="tier-count">${cards.length} articles</span>
+    <div class="tier-actions">
+      <button type="button" class="section-btn mark-section-read">全て既読</button>
+      <button type="button" class="section-btn skip skip-section-btn">スキップ</button>
+    </div>
   </div>
-  ${cardsHtml}
+  <div class="cards">
+    ${cardsHtml}
+  </div>
 </section>`;
 }
 
-// ── CSS (Feed Curator ベース) ─────────────────────────
+// ── CSS (Editorial Paper × Collapsible Rail) ──────────
 const CSS = `
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-:root { --sidebar-w: 220px; }
-
-:root, [data-theme="dark"] {
-  --bg: #09090b; --surface: #18181b; --surface-hover: #1e1e22;
-  --border: #27272a; --border-light: #3f3f46;
-  --text: #fafafa; --text-muted: #a1a1aa; --text-dim: #71717a;
-  --accent: #7c3aed; --accent-light: #a78bfa;
-  --accent-glow: rgba(167,139,250,0.12);
-  --tag-bg: rgba(167,139,250,0.12); --tag-text: #a78bfa; --logo-from: #fff;
+:root {
+  --serif: 'Charter', 'Iowan Old Style', 'Georgia', 'Hiragino Mincho ProN', 'Yu Mincho', serif;
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', sans-serif;
+  --rail-w-collapsed: 64px; --rail-w-expanded: 280px;
+  --feed-w: 760px; --header-h: 64px;
 }
 
-[data-theme="light"] {
-  --bg: #fafafa; --surface: #ffffff; --surface-hover: #f4f4f5;
-  --border: #e4e4e7; --border-light: #d4d4d8;
-  --text: #18181b; --text-muted: #52525b; --text-dim: #71717a;
-  --accent: #7c3aed; --accent-light: #7c3aed;
-  --accent-glow: rgba(124,58,237,0.08);
-  --tag-bg: rgba(124,58,237,0.08); --tag-text: #6d28d9; --logo-from: #18181b;
+:root, [data-theme="light"], [data-theme="dark"] {
+  --paper: #f5f1ea; --paper-tint: #efe9dd; --paper-edge: #e6dfd0;
+  --rule: #c9c0b1; --ink: #1a1814; --ink-soft: #3a342c;
+  --ink-mute: #7a6f5d; --ink-faint: #a89f8d;
+  --ink-blue: #1748a8; --ink-blue-soft: #2d63c8;
+  --tier-must-read: #1748a8; --tier-recommended: #4a6a3a;
+  --tier-worth-a-look: #a8741a; --tier-low-priority: #8a8174;
+  --bg: var(--paper); --surface: #fbf8f1; --surface-hover: #f0ead9;
+  --border: var(--paper-edge); --border-light: var(--rule);
+  --text: var(--ink); --text-muted: var(--ink-soft); --text-dim: var(--ink-mute);
+  --accent: var(--ink-blue); --accent-light: var(--ink-blue-soft);
+  --accent-glow: rgba(23,72,168,0.06);
+  --tag-bg: rgba(23,72,168,0.06); --tag-text: var(--ink-blue);
+  --bookmark: #a8741a; --danger: #a83232; --success: #4a6a3a;
 }
 
-@media (prefers-color-scheme: light) {
-  :root:not([data-theme]) {
-    --bg: #fafafa; --surface: #ffffff; --surface-hover: #f4f4f5;
-    --border: #e4e4e7; --border-light: #d4d4d8;
-    --text: #18181b; --text-muted: #52525b; --text-dim: #71717a;
-    --accent: #7c3aed; --accent-light: #7c3aed;
-    --accent-glow: rgba(124,58,237,0.08);
-    --tag-bg: rgba(124,58,237,0.08); --tag-text: #6d28d9; --logo-from: #18181b;
-  }
+html, body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--font-sans); font-size: 16px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+button, input { font-family: inherit; }
+a { color: inherit; }
+
+/* ── App shell ──────────────────────────────────────────────────────── */
+.app { display: grid; grid-template-columns: var(--rail-w-collapsed) 1fr; min-height: 100vh; transition: grid-template-columns 0.22s cubic-bezier(0.32,0.72,0,1); }
+.app.expanded { grid-template-columns: var(--rail-w-expanded) 1fr; }
+
+/* ── Rail (sidebar) ─────────────────────────────────────────────────── */
+.rail { position: sticky; top: 0; height: 100vh; border-right: 1px solid var(--rule); background: var(--paper-tint); display: flex; flex-direction: column; overflow: hidden; }
+.rail-top { padding: 18px 12px; display: flex; flex-direction: column; gap: 4px; align-items: stretch; overflow-y: auto; flex: 1; scrollbar-width: none; }
+.rail-top::-webkit-scrollbar { display: none; }
+.rail-mark { width: 40px; height: 40px; border: 1px solid var(--ink); display: grid; place-content: center; font-family: var(--serif); font-style: italic; font-weight: 700; font-size: 18px; color: var(--ink); margin: 0 auto 12px; transition: all 0.15s ease; cursor: pointer; user-select: none; }
+.rail-mark:hover { background: var(--ink); color: var(--paper); }
+.app.expanded .rail-mark { margin: 0 0 12px; }
+
+.rail-icon { display: flex; align-items: center; gap: 12px; padding: 9px 10px; border: none; background: transparent; color: var(--ink-mute); cursor: pointer; border-radius: 4px; font-size: 14px; transition: background 0.12s ease, color 0.12s ease; white-space: nowrap; width: 100%; text-align: left; text-decoration: none; }
+.rail-icon:hover { background: rgba(0,0,0,0.04); color: var(--ink); }
+.rail-icon.active { color: var(--ink-blue); background: var(--accent-glow); }
+.rail-glyph { width: 20px; flex-shrink: 0; text-align: center; font-size: 15px; }
+.rail-label { font-family: var(--serif); font-size: 14px; opacity: 0; transition: opacity 0.18s ease; pointer-events: none; }
+.app.expanded .rail-label { opacity: 1; pointer-events: auto; }
+.rail-count { margin-left: auto; font-size: 11px; color: var(--ink-faint); font-variant-numeric: tabular-nums; opacity: 0; transition: opacity 0.18s ease; }
+.app.expanded .rail-count { opacity: 1; }
+
+.rail-divider { height: 1px; background: var(--paper-edge); margin: 12px 14px; }
+.rail-section-label { font-family: var(--serif); font-style: italic; font-size: 11px; color: var(--ink-faint); padding: 0 14px 6px; opacity: 0; transition: opacity 0.18s ease; letter-spacing: 0.04em; white-space: nowrap; }
+.app.expanded .rail-section-label { opacity: 1; }
+
+.rail-search { margin: 8px 12px 0; padding: 7px 10px; border: 1px solid var(--paper-edge); background: var(--paper); color: var(--ink); border-radius: 4px; font-size: 13px; outline: none; opacity: 0; transition: opacity 0.18s ease, border-color 0.12s ease; pointer-events: none; }
+.app.expanded .rail-search { opacity: 1; pointer-events: auto; }
+.rail-search:focus { border-color: var(--ink-blue); }
+
+.rail-foot { padding: 12px; border-top: 1px solid var(--paper-edge); }
+.rail-foot-text { font-family: var(--serif); font-style: italic; font-size: 11px; color: var(--ink-faint); text-align: center; opacity: 0; transition: opacity 0.18s ease; }
+.app.expanded .rail-foot-text { opacity: 1; }
+
+.settings-btn-wrap { position: relative; display: inline-flex; }
+.sync-dot { position: absolute; top: -3px; right: -3px; width: 9px; height: 9px; border-radius: 50%; border: 2px solid var(--paper-tint); background: var(--paper-edge); pointer-events: none; transition: background 0.2s ease; }
+.sync-dot.ok      { background: var(--success); }
+.sync-dot.error   { background: var(--danger); }
+.sync-dot.syncing { background: var(--ink-blue); animation: pulse-dot 1s ease-in-out infinite; }
+@keyframes pulse-dot { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+.export-btn { display: block; width: 100%; padding: 7px 10px; background: none; border: none; color: var(--ink-mute); font-family: var(--serif); font-style: italic; font-size: 13px; cursor: pointer; text-align: left; border-radius: 4px; transition: color 0.12s ease; }
+.export-btn:hover { color: var(--ink); }
+
+/* ── Main content ───────────────────────────────────────────────────── */
+main { padding: 0; min-width: 0; }
+
+.masthead { position: sticky; top: 0; z-index: 4; background: rgba(245,241,234,0.88); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom: 1px solid var(--rule); }
+.masthead-inner { max-width: var(--feed-w); margin: 0 auto; padding: 22px 24px 14px; }
+.brand-row { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.wordmark { font-family: var(--serif); font-weight: 700; font-size: 28px; letter-spacing: -0.02em; color: var(--ink); line-height: 1; }
+.wordmark .ampersand { font-style: italic; font-weight: 400; color: var(--ink-blue); padding: 0 2px; }
+.masthead-date { font-family: var(--serif); font-style: italic; font-size: 13px; color: var(--ink-mute); }
+.masthead-rule { height: 1px; background: var(--ink); margin: 14px 0 12px; }
+
+.chips { display: flex; gap: 6px; flex-wrap: wrap; }
+.chip { padding: 5px 12px; border-radius: 999px; font-size: 12px; border: 1px solid var(--paper-edge); background: var(--paper); color: var(--ink-mute); cursor: pointer; font-family: var(--serif); transition: all 0.12s ease; }
+.chip:hover { border-color: var(--ink); color: var(--ink); }
+.chip.active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+/* ── Feed ───────────────────────────────────────────────────────────── */
+.feed { max-width: var(--feed-w); margin: 0 auto; padding: 40px 32px 96px; }
+
+@media (min-width: 1280px) {
+  :root { --feed-w: 820px; }
+  .c-title { font-size: 34px; line-height: 1.22; }
+  .c-summary { font-size: 19px; }
+  .wordmark { font-size: 32px; }
+  .feed { padding: 48px 32px 96px; }
+  .card { padding: 32px 0 34px 28px; }
+  .tier-eyebrow { font-size: 38px; }
+  .tier-mark { width: 52px; height: 52px; font-size: 26px; }
 }
 
-body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif;
-  background: var(--bg); color: var(--text); line-height: 1.6; min-height: 100vh;
-}
+.tier-section { margin-bottom: 16px; position: relative; }
+.tier-section[data-tier="must_read"]      { --tier-c: #1748a8; }
+.tier-section[data-tier="recommended"]    { --tier-c: #4a6a3a; }
+.tier-section[data-tier="worth_a_look"]   { --tier-c: #a8741a; }
+.tier-section[data-tier="low_priority"]   { --tier-c: #8a8174; }
 
-.layout { display: flex; max-width: 1080px; margin: 0 auto; min-height: 100vh; }
+.tier-divider { display: flex; align-items: center; gap: 18px; margin: 64px 0 24px; padding-bottom: 16px; border-bottom: 2px solid var(--ink); position: relative; }
+.tier-section:first-child .tier-divider { margin-top: 8px; }
+.tier-divider::before { content: ""; position: absolute; left: 0; bottom: -2px; width: 80px; height: 4px; background: var(--tier-c); }
 
-.sidebar {
-  width: var(--sidebar-w); flex-shrink: 0; padding: 2rem 1.25rem;
-  position: sticky; top: 0; height: 100vh; overflow-y: auto;
-  border-right: 1px solid var(--border);
-}
+.tier-mark { width: 44px; height: 44px; border-radius: 50%; background: var(--tier-c); color: var(--paper); font-family: var(--serif); font-style: italic; font-weight: 700; font-size: 22px; display: grid; place-content: center; flex-shrink: 0; letter-spacing: -0.02em; }
+.tier-eyebrow { font-family: var(--serif); font-size: 32px; font-weight: 700; color: var(--ink); letter-spacing: -0.02em; line-height: 1; }
+.tier-count { font-family: var(--font-sans); font-size: 13px; color: var(--ink-mute); font-variant-numeric: tabular-nums; letter-spacing: 0.04em; text-transform: uppercase; }
+.tier-actions { display: flex; gap: 18px; margin-left: auto; }
+.section-btn { background: none; border: none; color: var(--ink-mute); font-size: 14px; cursor: pointer; font-family: var(--serif); font-style: italic; padding: 0; transition: color 0.12s ease; }
+.section-btn:hover { color: var(--ink); }
+.section-btn.skip:hover { color: var(--danger); }
 
-.main { flex: 1; min-width: 0; padding: 2rem 2rem 4rem; }
-
-.logo {
-  font-size: 1.125rem; font-weight: 700; letter-spacing: -0.03em;
-  background: linear-gradient(135deg, var(--logo-from) 0%, var(--accent-light) 100%);
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-  margin-bottom: 0.25rem; display: flex; align-items: center; gap: 0.5rem;
-}
-
-.logo-icon {
-  width: 1.5rem; height: 1.5rem; flex-shrink: 0;
-  -webkit-text-fill-color: initial; color: var(--accent-light);
-}
-
-.date-label { font-size: 0.75rem; color: var(--text-dim); margin-bottom: 1.5rem; }
-
-.stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-bottom: 1.5rem; }
-
-.stat-box { background: var(--surface); border-radius: 8px; padding: 0.625rem 0.75rem; }
-.stat-val { font-size: 1.25rem; font-weight: 700; }
-.stat-lbl { font-size: 0.6875rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.04em; }
-
-.sidebar-section { margin-bottom: 1.5rem; }
-
-.sidebar-heading {
-  font-size: 0.6875rem; font-weight: 600; color: var(--text-dim);
-  text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.5rem;
-}
-
-.filter-list { display: flex; flex-direction: column; gap: 0.25rem; }
-
-.filter-btn {
-  background: none; border: none; border-radius: 6px; padding: 0.4rem 0.625rem;
-  color: var(--text-muted); font-size: 0.8125rem; cursor: pointer;
-  text-align: left; transition: all 0.12s ease;
-}
-.filter-btn:hover { background: var(--surface); color: var(--text); }
-.filter-btn.active { background: var(--accent-glow); color: var(--accent); font-weight: 600; }
-
-.toc-link {
-  display: flex; align-items: center; gap: 0.5rem; padding: 0.375rem 0.625rem;
-  border-radius: 6px; color: var(--text-muted); text-decoration: none;
-  font-size: 0.8125rem; transition: all 0.12s ease;
-}
-.toc-link:hover { background: var(--surface); color: var(--text); }
-
-.toc-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-.toc-count { margin-left: auto; font-size: 0.75rem; color: var(--text-dim); font-variant-numeric: tabular-nums; }
-
-.sidebar-top { display: flex; align-items: center; justify-content: space-between; }
-
-.theme-toggle {
-  background: none; border: 1px solid var(--border); border-radius: 6px;
-  width: 2rem; height: 2rem; cursor: pointer; display: flex; align-items: center;
-  justify-content: center; transition: all 0.15s ease; color: var(--text-dim); font-size: 1rem;
-}
-.theme-toggle:hover { border-color: var(--accent-light); color: var(--accent-light); }
-
-.theme-icon::before { content: "\\25D0"; }
-[data-theme="dark"] .theme-icon::before { content: "\\2600"; }
-[data-theme="light"] .theme-icon::before { content: "\\263E"; }
-
-.tier-section { margin-bottom: 2.5rem; }
-
-.tier-header {
-  display: flex; align-items: center; gap: 0.625rem;
-  margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border);
-}
-.tier-bar { width: 3px; height: 1.25rem; border-radius: 2px; }
-.tier-header h2 { font-size: 1rem; font-weight: 600; letter-spacing: -0.01em; }
-.tier-count {
-  font-size: 0.75rem; color: var(--text-dim); background: var(--surface);
-  padding: 0.125rem 0.5rem; border-radius: 999px;
-}
-
-.mark-section-read {
-  margin-left: auto; background: none; border: 1px solid var(--border); border-radius: 6px;
-  padding: 0.25rem 0.625rem; color: var(--text-dim); font-size: 0.6875rem;
-  cursor: pointer; transition: all 0.12s ease;
-}
-.mark-section-read:hover { border-color: var(--accent-light); color: var(--accent-light); }
-
-.skip-section-btn {
-  background: none; border: 1px solid var(--border); border-radius: 6px;
-  padding: 0.25rem 0.625rem; color: var(--text-dim); font-size: 0.6875rem;
-  cursor: pointer; transition: all 0.12s ease;
-}
-.skip-section-btn:hover { border-color: #ef4444; color: #ef4444; }
-
-.card {
-  background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
-  padding: 1rem 1.25rem; margin-bottom: 0.5rem;
-  transition: background 0.15s ease, border-color 0.15s ease;
-  position: relative;
-}
-.card:hover { background: var(--surface-hover); border-color: var(--border-light); }
-.card.read { opacity: 0.45; }
+/* ── Card ───────────────────────────────────────────────────────────── */
+.cards { display: flex; flex-direction: column; }
+.card { padding: 28px 0 30px 24px; border-bottom: 1px solid var(--paper-edge); position: relative; transition: opacity 0.2s ease; border-left: 3px solid var(--tier-c); margin-left: -8px; }
+.tier-section[data-tier="low_priority"] .card { border-left-color: var(--paper-edge); }
+.card:last-child { border-bottom: none; }
+.card.read { opacity: 0.4; }
 .card.read:hover { opacity: 0.75; }
+.card.has-detail { cursor: pointer; }
+.card.focused { outline: 2px solid var(--ink-blue); outline-offset: 2px; }
 
-.card-row { display: flex; align-items: flex-start; gap: 0.875rem; }
+.c-row { display: flex; flex-direction: column; gap: 0; }
+.c-head { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; font-size: 13px; color: var(--ink-mute); font-family: var(--serif); }
+.feed-avatar { width: 24px; height: 24px; border-radius: 50%; display: grid; place-content: center; color: var(--paper); font-size: 11px; font-weight: 700; flex-shrink: 0; font-family: var(--font-sans); }
+.feed-name { color: var(--ink); font-weight: 600; font-family: var(--font-sans); font-size: 13px; }
+.c-head .meta-sep { color: var(--ink-faint); }
+.tag { font-family: var(--font-sans); font-size: 11px; padding: 1px 7px; border-radius: 3px; background: var(--tag-bg); color: var(--tag-text); letter-spacing: 0.02em; }
+.badge-new { font-size: 9px; font-weight: 700; letter-spacing: 0.08em; padding: 2px 6px; border-radius: 2px; background: var(--ink-blue); color: var(--paper); text-transform: uppercase; font-family: var(--font-sans); margin-left: 2px; }
 
-.read-btn {
-  flex-shrink: 0; width: 1.375rem; height: 1.375rem; margin-top: 0.125rem;
-  background: none; border: 1.5px solid var(--border-light); border-radius: 4px;
-  cursor: pointer; color: var(--text-dim); font-size: 0.75rem;
-  display: flex; align-items: center; justify-content: center;
-  transition: all 0.12s ease; padding: 0;
-}
-.read-btn:hover { border-color: var(--accent-light); color: var(--accent-light); }
-.read-btn.is-read { background: var(--accent); border-color: var(--accent); color: #fff; }
+.c-title { font-family: var(--serif); font-size: 30px; font-weight: 700; line-height: 1.25; letter-spacing: -0.015em; margin: 0 0 12px; color: var(--ink); }
+.c-title a { color: inherit; text-decoration: none; }
+.card.has-detail:hover .c-title a, .card:hover .c-title a { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 4px; text-decoration-color: var(--ink-faint); }
 
-.skip-btn {
-  position: absolute; top: 0.5rem; right: 0.5rem;
-  width: 1.25rem; height: 1.25rem;
-  background: var(--surface); border: 1px solid var(--border-light); border-radius: 50%;
-  cursor: pointer; color: var(--text-dim); font-size: 0.625rem;
-  display: flex; align-items: center; justify-content: center;
-  opacity: 0; transition: opacity 0.12s ease, border-color 0.12s ease, color 0.12s ease, background 0.12s ease;
-  padding: 0; z-index: 1;
-}
-.card:hover .skip-btn { opacity: 1; }
-.skip-btn:hover { border-color: #ef4444; color: #ef4444; background: rgba(239,68,68,0.1); }
+.c-summary { font-family: var(--serif); font-size: 18px; line-height: 1.6; color: var(--ink-soft); margin: 0 0 18px; }
 
-.card-body { flex: 1; min-width: 0; }
+.c-actions { display: flex; align-items: center; gap: 4px; }
+.icon-btn { width: 32px; height: 32px; border: none; background: transparent; border-radius: 50%; cursor: pointer; color: var(--ink-faint); font-size: 14px; display: grid; place-content: center; transition: all 0.12s ease; }
+.icon-btn:hover { background: rgba(0,0,0,0.05); color: var(--ink); }
+.icon-btn.active { color: var(--ink-blue); }
+.icon-btn.bookmark.on { color: var(--bookmark); }
+.icon-btn.skip:hover { color: var(--danger); background: rgba(168,50,50,0.06); }
+.icon-btn.share-btn { font-size: 12px; }
+.icon-btn.share-btn.copied { color: var(--success); }
 
-.card-title { font-size: 0.9375rem; font-weight: 600; line-height: 1.4; margin-bottom: 0.25rem; }
-.card-title a { color: var(--text); text-decoration: none; }
-.card-title a:hover { color: var(--accent); }
+.c-score { margin-left: auto; font-family: var(--serif); font-style: italic; font-size: 12px; color: var(--ink-faint); display: flex; align-items: center; gap: 8px; }
+.score-bar { width: 36px; height: 2px; background: var(--paper-edge); border-radius: 1px; overflow: hidden; }
+.score-fill { height: 100%; }
 
-.card-summary {
-  font-size: 0.8125rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 0.375rem;
-  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
-}
-.card:hover .card-summary { -webkit-line-clamp: unset; }
+/* ── FAB ────────────────────────────────────────────────────────────── */
+.fab { position: fixed; bottom: 28px; right: 28px; width: 40px; height: 40px; background: var(--ink); color: var(--paper); border: none; border-radius: 50%; font-size: 14px; cursor: pointer; box-shadow: 0 2px 8px rgba(26,24,20,0.18); display: grid; place-content: center; transition: opacity 0.22s ease, transform 0.12s ease; opacity: 0; pointer-events: none; }
+.fab:hover { transform: translateY(-2px); }
+.fab.visible { opacity: 1; pointer-events: auto; }
 
-.card-meta { display: flex; align-items: center; gap: 0.375rem; font-size: 0.75rem; color: var(--text-dim); }
+.empty { padding: 24px; color: var(--ink-faint); font-family: var(--serif); font-style: italic; font-size: 14px; text-align: center; border: 1px dashed var(--paper-edge); border-radius: 4px; }
 
-.feed-name::before {
-  content: ""; display: inline-block; width: 5px; height: 5px; border-radius: 50%;
-  background: var(--accent-light); margin-right: 0.25rem; vertical-align: middle;
-}
-.sep { color: var(--border-light); }
+footer { text-align: center; color: var(--ink-faint); font-size: 0.6875rem; padding: 1.5rem 0; font-family: var(--serif); font-style: italic; }
 
-.tag {
-  display: inline-block; font-size: 0.6875rem; padding: 0.0625rem 0.4rem;
-  border-radius: 4px; background: var(--tag-bg); color: var(--tag-text); margin-right: 0.25rem;
-}
-
-.card-score { flex-shrink: 0; margin-top: 0.125rem; }
-
-.score-ring {
-  width: 2.75rem; aspect-ratio: 1; border-radius: 50%;
-  display: grid; place-content: center;
-  background: conic-gradient(var(--color) calc(var(--pct) * 1%), var(--border) 0);
-  position: relative;
-}
-.score-ring::before {
-  content: ""; position: absolute; inset: 3px; border-radius: 50%; background: var(--surface);
-}
-.score-ring span {
-  position: relative; font-size: 0.75rem; font-weight: 700;
-  font-variant-numeric: tabular-nums; color: var(--text-muted);
-}
-
-.has-detail { cursor: pointer; }
-.has-detail:hover .card-title a { text-decoration: underline; }
-
-/* サイドバー スクロールバー */
-.sidebar { scrollbar-width: thin; scrollbar-color: var(--border) transparent; }
-.sidebar::-webkit-scrollbar { width: 4px; }
-.sidebar::-webkit-scrollbar-track { background: transparent; }
-.sidebar::-webkit-scrollbar-thumb { background: var(--border-light); border-radius: 4px; }
-.sidebar::-webkit-scrollbar-thumb:hover { background: var(--text-dim); }
-[data-theme="dark"] .sidebar::-webkit-scrollbar-thumb { background: #3f3f46; }
-[data-theme="dark"] .sidebar::-webkit-scrollbar-thumb:hover { background: #52525b; }
-
-/* スコアツールチップ */
-.score-ring[data-tooltip] { cursor: help; }
-.score-ring[data-tooltip]::after {
-  content: attr(data-tooltip);
-  position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%);
-  background: var(--surface); border: 1px solid var(--border); border-radius: 6px;
-  padding: 0.4rem 0.6rem; font-size: 0.7rem; font-weight: 400; color: var(--text);
-  white-space: pre; line-height: 1.5; z-index: 100;
-  pointer-events: none; opacity: 0; transition: opacity 0.12s ease;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-}
-.score-ring[data-tooltip]:hover::after { opacity: 1; }
-
-/* ブックマーク / コピー / エクスポート */
-.bookmark-btn {
-  background: none; border: none; padding: 0.25rem 0.375rem; cursor: pointer;
-  color: var(--text-dim); font-size: 1.125rem; line-height: 1;
-  transition: color 0.12s ease; flex-shrink: 0;
-  display: inline-flex; align-items: center; justify-content: center;
-  min-width: 2rem; min-height: 2rem;
-}
-.bookmark-btn:hover { color: #f59e0b; }
-.bookmark-btn.is-bookmarked { color: #f59e0b; }
-
-.copy-btn {
-  background: none; border: none; padding: 0 0.125rem; cursor: pointer;
-  color: var(--text-dim); font-size: 0.75rem; line-height: 1;
-  transition: color 0.12s ease; white-space: nowrap; flex-shrink: 0;
-}
-.copy-btn:hover { color: var(--accent-light); }
-.copy-btn.copied { color: #10b981; font-size: 0.6875rem; }
-
-.export-btn {
-  display: block; width: 100%; padding: 0.4rem 0.625rem; margin-top: 0.25rem;
-  background: none; border: 1px solid var(--border); border-radius: 6px;
-  color: var(--text-muted); font-size: 0.8125rem; cursor: pointer;
-  text-align: left; transition: all 0.12s ease;
-}
-.export-btn:hover { border-color: var(--accent-light); color: var(--accent-light); }
-
-/* SNSシェア */
-.share-btn {
-  background: none; border: 1px solid var(--border-light); border-radius: 4px;
-  padding: 0.0625rem 0.375rem; color: var(--text-dim); font-size: 0.6875rem;
-  cursor: pointer; transition: all 0.12s ease; white-space: nowrap; margin-left: auto;
-}
-.share-btn:hover { border-color: var(--accent-light); color: var(--accent-light); }
-.share-btn.copied { border-color: #10b981; color: #10b981; }
-
-/* キーボードショートカット */
-.card.focused { outline: 2px solid var(--accent-light); outline-offset: 1px; }
-
-.kbd-modal-overlay {
-  position: fixed; inset: 0; background: rgba(0,0,0,0.55);
-  display: flex; align-items: center; justify-content: center;
-  z-index: 1000; backdrop-filter: blur(2px);
-}
-.kbd-modal {
-  background: var(--surface); border: 1px solid var(--border-light);
-  border-radius: 12px; padding: 1.5rem 2rem; max-width: 400px; width: 90%;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
-}
-.kbd-modal h3 { font-size: 1rem; font-weight: 600; margin-bottom: 1rem; }
-.kbd-table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
-.kbd-table td { padding: 0.5rem 0.5rem; color: var(--text-muted); vertical-align: middle; }
-.kbd-table td:first-child { width: 110px; white-space: nowrap; }
-.kbd-table tr + tr td { border-top: 1px solid var(--border); }
-kbd {
-  display: inline-block; padding: 0.125rem 0.375rem;
-  border: 1px solid var(--border-light); border-radius: 4px;
-  background: var(--bg); font-size: 0.75rem; font-family: monospace;
-  color: var(--text); line-height: 1.4;
-}
-
-/* 詳細パネル（ネイティブ <dialog> 使用） */
+/* ── Dialogs ────────────────────────────────────────────────────────── */
 #detail-dialog {
   border: 1px solid var(--border); border-radius: 14px; padding: 0;
   width: 760px; max-width: calc(100vw - 2rem); max-height: calc(100vh - 4rem);
   background: var(--surface); color: var(--text);
-  box-shadow: 0 24px 64px rgba(0,0,0,0.3), 0 4px 16px rgba(0,0,0,0.15);
-  display: flex; flex-direction: column;
-  margin: auto; /* 確実に中央表示 */
-  /* 閉じた状態 */
+  box-shadow: 0 24px 64px rgba(0,0,0,0.15), 0 4px 16px rgba(0,0,0,0.08);
+  display: flex; flex-direction: column; margin: auto;
   opacity: 0; transform: scale(0.95) translateY(2%);
-  transition: opacity 0.18s ease, transform 0.22s cubic-bezier(0.34,1.56,0.64,1),
-              display 0.22s allow-discrete, overlay 0.22s allow-discrete;
+  transition: opacity 0.18s ease, transform 0.22s cubic-bezier(0.34,1.56,0.64,1), display 0.22s allow-discrete, overlay 0.22s allow-discrete;
 }
 #detail-dialog[open] { opacity: 1; transform: scale(1) translateY(0); }
-@starting-style {
-  #detail-dialog[open] { opacity: 0; transform: scale(0.95) translateY(2%); }
-}
-#detail-dialog::backdrop {
-  background: rgba(0,0,0,0.5); backdrop-filter: blur(4px);
-  transition: display 0.22s allow-discrete, overlay 0.22s allow-discrete,
-              background-color 0.2s ease;
-}
-@starting-style {
-  #detail-dialog[open]::backdrop { background-color: transparent; }
-}
-/* モバイル: ボトムシート */
-@media (max-width: 768px) {
-  #detail-dialog {
-    position: fixed;
-    bottom: 0; left: 0; right: 0; top: auto;
-    width: 100%; max-width: 100%;
-    max-height: 88vh;
-    margin: 0;
-    border-radius: 16px 16px 0 0;
-    transform: translateY(100%);
-    transition: opacity 0.2s ease, transform 0.25s cubic-bezier(0.32,0.72,0,1),
-                display 0.25s allow-discrete, overlay 0.25s allow-discrete;
-  }
-  #detail-dialog[open] { opacity: 1; transform: translateY(0); }
-  @starting-style {
-    #detail-dialog[open] { opacity: 0; transform: translateY(100%); }
-  }
-}
-
-.detail-panel-header {
-  display: flex; align-items: flex-start; gap: 0.75rem;
-  padding: 1rem 1rem 0.75rem; border-bottom: 1px solid var(--border);
-  flex-shrink: 0;
-}
-.detail-panel-header h2 {
-  flex: 1; font-size: 0.9375rem; font-weight: 600; line-height: 1.5;
-  color: var(--text); margin: 0;
-}
-.detail-panel-close {
-  flex-shrink: 0; background: none; border: none; color: var(--text-dim);
-  font-size: 1.125rem; cursor: pointer; padding: 0.125rem 0.25rem; line-height: 1;
-  transition: color 0.12s ease;
-}
+@starting-style { #detail-dialog[open] { opacity: 0; transform: scale(0.95) translateY(2%); } }
+#detail-dialog::backdrop { background: rgba(26,24,20,0.4); backdrop-filter: blur(4px); transition: display 0.22s allow-discrete, overlay 0.22s allow-discrete, background-color 0.2s ease; }
+@starting-style { #detail-dialog[open]::backdrop { background-color: transparent; } }
+.detail-panel-header { display: flex; align-items: flex-start; gap: 0.75rem; padding: 1rem 1rem 0.75rem; border-bottom: 1px solid var(--border); flex-shrink: 0; }
+.detail-panel-header h2 { flex: 1; font-size: 0.9375rem; font-weight: 600; line-height: 1.5; font-family: var(--serif); color: var(--text); margin: 0; }
+.detail-panel-close { flex-shrink: 0; background: none; border: none; color: var(--text-dim); font-size: 1.125rem; cursor: pointer; padding: 0.125rem 0.25rem; line-height: 1; transition: color 0.12s ease; }
 .detail-panel-close:hover { color: var(--text); }
-
-.detail-panel-body {
-  flex: 1; overflow-y: auto; padding: 1rem;
-  scrollbar-width: thin; scrollbar-color: var(--border) transparent;
-}
+.detail-panel-body { flex: 1; overflow-y: auto; padding: 1rem; scrollbar-width: thin; scrollbar-color: var(--border) transparent; }
 .detail-panel-body::-webkit-scrollbar { width: 4px; }
 .detail-panel-body::-webkit-scrollbar-thumb { background: var(--border-light); border-radius: 4px; }
-
-.detail-panel-summary {
-  font-size: 0.875rem; color: var(--text-muted); line-height: 1.75;
-  margin: 0 0 1.25rem; padding: 0.75rem 1rem;
-  background: var(--bg); border-radius: 8px;
-  border-left: 3px solid var(--border-light);
-}
-.detail-panel-detail-heading {
-  font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.06em;
-  text-transform: uppercase; color: var(--text-dim);
-  margin: 0 0 0.5rem;
-}
-.detail-panel-detail {
-  font-size: 0.9375rem; color: var(--text); line-height: 2;
-  white-space: pre-wrap;
-}
-
-.detail-panel-footer {
-  padding: 0.875rem 1rem; border-top: 1px solid var(--border); flex-shrink: 0;
-}
-.detail-panel-link {
-  display: block; text-align: center; padding: 0.625rem 1rem;
-  background: var(--accent-light); color: #fff; border-radius: 8px;
-  font-size: 0.875rem; font-weight: 600; text-decoration: none;
-  transition: opacity 0.12s ease;
-}
+.detail-panel-summary { font-family: var(--serif); font-size: 0.9375rem; color: var(--text-muted); line-height: 1.75; margin: 0 0 1.25rem; padding: 0.75rem 1rem; background: var(--bg); border-radius: 8px; border-left: 3px solid var(--border-light); }
+.detail-panel-detail-heading { font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-dim); margin: 0 0 0.5rem; }
+.detail-panel-detail { font-family: var(--serif); font-size: 0.9375rem; color: var(--text); line-height: 2; white-space: pre-wrap; }
+.detail-panel-footer { padding: 0.875rem 1rem; border-top: 1px solid var(--border); flex-shrink: 0; }
+.detail-panel-link { display: block; text-align: center; padding: 0.625rem 1rem; background: var(--ink); color: var(--paper); border-radius: 8px; font-family: var(--serif); font-size: 0.875rem; font-weight: 600; text-decoration: none; transition: opacity 0.12s ease; }
 .detail-panel-link:hover { opacity: 0.85; }
 
-.search-wrap { margin-bottom: 1.5rem; }
-.search-input {
-  width: 100%; padding: 0.5rem 0.875rem; border: 1px solid var(--border);
-  border-radius: 8px; background: var(--surface); color: var(--text);
-  font-size: 0.875rem; outline: none; transition: border-color 0.12s ease;
-}
-.search-input:focus { border-color: var(--accent-light); }
-.search-input::placeholder { color: var(--text-dim); }
-
-.empty { text-align: center; padding: 4rem 2rem; color: var(--text-dim); }
-.empty h2 { font-size: 1.125rem; margin-bottom: 0.5rem; color: var(--text-muted); }
-
-footer { text-align: center; color: var(--text-dim); font-size: 0.6875rem; padding: 1.5rem 0; }
-footer a { color: var(--text-dim); text-decoration: none; }
-footer a:hover { color: var(--accent-light); }
-
-/* 要約の箇条書き表示 */
-.card-summary-list {
-  font-size: 0.8125rem; color: var(--text-muted); line-height: 1.6;
-  margin-bottom: 0.375rem; padding-left: 1rem; list-style: none;
-}
-.card-summary-list li { position: relative; padding-left: 0.875rem; margin-bottom: 0.1rem; }
-.card-summary-list li::before {
-  content: "·"; position: absolute; left: 0; color: var(--accent-light); font-weight: 700;
-}
-.card:not(:hover) .card-summary-list li:nth-child(n+3) { display: none; }
-
-/* トップへ戻るボタン */
-.back-to-top {
-  position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 100;
-  width: 2.5rem; height: 2.5rem; border-radius: 50%;
-  background: var(--accent); color: #fff; border: none;
-  font-size: 1rem; cursor: pointer;
-  opacity: 0; pointer-events: none;
-  transition: opacity 0.2s ease, transform 0.2s ease;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-}
-.back-to-top.visible { opacity: 1; pointer-events: auto; }
-@media (any-hover: hover) {
-  .back-to-top:hover { transform: translateY(-2px); }
-  .card:hover { background: var(--surface-hover); border-color: var(--border-light); }
-  .filter-btn:hover { background: var(--surface); color: var(--text); }
-  .toc-link:hover { background: var(--surface); color: var(--text); }
-  .read-btn:hover { border-color: var(--accent-light); color: var(--accent-light); }
-  .skip-btn:hover { border-color: #ef4444; color: #ef4444; background: rgba(239,68,68,0.1); }
-  .detail-panel-link:hover { opacity: 0.85; }
-  .bookmark-btn:hover { color: #f59e0b; }
-  .copy-btn:hover { color: var(--accent-light); }
-  .share-btn:hover { border-color: var(--accent-light); color: var(--accent-light); }
-  .export-btn:hover { border-color: var(--accent-light); color: var(--accent-light); }
-  .theme-toggle:hover { border-color: var(--accent-light); color: var(--accent-light); }
-  .mark-section-read:hover { border-color: var(--accent-light); color: var(--accent-light); }
-  .skip-section-btn:hover { border-color: #ef4444; color: #ef4444; }
-  .score-ring[data-tooltip]:hover::after { opacity: 1; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    transition-duration: 1ms !important;
-    animation-duration: 1ms !important;
-  }
-}
-
-@media (max-width: 768px) {
-  .layout { flex-direction: column; }
-  .sidebar {
-    width: 100%; height: auto; position: sticky; top: 0; z-index: 10;
-    background: var(--bg); border-right: none; border-bottom: 1px solid var(--border);
-    padding: 0.75rem 1rem;
-  }
-  .sidebar-top { margin-bottom: 0.5rem; }
-  .date-label { display: none; }
-  .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 0.375rem; margin-bottom: 0; }
-  .stat-box { padding: 0.375rem 0.625rem; }
-  .stat-val { font-size: 1rem; }
-  /* フィルター類はトグルで開閉 */
-  .sidebar-collapsible { display: none; padding-top: 0.75rem; }
-  .sidebar-collapsible.open { display: block; }
-  .sidebar-section.toc { display: none; }
-  /* トグルボタン */
-  .mobile-filter-toggle {
-    display: flex; align-items: center; justify-content: center;
-    width: 100%; margin-top: 0.5rem; padding: 0.375rem;
-    background: none; border: 1px solid var(--border); border-radius: 6px;
-    color: var(--text-dim); font-size: 0.75rem; cursor: pointer;
-  }
-  .mobile-filter-toggle:hover { border-color: var(--accent-light); color: var(--accent-light); }
-  .main { padding: 1rem; }
-  .score-ring { width: 2.25rem; height: 2.25rem; }
-  .score-ring span { font-size: 0.6875rem; }
-}
-@media (min-width: 769px) {
-  .mobile-filter-toggle { display: none; }
-  .sidebar-collapsible { display: block !important; }
-}
-
-/* ── NEW バッジ ── */
-.badge-new {
-  display: inline-flex; align-items: center;
-  font-size: 0.6rem; font-weight: 700; letter-spacing: 0.06em;
-  padding: 0.1rem 0.35rem; border-radius: 3px;
-  background: #10b981; color: #fff;
-  text-transform: uppercase; flex-shrink: 0; line-height: 1.4;
-}
-
-/* ── 設定モーダル ── */
-.settings-btn {
-  background: none; border: 1px solid var(--border); border-radius: 6px;
-  width: 2rem; height: 2rem; cursor: pointer; display: flex; align-items: center;
-  justify-content: center; transition: all 0.15s ease; color: var(--text-dim); font-size: 0.875rem;
-}
-@media (any-hover: hover) {
-  .settings-btn:hover { border-color: var(--accent-light); color: var(--accent-light); }
-}
-#settings-dialog {
-  border: 1px solid var(--border); border-radius: 14px; padding: 0;
-  width: 420px; max-width: calc(100vw - 2rem);
-  background: var(--surface); color: var(--text);
-  box-shadow: 0 24px 64px rgba(0,0,0,0.3), 0 4px 16px rgba(0,0,0,0.15);
-}
-#settings-dialog::backdrop { background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); }
-.settings-header {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 1rem 1.25rem 0.75rem; border-bottom: 1px solid var(--border);
-}
-.settings-header h3 { font-size: 0.9375rem; font-weight: 600; }
-.settings-close {
-  background: none; border: none; color: var(--text-dim);
-  font-size: 1.125rem; cursor: pointer; padding: 0.125rem 0.375rem; line-height: 1;
-  transition: color 0.12s ease;
-}
+#settings-dialog { border: 1px solid var(--border); border-radius: 14px; padding: 0; width: 420px; max-width: calc(100vw - 2rem); background: var(--surface); color: var(--text); box-shadow: 0 24px 64px rgba(0,0,0,0.15), 0 4px 16px rgba(0,0,0,0.08); }
+#settings-dialog::backdrop { background: rgba(26,24,20,0.4); backdrop-filter: blur(4px); }
+.settings-header { display: flex; align-items: center; justify-content: space-between; padding: 1rem 1.25rem 0.75rem; border-bottom: 1px solid var(--border); }
+.settings-header h3 { font-size: 0.9375rem; font-weight: 600; font-family: var(--serif); }
+.settings-close { background: none; border: none; color: var(--text-dim); font-size: 1.125rem; cursor: pointer; padding: 0.125rem 0.375rem; line-height: 1; transition: color 0.12s ease; }
 .settings-close:hover { color: var(--text); }
 .settings-body { padding: 1.25rem; display: flex; flex-direction: column; gap: 1rem; }
-.settings-field label {
-  display: block; font-size: 0.75rem; font-weight: 600; color: var(--text-dim);
-  margin-bottom: 0.375rem; text-transform: uppercase; letter-spacing: 0.04em;
-}
-.settings-input {
-  width: 100%; padding: 0.5rem 0.75rem; border: 1px solid var(--border);
-  border-radius: 8px; background: var(--bg); color: var(--text);
-  font-size: 0.875rem; font-family: monospace; outline: none;
-  transition: border-color 0.12s ease;
-}
-.settings-input:focus { border-color: var(--accent-light); }
+.settings-field label { display: block; font-size: 0.75rem; font-weight: 600; color: var(--text-dim); margin-bottom: 0.375rem; text-transform: uppercase; letter-spacing: 0.04em; }
+.settings-input { width: 100%; padding: 0.5rem 0.75rem; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); color: var(--text); font-size: 0.875rem; font-family: monospace; outline: none; transition: border-color 0.12s ease; }
+.settings-input:focus { border-color: var(--ink-blue); }
 .settings-hint { font-size: 0.75rem; color: var(--text-dim); margin-top: 0.25rem; }
-.settings-footer {
-  padding: 0.875rem 1.25rem; border-top: 1px solid var(--border);
-  display: flex; align-items: center; gap: 0.75rem;
-}
-.settings-save {
-  padding: 0.5rem 1.25rem; background: var(--accent); color: #fff;
-  border: none; border-radius: 8px; font-size: 0.875rem; font-weight: 600;
-  cursor: pointer; transition: opacity 0.12s ease; flex-shrink: 0;
-}
+.settings-footer { padding: 0.875rem 1.25rem; border-top: 1px solid var(--border); display: flex; align-items: center; gap: 0.75rem; }
+.settings-save { padding: 0.5rem 1.25rem; background: var(--ink); color: var(--paper); border: none; border-radius: 8px; font-size: 0.875rem; font-weight: 600; font-family: var(--serif); cursor: pointer; transition: opacity 0.12s ease; flex-shrink: 0; }
 .settings-save:hover { opacity: 0.85; }
 .sync-indicator { font-size: 0.75rem; color: var(--text-dim); margin-left: auto; }
-.sync-indicator.syncing { color: var(--accent-light); }
-.sync-indicator.synced  { color: #10b981; }
-.sync-indicator.error   { color: #ef4444; }
-.sidebar-top-actions { display: flex; gap: 0.25rem; align-items: center; }
+.sync-indicator.syncing { color: var(--ink-blue); }
+.sync-indicator.synced  { color: var(--success); }
+.sync-indicator.error   { color: var(--danger); }
 
-/* ── サイドバー同期ドット ── */
-.settings-btn-wrap { position: relative; display: inline-flex; }
-.sync-dot {
-  position: absolute; top: -3px; right: -3px;
-  width: 9px; height: 9px; border-radius: 50%;
-  border: 2px solid var(--bg);
-  background: var(--border-light);
-  pointer-events: none;
-  transition: background 0.2s ease;
-}
-.sync-dot.ok      { background: #10b981; }
-.sync-dot.error   { background: #ef4444; }
-.sync-dot.syncing { background: var(--accent-light); animation: pulse-dot 1s ease-in-out infinite; }
-@keyframes pulse-dot {
-  0%, 100% { opacity: 1; }
-  50%       { opacity: 0.4; }
-}
+/* ── Keyboard shortcut modal ────────────────────────────────────────── */
+.kbd-modal-overlay { position: fixed; inset: 0; background: rgba(26,24,20,0.5); display: flex; align-items: center; justify-content: center; z-index: 1000; backdrop-filter: blur(2px); }
+.kbd-modal { background: var(--surface); border: 1px solid var(--border-light); border-radius: 12px; padding: 1.5rem 2rem; max-width: 400px; width: 90%; box-shadow: 0 8px 32px rgba(26,24,20,0.15); }
+.kbd-modal h3 { font-size: 1rem; font-weight: 600; font-family: var(--serif); margin-bottom: 1rem; }
+.kbd-table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
+.kbd-table td { padding: 0.5rem 0.5rem; color: var(--text-muted); vertical-align: middle; }
+.kbd-table td:first-child { width: 110px; white-space: nowrap; }
+.kbd-table tr + tr td { border-top: 1px solid var(--border); }
+kbd { display: inline-block; padding: 0.125rem 0.375rem; border: 1px solid var(--border-light); border-radius: 4px; background: var(--bg); font-size: 0.75rem; font-family: monospace; color: var(--text); line-height: 1.4; }
 
-/* ── モバイルタップ改善 ── */
+/* ── Responsive ─────────────────────────────────────────────────────── */
 @media (max-width: 768px) {
-  /* read-btn: 44px タップ領域 */
-  .read-btn { width: 2.75rem; height: 2.75rem; font-size: 1rem; }
-  /* skip-btn: 常時表示・大きめ */
-  .skip-btn { opacity: 1; width: 2rem; height: 2rem; font-size: 0.875rem; top: 0.375rem; right: 0.375rem; }
-  /* bookmark-btn: 44px タップ領域 + 大きい星アイコン */
-  .bookmark-btn {
-    font-size: 1.5rem;
-    min-width: 2.75rem; min-height: 2.75rem;
-    display: inline-flex; align-items: center; justify-content: center;
-    padding: 0.5rem;
-  }
-  .copy-btn { font-size: 0.875rem; padding: 0.375rem; }
-  .card-meta { gap: 0.5rem; flex-wrap: wrap; align-items: center; }
+  .app { grid-template-columns: 1fr; }
+  .app.expanded { grid-template-columns: 1fr; }
+  .rail { position: relative; height: auto; border-right: none; border-bottom: 1px solid var(--rule); flex-direction: row; padding: 8px; overflow: visible; }
+  .rail-top { flex-direction: row; padding: 0; overflow: visible; flex: none; }
+  .rail-divider, .rail-section-label, .rail-search, .rail-foot { display: none; }
+  .masthead-inner { padding: 16px 20px 12px; }
+  .wordmark { font-size: 22px; }
+  .feed { padding: 20px 20px 60px; }
+  .card { padding: 18px 0 20px; margin-left: -4px; }
+  .c-title { font-size: 19px; line-height: 1.32; margin-bottom: 8px; }
+  .c-summary { font-size: 15px; line-height: 1.6; margin-bottom: 12px; }
+  .c-head { font-size: 12px; }
+  .feed-avatar { width: 22px; height: 22px; font-size: 10px; }
+  .feed-name { font-size: 12px; }
+  #detail-dialog { position: fixed; bottom: 0; left: 0; right: 0; top: auto; width: 100%; max-width: 100%; max-height: 88vh; margin: 0; border-radius: 16px 16px 0 0; transform: translateY(100%); transition: opacity 0.2s ease, transform 0.25s cubic-bezier(0.32,0.72,0,1), display 0.25s allow-discrete, overlay 0.25s allow-discrete; }
+  #detail-dialog[open] { opacity: 1; transform: translateY(0); }
+  @starting-style { #detail-dialog[open] { opacity: 0; transform: translateY(100%); } }
 }
+
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition-duration: 1ms !important; animation-duration: 1ms !important; } }
 `.trim();
 
 // ── JavaScript (localStorage ベース、サーバー不要) ────
@@ -734,7 +415,8 @@ function cycleTheme() {
   var cur = getPreferredTheme();
   applyTheme(cur === 'auto' ? 'light' : cur === 'light' ? 'dark' : 'auto');
 }
-document.getElementById('theme-toggle').addEventListener('click', cycleTheme);
+var themeToggleEl = document.getElementById('theme-toggle');
+if (themeToggleEl) themeToggleEl.addEventListener('click', cycleTheme);
 
 // ── 既読 / スキップ状態 (localStorage) ───────────────
 var READ_KEY = 'news_read_v2';
@@ -759,8 +441,8 @@ function restoreState() {
     }
     if (readIds.has(id)) {
       card.classList.add('read');
-      var btn = card.querySelector('.read-btn');
-      if (btn) { btn.classList.add('is-read'); btn.textContent = '\\u2713'; }
+      var btn = card.querySelector('[data-action="read"]');
+      if (btn) { btn.classList.add('active'); btn.textContent = '\\u2713'; }
     }
   });
 }
@@ -773,14 +455,14 @@ function removeNewBadge(card) {
 function toggleRead(card) {
   var id = Number(card.dataset.id);
   var readIds = getSet(READ_KEY);
-  var btn = card.querySelector('.read-btn');
+  var btn = card.querySelector('[data-action="read"]');
   if (card.classList.contains('read')) {
     card.classList.remove('read');
-    if (btn) { btn.classList.remove('is-read'); btn.textContent = ''; }
+    if (btn) { btn.classList.remove('active'); btn.textContent = ''; }
     readIds.delete(id);
   } else {
     card.classList.add('read');
-    if (btn) { btn.classList.add('is-read'); btn.textContent = '\\u2713'; }
+    if (btn) { btn.classList.add('active'); btn.textContent = '\\u2713'; }
     readIds.add(id);
     removeNewBadge(card);
   }
@@ -795,8 +477,8 @@ function markRead(card) {
   var id = Number(card.dataset.id);
   var readIds = getSet(READ_KEY);
   card.classList.add('read');
-  var btn = card.querySelector('.read-btn');
-  if (btn) { btn.classList.add('is-read'); btn.textContent = '\\u2713'; }
+  var btn = card.querySelector('[data-action="read"]');
+  if (btn) { btn.classList.add('active'); btn.textContent = '\\u2713'; }
   readIds.add(id);
   removeNewBadge(card);
   saveSet(READ_KEY, readIds);
@@ -824,8 +506,8 @@ function markSectionRead(btn) {
     if (card.style.display === 'none') return;
     var id = Number(card.dataset.id);
     card.classList.add('read');
-    var rb = card.querySelector('.read-btn');
-    if (rb) { rb.classList.add('is-read'); rb.textContent = '\\u2713'; }
+    var rb = card.querySelector('[data-action="read"]');
+    if (rb) { rb.classList.add('active'); rb.textContent = '\\u2713'; }
     readIds.add(id);
   });
   saveSet(READ_KEY, readIds);
@@ -861,7 +543,7 @@ function updateTocCounts() {
     if (!href) return;
     var sectionId = href.slice(1);
     var section = document.getElementById(sectionId);
-    var countEl = link.querySelector('.toc-count');
+    var countEl = link.querySelector('.rail-count');
     if (section && countEl) {
       var visible = section.querySelectorAll('.card:not([style*="display: none"])').length;
       countEl.textContent = String(visible);
@@ -900,8 +582,8 @@ function applyFilters() {
   document.querySelectorAll('.card').forEach(function(card) {
     var isRead = card.classList.contains('read');
     var cat = card.dataset.category || '';
-    var title = (card.querySelector('.card-title') || {}).textContent || '';
-    var summary = (card.querySelector('.card-summary') || {}).textContent || '';
+    var title = (card.querySelector('.c-title') || {}).textContent || '';
+    var summary = (card.querySelector('.c-summary') || {}).textContent || '';
     var show = true;
     if (currentReadFilter === 'unread' && isRead) show = false;
     if (currentReadFilter === 'read' && !isRead) show = false;
@@ -928,7 +610,7 @@ function applyFilters() {
       }
     }
     if (currentBookmarkFilter) {
-      var cardLink = card.querySelector('.card-title a');
+      var cardLink = card.querySelector('.c-title a');
       if (!cardLink || !isBookmarked(cardLink.href)) show = false;
     }
     if (q && !title.toLowerCase().includes(q) && !summary.toLowerCase().includes(q)) show = false;
@@ -961,7 +643,7 @@ function filterArticles(mode) {
 
 function filterByCategory(cat) {
   currentCategoryFilter = cat;
-  setActiveBtn('category-filters', cat);
+  setActiveBtn('category-chips', cat);
   applyFilters();
 }
 
@@ -990,7 +672,7 @@ function buildSourceFilters() {
   sources.forEach(function(source) {
     var btn = document.createElement('button');
     btn.type = 'button';
-    btn.className = 'filter-btn';
+    btn.className = 'rail-icon filter-btn';
     btn.dataset.value = source;
     btn.textContent = source;
     container.appendChild(btn);
@@ -998,12 +680,24 @@ function buildSourceFilters() {
 }
 
 // ── イベント委譲 ──────────────────────────────────────
-document.querySelector('.main').addEventListener('click', function(e) {
-  var readBtn = e.target.closest('.read-btn');
+document.querySelector('main').addEventListener('click', function(e) {
+  var readBtn = e.target.closest('[data-action="read"]');
   if (readBtn) { toggleRead(readBtn.closest('.card')); return; }
 
-  var skipBtn = e.target.closest('.skip-btn');
+  var skipBtn = e.target.closest('[data-action="skip"]');
   if (skipBtn) { dismissArticle(skipBtn.closest('.card')); return; }
+
+  var bmBtn = e.target.closest('[data-action="bookmark"]');
+  if (bmBtn) {
+    var bmCard = bmBtn.closest('.card');
+    if (!bmCard) return;
+    var bmLink = bmCard.querySelector('.c-title a');
+    if (!bmLink) return;
+    var nowBm = toggleBookmark(bmLink.href);
+    bmBtn.textContent = nowBm ? '★' : '☆';
+    bmBtn.classList.toggle('on', nowBm);
+    return;
+  }
 
   var markBtn = e.target.closest('.mark-section-read');
   if (markBtn) { markSectionRead(markBtn); return; }
@@ -1011,14 +705,14 @@ document.querySelector('.main').addEventListener('click', function(e) {
   var skipSecBtn = e.target.closest('.skip-section-btn');
   if (skipSecBtn) { skipSectionAll(skipSecBtn); return; }
 
-  var shareBtn = e.target.closest('.share-btn');
+  var shareBtn = e.target.closest('[data-action="share"]');
   if (shareBtn) { shareArticle(shareBtn); return; }
 
-  var articleLink = e.target.closest('.card-title a');
+  var articleLink = e.target.closest('.c-title a');
   if (articleLink) { markRead(articleLink.closest('.card')); return; }
 
   var card = e.target.closest('.card.has-detail');
-  if (card && !e.target.closest('.read-btn, .skip-btn, .bookmark-btn, .copy-btn, .share-btn')) {
+  if (card && !e.target.closest('[data-action], .c-score')) {
     openDetailPanel(card);
   }
 });
@@ -1047,7 +741,7 @@ detailDialog.addEventListener('click', function(e) {
   }
 });
 
-document.getElementById('category-filters').addEventListener('click', function(e) {
+document.getElementById('category-chips').addEventListener('click', function(e) {
   var btn = e.target.closest('.filter-btn');
   if (btn) filterByCategory(btn.dataset.value || 'all');
 });
@@ -1084,14 +778,6 @@ searchEl.addEventListener('input', function() {
 });
 
 // ── モバイル フィルタートグル ─────────────────────────
-var mobileToggle = document.getElementById('mobile-filter-toggle');
-var sidebarCollapsible = document.getElementById('sidebar-collapsible');
-if (mobileToggle && sidebarCollapsible) {
-  mobileToggle.addEventListener('click', function() {
-    var isOpen = sidebarCollapsible.classList.toggle('open');
-    mobileToggle.textContent = isOpen ? 'フィルター ▴' : 'フィルター ▾';
-  });
-}
 
 // ── ブックマーク機能 ──────────────────────────────────
 var BOOKMARK_KEY = 'bookmarks';
@@ -1202,62 +888,16 @@ function scheduleGistSave() {
 
 function restoreBookmarkState() {
   document.querySelectorAll('.card').forEach(function(card) {
-    var link = card.querySelector('.card-title a');
-    var bBtn = card.querySelector('.bookmark-btn');
+    var link = card.querySelector('.c-title a');
+    var bBtn = card.querySelector('[data-action="bookmark"]');
     if (!link || !bBtn) return;
     var bookmarked = isBookmarked(link.href);
-    bBtn.className = 'bookmark-btn' + (bookmarked ? ' is-bookmarked' : '');
-    bBtn.setAttribute('aria-label', bookmarked ? 'ブックマーク解除' : 'ブックマークに追加');
+    bBtn.classList.toggle('on', bookmarked);
     bBtn.textContent = bookmarked ? '\\u2605' : '\\u2606';
   });
   applyFilters();
 }
 
-document.querySelectorAll('.card').forEach(function(card) {
-  var link = card.querySelector('.card-title a');
-  if (!link) return;
-  var meta = card.querySelector('.card-meta');
-  if (!meta) return;
-  var bookmarked = isBookmarked(link.href);
-  var bBtn = document.createElement('button');
-  bBtn.className = 'bookmark-btn' + (bookmarked ? ' is-bookmarked' : '');
-  bBtn.setAttribute('aria-label', bookmarked ? 'ブックマーク解除' : 'ブックマークに追加');
-  bBtn.textContent = bookmarked ? '\u2605' : '\u2606';
-  meta.appendChild(bBtn);
-  var cBtn = document.createElement('button');
-  cBtn.className = 'copy-btn';
-  cBtn.setAttribute('aria-label', 'URLをコピー');
-  cBtn.textContent = '\uD83D\uDD17';
-  meta.appendChild(cBtn);
-});
-
-document.querySelector('.main').addEventListener('click', function(e) {
-  var bBtn = e.target.closest('.bookmark-btn');
-  if (bBtn) {
-    var bCard = bBtn.closest('.card');
-    if (!bCard) return;
-    var bLink = bCard.querySelector('.card-title a');
-    if (!bLink) return;
-    var nowBm = toggleBookmark(bLink.href);
-    bBtn.textContent = nowBm ? '\u2605' : '\u2606';
-    bBtn.classList.toggle('is-bookmarked', nowBm);
-    bBtn.setAttribute('aria-label', nowBm ? 'ブックマーク解除' : 'ブックマークに追加');
-    return;
-  }
-  var cBtn = e.target.closest('.copy-btn');
-  if (cBtn) {
-    var cCard = cBtn.closest('.card');
-    if (!cCard) return;
-    var cLink = cCard.querySelector('.card-title a');
-    if (!cLink) return;
-    navigator.clipboard.writeText(cLink.href).then(function() {
-      cBtn.textContent = '\u2713 Copied';
-      cBtn.classList.add('copied');
-      setTimeout(function() { cBtn.textContent = '\uD83D\uDD17'; cBtn.classList.remove('copied'); }, 1000);
-    });
-    return;
-  }
-});
 
 function exportBookmarks() {
   var bms = getBookmarks();
@@ -1266,7 +906,7 @@ function exportBookmarks() {
   var lines = ['# Bookmarks - ' + today, ''];
   bms.forEach(function(url) {
     var title = url;
-    document.querySelectorAll('.card-title a').forEach(function(a) {
+    document.querySelectorAll('.c-title a').forEach(function(a) {
       if (a.href === url) title = a.textContent.trim();
     });
     lines.push('- [' + title.replace(/\\[/g, '\\\\[').replace(/\\]/g, '\\\\]') + '](' + url.replace(/\\(/g, '%28').replace(/\\)/g, '%29') + ')');
@@ -1282,20 +922,6 @@ var exportBtnEl = document.getElementById('export-bookmarks-btn');
 if (exportBtnEl) exportBtnEl.addEventListener('click', exportBookmarks);
 
 // ── SNSシェア ─────────────────────────────────────────
-function initShareButtons() {
-  document.querySelectorAll('.card').forEach(function(card) {
-    var link = card.querySelector('.card-title a');
-    var meta = card.querySelector('.card-meta');
-    if (!link || !meta) return;
-    var btn = document.createElement('button');
-    btn.className = 'share-btn';
-    btn.textContent = 'Share';
-    btn.dataset.shareUrl = link.href;
-    btn.dataset.shareTitle = link.textContent.trim();
-    btn.setAttribute('aria-label', 'SNSシェア');
-    meta.insertBefore(btn, meta.firstChild);
-  });
-}
 
 function shareArticle(btn) {
   var text = (btn.dataset.shareTitle || '') + ' ' + (btn.dataset.shareUrl || '') + ' #NewsDigest';
@@ -1306,22 +932,7 @@ function shareArticle(btn) {
   });
 }
 
-// ── スコアツールチップ ────────────────────────────────
-var TIER_LABELS = {
-  'must-read':    { label: 'Must Read',    threshold: '0.85以上' },
-  'recommended':  { label: 'Recommended', threshold: '0.70〜0.84' },
-  'worth-a-look': { label: 'Worth a Look', threshold: '0.50〜0.69' },
-  'low-priority': { label: 'Low Priority', threshold: '0.50未満' }
-};
-document.querySelectorAll('.card').forEach(function(card) {
-  var ring = card.querySelector('.score-ring');
-  if (!ring) return;
-  var tier = card.dataset.tier || '';
-  var score = (ring.querySelector('span') || {}).textContent || '';
-  var info = TIER_LABELS[tier];
-  if (!info) return;
-  ring.setAttribute('data-tooltip', 'スコア: ' + score + '\\nTier: ' + info.label + '\\n基準: ' + info.threshold);
-});
+
 
 // ── キーボードショートカット ──────────────────────────
 var focusedCard = null;
@@ -1367,12 +978,12 @@ document.addEventListener('keydown', function(e) {
     case 'r': if (focusedCard) toggleRead(focusedCard); break;
     case 'b':
       if (focusedCard) {
-        var bLink = focusedCard.querySelector('.card-title a');
-        var bBtn = focusedCard.querySelector('.bookmark-btn');
+        var bLink = focusedCard.querySelector('.c-title a');
+        var bBtn = focusedCard.querySelector('[data-action="bookmark"]');
         if (bLink && bBtn) {
           var nowBm = toggleBookmark(bLink.href);
           bBtn.textContent = nowBm ? '\u2605' : '\u2606';
-          bBtn.classList.toggle('is-bookmarked', nowBm);
+          bBtn.classList.toggle('on', nowBm);
         }
       }
       break;
@@ -1383,16 +994,11 @@ document.addEventListener('keydown', function(e) {
 
 // ── トップへ戻る ──────────────────────────────────────
 var backToTopBtn = document.getElementById('back-to-top');
-var mainEl = document.querySelector('.main');
-mainEl.addEventListener('scroll', function() {
-  backToTopBtn.classList.toggle('visible', mainEl.scrollTop > 400);
-}, { passive: true });
 window.addEventListener('scroll', function() {
   backToTopBtn.classList.toggle('visible', window.scrollY > 400);
 }, { passive: true });
 backToTopBtn.addEventListener('click', function() {
   window.scrollTo({ top: 0, behavior: 'smooth' });
-  mainEl.scrollTo({ top: 0, behavior: 'smooth' });
 });
 
 // ── 設定モーダル ──────────────────────────────────────
@@ -1437,8 +1043,8 @@ function applyNewBadges() {
       var badge = document.createElement('span');
       badge.className = 'badge-new';
       badge.textContent = 'NEW';
-      var meta = card.querySelector('.card-meta');
-      if (meta) meta.prepend(badge);
+      var meta = card.querySelector('.c-head');
+      if (meta) meta.append(badge);
     }
   });
   // 今回の訪問時刻を記録（次回のために）
@@ -1448,14 +1054,22 @@ function applyNewBadges() {
 restoreState();
 buildSourceFilters();
 setActiveBtn('read-filters', currentReadFilter);
-setActiveBtn('category-filters', currentCategoryFilter);
+setActiveBtn('category-chips', currentCategoryFilter);
 setActiveBtn('date-filters', currentDateFilter);
 setActiveBtn('source-filters', currentSourceFilter);
 applyFilters();
-initShareButtons();
 initSyncDot();
 applyNewBadges();
 loadFromGist();
+
+// ── レール展開/折り畳み ────────────────────────────────
+var appEl = document.getElementById('app');
+var railToggleEl = document.getElementById('rail-toggle');
+if (railToggleEl && appEl) {
+  railToggleEl.addEventListener('click', function() {
+    appEl.classList.toggle('expanded');
+  });
+}
 `.trim();
 
 // ── メイン生成関数 ────────────────────────────────────
@@ -1493,23 +1107,26 @@ export async function generateHtml(
     minute: "2-digit",
   });
 
-  // サイドバー TOC
-  const tocLinks = TIERS.filter((t) => (tierMap.get(t.id)?.length ?? 0) > 0)
+  // レール TOC アイテム
+  const TIER_GLYPHS: Record<string, string> = {
+    "must-read": "★", "recommended": "◆", "worth-a-look": "●", "low-priority": "○",
+  };
+  const tocItems = TIERS.filter((t) => (tierMap.get(t.id)?.length ?? 0) > 0)
     .map(
-      (t) => `<a class="toc-link" href="#${t.id}">
-        <span class="toc-dot" style="background:${t.color}"></span>
-        ${t.label}
-        <span class="toc-count">${tierMap.get(t.id)!.length}</span>
+      (t) => `<a class="rail-icon toc-link" href="#${t.id}" style="color:${t.color}">
+        <span class="rail-glyph">${TIER_GLYPHS[t.id] ?? "·"}</span>
+        <span class="rail-label" style="color:var(--ink)">${t.label}</span>
+        <span class="rail-count">${tierMap.get(t.id)!.length}</span>
       </a>`
     )
     .join("\n");
 
-  // カテゴリフィルターボタン
+  // カテゴリ chip ボタン（マストヘッド）
   const catButtons = ["all", ...categories]
     .map((c) => {
       const label = c === "all" ? "すべて" : categoryLabel(c);
-      const active = c === "all" ? ' class="filter-btn active"' : ' class="filter-btn"';
-      return `<button type="button"${active} data-value="${esc(c)}">${esc(label)}</button>`;
+      const cls = c === "all" ? "chip filter-btn active" : "chip filter-btn";
+      return `<button type="button" class="${cls}" data-value="${esc(c)}">${esc(label)}</button>`;
     })
     .join("\n");
 
@@ -1537,111 +1154,113 @@ export async function generateHtml(
 </script>
 </head>
 <body>
-<div class="layout">
+<div class="app" id="app">
 
-<aside class="sidebar">
-  <div class="sidebar-top">
-    <div class="logo">
-      <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M4 11a9 9 0 0 1 9 9"/>
-        <path d="M4 4a16 16 0 0 1 16 16"/>
-        <circle cx="5" cy="19" r="1"/>
-      </svg>
-      News Digest
-    </div>
-    <div class="sidebar-top-actions">
-      <div class="settings-btn-wrap">
-        <button type="button" class="settings-btn" id="settings-btn" title="同期設定">&#9881;</button>
-        <span class="sync-dot" id="sync-dot"></span>
-      </div>
-      <button type="button" class="theme-toggle" id="theme-toggle" title="テーマ切り替え">
-        <span class="theme-icon"></span>
+<nav class="rail">
+  <div class="rail-top">
+    <div class="rail-mark" id="rail-toggle">N</div>
+
+    <div class="rail-section-label">Sections</div>
+    ${tocItems}
+
+    <div class="rail-divider"></div>
+    <div class="rail-section-label">表示</div>
+    <div id="read-filters">
+      <button type="button" class="rail-icon filter-btn active" data-value="all">
+        <span class="rail-glyph">≡</span>
+        <span class="rail-label">すべて</span>
+      </button>
+      <button type="button" class="rail-icon filter-btn" data-value="unread">
+        <span class="rail-glyph">○</span>
+        <span class="rail-label">未読のみ</span>
+        <span class="rail-count" id="unread-count">${rows.length}</span>
+      </button>
+      <button type="button" class="rail-icon filter-btn" data-value="read">
+        <span class="rail-glyph">✓</span>
+        <span class="rail-label">既読のみ</span>
       </button>
     </div>
-  </div>
-  <div class="date-label">${today}</div>
 
-  <div class="stats-grid">
-    <div class="stat-box">
-      <div class="stat-val">${rows.length}</div>
-      <div class="stat-lbl">記事</div>
+    <div class="rail-divider"></div>
+    <div class="rail-section-label">期間</div>
+    <div id="date-filters">
+      <button type="button" class="rail-icon filter-btn active" data-value="all">
+        <span class="rail-glyph">◷</span>
+        <span class="rail-label">すべて</span>
+      </button>
+      <button type="button" class="rail-icon filter-btn" data-value="today">
+        <span class="rail-glyph">◈</span>
+        <span class="rail-label">今日</span>
+      </button>
+      <button type="button" class="rail-icon filter-btn" data-value="3days">
+        <span class="rail-glyph">◉</span>
+        <span class="rail-label">3日間</span>
+      </button>
+      <button type="button" class="rail-icon filter-btn" data-value="week">
+        <span class="rail-glyph">◎</span>
+        <span class="rail-label">1週間</span>
+      </button>
     </div>
-    <div class="stat-box">
-      <div class="stat-val" id="unread-count">${rows.length}</div>
-      <div class="stat-lbl">未読</div>
+
+    <div class="rail-divider"></div>
+    <div class="rail-section-label">ソース</div>
+    <div id="source-filters">
+      <button type="button" class="rail-icon filter-btn active" data-value="all">
+        <span class="rail-glyph">⊞</span>
+        <span class="rail-label">すべて</span>
+      </button>
+    </div>
+    <input type="search" class="rail-search" id="search" placeholder="キーワード検索…" aria-label="記事を検索">
+
+    <div class="rail-divider"></div>
+    <button type="button" class="rail-icon filter-btn" id="bookmark-filter-btn" data-value="bookmarked">
+      <span class="rail-glyph">★</span>
+      <span class="rail-label">ブックマーク</span>
+    </button>
+    <button type="button" class="export-btn" id="export-bookmarks-btn">📥 書き出す</button>
+    <div class="rail-divider"></div>
+    <div class="settings-btn-wrap">
+      <button type="button" class="rail-icon" id="settings-btn" title="同期設定">
+        <span class="rail-glyph">⚙</span>
+        <span class="rail-label">同期設定</span>
+      </button>
+      <span class="sync-dot" id="sync-dot"></span>
     </div>
   </div>
+  <div class="rail-foot">
+    <div class="rail-foot-text">News Digest · ${today}</div>
+  </div>
+</nav>
 
-  <button type="button" class="mobile-filter-toggle" id="mobile-filter-toggle">フィルター ▾</button>
-
-  <div class="sidebar-collapsible" id="sidebar-collapsible">
-    <div class="sidebar-section" id="read-filters">
-      <div class="sidebar-heading">表示</div>
-      <div class="filter-list">
-        <button type="button" class="filter-btn active" data-value="all">すべて</button>
-        <button type="button" class="filter-btn" data-value="unread">未読のみ</button>
-        <button type="button" class="filter-btn" data-value="read">既読のみ</button>
+<main>
+  <div class="masthead">
+    <div class="masthead-inner">
+      <div class="brand-row">
+        <span class="wordmark">News <span class="ampersand">&amp;</span> Digest</span>
+        <span class="masthead-date">${today}</span>
       </div>
-    </div>
-
-    <div class="sidebar-section">
-      <div class="sidebar-heading">カテゴリ</div>
-      <div class="filter-list" id="category-filters">
+      <div class="masthead-rule"></div>
+      <div class="chips" id="category-chips">
         ${catButtons}
       </div>
     </div>
-
-    <div class="sidebar-section" id="date-filters">
-      <div class="sidebar-heading">期間</div>
-      <div class="filter-list">
-        <button type="button" class="filter-btn active" data-value="all">すべて</button>
-        <button type="button" class="filter-btn" data-value="today">今日</button>
-        <button type="button" class="filter-btn" data-value="3days">3日</button>
-        <button type="button" class="filter-btn" data-value="week">1週間</button>
-      </div>
-    </div>
-
-    <div class="sidebar-section">
-      <div class="sidebar-heading">ソース</div>
-      <div class="filter-list" id="source-filters">
-        <button type="button" class="filter-btn active" data-value="all">すべて</button>
-      </div>
-    </div>
-
-    <div class="sidebar-section">
-      <div class="sidebar-heading">ブックマーク</div>
-      <div class="filter-list">
-        <button class="filter-btn" id="bookmark-filter-btn" data-value="bookmarked">★ ブックマーク</button>
-      </div>
-      <button type="button" class="export-btn" id="export-bookmarks-btn">📥 書き出す</button>
-    </div>
-
-    <div class="sidebar-section toc">
-      <div class="sidebar-heading">セクション</div>
-      ${tocLinks}
-    </div>
-  </div>
-</aside>
-
-<main class="main">
-  <search class="search-wrap">
-    <input id="search" class="search-input" type="search" placeholder="キーワード検索..." aria-label="記事を検索">
-  </search>
-
-  ${sections}
-
-  <div id="no-results" class="empty" style="display:none">
-    <h2>記事が見つかりません</h2>
-    <p>フィルターを変更するか、検索キーワードを変えてみてください。</p>
   </div>
 
-  <footer>更新: ${updatedAt}</footer>
+  <div class="feed">
+    ${sections}
+
+    <div id="no-results" class="empty" style="display:none">
+      条件に一致する記事はありません。フィルターを変えてみてください。
+    </div>
+
+    <footer>更新: ${updatedAt}</footer>
+  </div>
 </main>
 
 </div>
 
 <!-- トップへ戻るボタン -->
-<button type="button" class="back-to-top" id="back-to-top" aria-label="トップへ戻る">↑</button>
+<button type="button" class="fab" id="back-to-top" aria-label="トップへ戻る">↑</button>
 
 <!-- 同期設定モーダル -->
 <dialog id="settings-dialog" aria-labelledby="settings-dialog-title">
